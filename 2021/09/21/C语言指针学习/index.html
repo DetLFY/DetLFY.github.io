@@ -16,7 +16,7 @@
 <meta property="og:description" content="1.何为指针指针是一类特殊的变量，用以寄存其他变量的地址。我们知道，假若定义一个变量，则这个变量会被随机分配到内存中的几个连续存储单元。每一个存储单元都有一个地址。正因为这些存储单元是一定的，且每种类型的变量长度是固定的，所以只要知道了这些连续存储单元中的第一个的地址，即知道了这个变量在内存中的位置。因此，这几个连续存储单元的首地址就作为这个变量的地址。例如：定义变量“float f;”，假如它被">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-09-21T14:37:38.000Z">
-<meta property="article:modified_time" content="2021-09-21T16:53:08.854Z">
+<meta property="article:modified_time" content="2021-09-22T01:15:51.341Z">
 <meta property="article:author" content="LianFeiyang">
 <meta property="article:tag" content="博客">
 <meta property="article:tag" content="C&#x2F;C++">
@@ -178,7 +178,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h4 id="1-何为指针"><a href="#1-何为指针" class="headerlink" title="1.何为指针"></a>1.何为指针</h4><p>指针是一类特殊的变量，用以寄存其他变量的地址。<br>我们知道，假若定义一个变量，则这个变量会被随机分配到内存中的几个连续存储单元。每一个存储单元都有一个地址。正因为这些存储单元是一定的，且每种类型的变量长度是固定的，所以只要知道了这些连续存储单元中的第一个的地址，即知道了这个变量在内存中的位置。因此，这几个连续存储单元的首地址就作为这个变量的地址。例如：定义变量“float f;”，假如它被分配到地址为1000、1001、1002、1003的四个连续存储单元，则地址1000就是变量f的地址。而这个地址也成为变量f的指针。<br>因此，变量的地址就是变量的指针。</p>
+        <h4 id="1-何为指针"><a href="#1-何为指针" class="headerlink" title="1.何为指针"></a>1.何为指针</h4><p>指针是一类特殊的变量，用以寄存其他变量的地址。<br>我们知道，假若定义一个变量，则这个变量会被随机分配到内存中的几个连续存储单元。每一个存储单元都有一个地址。正因为这些存储单元是一定的，且每种类型的变量长度是固定的，所以只要知道了这些连续存储单元中的第一个的地址，即知道了这个变量在内存中的位置。因此，这几个连续存储单元的首地址就作为这个变量的地址。例如：定义变量“float f;”，假如它被分配到地址为1000、1001、1002、1003的四个连续存储单元，则地址1000就是变量f的地址。而这个地址也成为变量f的指针。<br>因此，<strong>变量的地址就是变量的指针。</strong></p>
 <h4 id="2-指针变量的定义与赋值"><a href="#2-指针变量的定义与赋值" class="headerlink" title="2.指针变量的定义与赋值"></a>2.指针变量的定义与赋值</h4><span id="more"></span>
 <p>指针变量的定义的语法格式如下：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">类型标识符 *标识符;</span><br></pre></td></tr></table></figure>
@@ -190,13 +190,13 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">int i,*p1,*p2;</span><br><span class="line">p1=&amp;i;</span><br><span class="line">p2=p1;    //赋值完后p1，p2指向同一地址。（即变量i的地址）注意，执行该操作时要求两指针类型相同。</span><br></pre></td></tr></table></figure>
 <p>也可以给一个指针赋空值，；例如：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">p=NULL;  //注意，NULL被预定义在头文件stdio.h中。</span><br></pre></td></tr></table></figure>
-<p>在头文件stdio.h中NULL与整数0对应。被赋予这样值的指针p称为空指针，它不指向任何有效的数据。因此为了防止错误地使用指针来存取数据，常在指针未被使用前赋值NULL。NULL可以赋值给任何类型的指针。</p>
+<p>在头文件stdio.h中NULL与整数0对应。被赋予这样值的指针p称为空指针，它不指向任何有效的数据。因此<strong>为了防止错误地使用指针来存取数据，常在指针未被使用前赋值NULL。</strong>NULL可以赋值给<strong>任何类型</strong>的指针。</p>
 <p>我们可以用new、delete运算符来创建一个对象并开分配存储空间或者删除所创建的对象并释放所分配的存储空间。它们的语法格式如下：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">new 类型名; || new 类型名[元素个数];</span><br><span class="line">delete 变量名; || delete []变量名;</span><br></pre></td></tr></table></figure>
 <p>来看一段书上的例子：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">int i=7,*p;</span><br><span class="line">double *q;</span><br><span class="line">p=new int[i+3];</span><br><span class="line">q=new double;</span><br><span class="line">//中间略</span><br><span class="line">delete q;</span><br><span class="line">delete []p;</span><br></pre></td></tr></table></figure>
 <p>这个例子可以方便理解两个运算符的用法。</p>
-<h4 id="3-关于指针运算符的那些事"><a href="#3-关于指针运算符的那些事" class="headerlink" title="3.关于指针运算符的那些事"></a>3.关于指针运算符的那些事</h4><p>指针运算符“*”是单目运算符，运算对象必须放在其右侧，且运算对象只能是指针变量或地址，可以用其来存取相应的存储单元中的数据。<br>有以下的结论：<br>1）*&amp;i &lt;=&gt; i；<br>2）若“p=&amp;i”，则 *p &lt;=&gt; i；<br>但是，两者的时间复杂度不同。利用*p存取其所指变量的值是间接存取的，所以比直接存取一个变量要费时。<br>“&amp;”与“*”放在一起作用时有相互“抵消”的作用。（书上是这样写的……）<br>只要指针变量指向了内存中的某一存储单元，就可以用例如*p的形式来存取该存储单元的数据。<br>还是书上的例子（改了一个值），：</p>
+<h4 id="3-关于指针运算符的那些事"><a href="#3-关于指针运算符的那些事" class="headerlink" title="3.关于指针运算符的那些事"></a>3.关于指针运算符的那些事</h4><p>指针运算符“*”是单目运算符，运算对象必须放在其右侧，且运算对象只能是指针变量或地址，可以用其来存取相应的存储单元中的数据。<br>有以下的结论：<br><strong>1）*&amp;i &lt;=&gt; i；<br>2）若“p=&amp;i”，则 *p &lt;=&gt; i；</strong><br>但是，两者的时间复杂度不同。利用*p存取其所指变量的值是间接存取的，所以比直接存取一个变量要费时。<br>“&amp;”与“*”放在一起作用时有相互“抵消”的作用。<del>（书上是这样写的……）</del><br>只要指针变量指向了内存中的某一存储单元，就可以用例如*p的形式来存取该存储单元的数据。<br>还是书上的例子（改了一个值），：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">int *p;</span><br><span class="line">p=new int;</span><br><span class="line">*p=4869;</span><br></pre></td></tr></table></figure>
 <p>上述语句中在动态内存存储区中分配了一块存储区域，并将其首地址赋值与指针p，并将整数4869存入该存储区。</p>
 
