@@ -16,7 +16,7 @@
 <meta property="og:description" content="1.何为指针指针是一类特殊的变量，用以寄存其他变量的地址。我们知道，假若定义一个变量，则这个变量会被随机分配到内存中的几个连续存储单元。每一个存储单元都有一个地址。正因为这些存储单元是一定的，且每种类型的变量长度是固定的，所以只要知道了这些连续存储单元中的第一个的地址，即知道了这个变量在内存中的位置。因此，这几个连续存储单元的首地址就作为这个变量的地址。例如：定义变量“float f;”，假如它被">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-09-21T14:37:38.000Z">
-<meta property="article:modified_time" content="2021-09-22T01:15:51.341Z">
+<meta property="article:modified_time" content="2021-09-22T07:17:03.433Z">
 <meta property="article:author" content="LianFeiyang">
 <meta property="article:tag" content="博客">
 <meta property="article:tag" content="C&#x2F;C++">
@@ -184,7 +184,7 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">类型标识符 *标识符;</span><br></pre></td></tr></table></figure>
 <p>指针变量可以通过地址运算符“&amp;”来赋值，例如：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">float</span> f,*p;    //定义一个单精度浮点型变量f，以及一个指针p。注意，变量与指针的类型必须一致。</span><br><span class="line">p=&amp;f;    //将变量f的地址传给指针p。</span><br></pre></td></tr></table></figure>
-<p>指针变量的初始化语句一般写出：</p>
+<p>指针变量的初始化语句一般写成：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">float</span> f,*p=&amp;f;</span><br></pre></td></tr></table></figure>
 <p>也可以把一个指针的地址值赋值给另一个指针，例如：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">int i,*p1,*p2;</span><br><span class="line">p1=&amp;i;</span><br><span class="line">p2=p1;    //赋值完后p1，p2指向同一地址。（即变量i的地址）注意，执行该操作时要求两指针类型相同。</span><br></pre></td></tr></table></figure>
