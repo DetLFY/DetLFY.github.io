@@ -24,7 +24,7 @@
 <meta property="og:image" content="http://example.com/2021/09/25/%E5%87%BD%E6%95%B0%E7%9A%84%E8%B0%83%E7%94%A8%E4%B8%8E%E7%BA%A6%E5%AE%9A/3.png">
 <meta property="og:image" content="http://example.com/2021/09/25/%E5%87%BD%E6%95%B0%E7%9A%84%E8%B0%83%E7%94%A8%E4%B8%8E%E7%BA%A6%E5%AE%9A/6.png">
 <meta property="article:published_time" content="2021-09-25T03:42:08.000Z">
-<meta property="article:modified_time" content="2021-09-25T12:09:05.021Z">
+<meta property="article:modified_time" content="2021-09-25T12:48:38.966Z">
 <meta property="article:author" content="LianFeiyang">
 <meta property="article:tag" content="博客">
 <meta property="article:tag" content="C&#x2F;C++">
@@ -225,7 +225,7 @@ main调用func_b，func_b调用func_a。从主函数开始，以下逐步分析�
 <li><strong>mov rbp,rsp</strong> <em>;将栈底指针指向现在的栈顶。</em></li>
 <li><strong>sub rsp,xxx</strong> <em>;开辟被调用函数的栈帧，此时上一步的rbp就指向栈帧的底。</em><br>func_b执行完维护栈帧操作后的栈布局如下图：<br><img src="/2021/09/25/%E5%87%BD%E6%95%B0%E7%9A%84%E8%B0%83%E7%94%A8%E4%B8%8E%E7%BA%A6%E5%AE%9A/4.png"></li>
 </ul>
-<p><strong>所谓栈帧的维护就是维护rbp和rsp两个指针。rsp永远指向栈顶。rbp用来定位局部变量。</strong><br>之后，func_b调用func_a，其调用流程与主函数调用func_b基本一致。不同的是返回地址、rbp和rsp指向的地址，以及开辟的栈空间不同。<br>fanc_b调用完func_a后发栈布局如下图：<br><img src="/2021/09/25/%E5%87%BD%E6%95%B0%E7%9A%84%E8%B0%83%E7%94%A8%E4%B8%8E%E7%BA%A6%E5%AE%9A/5.png"><br>至此函数调用完毕。当func_a执行完毕后便要返回。当一个函数执行结束返回时，会执行<strong>leave</strong>和<strong>ret</strong>两个指令。这个过程的实际效果为先<strong>mov rsp,rbp</strong>再<strong>pop rbp</strong>最后再<strong>pop rip</strong>。<br>func_a执行完毕返回后的栈布局如下图：<br><img src="/2021/09/25/%E5%87%BD%E6%95%B0%E7%9A%84%E8%B0%83%E7%94%A8%E4%B8%8E%E7%BA%A6%E5%AE%9A/4.png"><br>可以看出，与之前func_b未调用func_a前的栈帧比完全一致，说明已经恢复了栈帧。但是唯一的不同之处是此时rip已经指向了c=1后面的一条指令，说明func_a已经执行完毕了。<br>同理，func_b执行完毕返回后的栈布局如下图：<br><img src="/2021/09/25/%E5%87%BD%E6%95%B0%E7%9A%84%E8%B0%83%E7%94%A8%E4%B8%8E%E7%BA%A6%E5%AE%9A/3.png"><br>之后主函数继续执行直到结束。<br>至此函数的调用返回执行流程结束。</p>
+<p><strong>所谓栈帧的维护就是维护rbp和rsp两个指针。rsp永远指向栈顶。rbp用来定位局部变量。</strong><br>之后，func_b调用func_a，其调用流程与主函数调用func_b基本一致。不同的是返回地址、rbp和rsp指向的地址，以及开辟的栈空间不同。<br>fanc_b调用完func_a后的栈布局如下图：<br><img src="/2021/09/25/%E5%87%BD%E6%95%B0%E7%9A%84%E8%B0%83%E7%94%A8%E4%B8%8E%E7%BA%A6%E5%AE%9A/5.png"><br>至此函数调用完毕。当func_a执行完毕后便要返回。当一个函数执行结束返回时，会执行<strong>leave</strong>和<strong>ret</strong>两个指令。这个过程的实际效果为先<strong>mov rsp,rbp</strong>再<strong>pop rbp</strong>最后再<strong>pop rip</strong>。<br>func_a执行完毕返回后的栈布局如下图：<br><img src="/2021/09/25/%E5%87%BD%E6%95%B0%E7%9A%84%E8%B0%83%E7%94%A8%E4%B8%8E%E7%BA%A6%E5%AE%9A/4.png"><br>可以看出，与之前func_b未调用func_a前的栈帧比完全一致，说明已经恢复了栈帧。但是唯一的不同之处是此时rip已经指向了c=1后面的一条指令，说明func_a已经执行完毕了。<br>同理，func_b执行完毕返回后的栈布局如下图：<br><img src="/2021/09/25/%E5%87%BD%E6%95%B0%E7%9A%84%E8%B0%83%E7%94%A8%E4%B8%8E%E7%BA%A6%E5%AE%9A/3.png"><br>之后主函数继续执行直到结束。<br>至此函数的调用返回执行流程结束。</p>
 <p>总结如下：</p>
 <ul>
 <li><strong>调用函数：将rip压栈，然后将rip赋值为被调用函数的起始地址。这一操作被隐性地内置再call指令中。</strong></li>
@@ -538,6 +538,18 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">溢出</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">测试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">栈</a>
               </li>
              
@@ -547,18 +559,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">调用约定</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">测试</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">溢出</a>
               </li>
             
             <div class="clearfix"></div>
