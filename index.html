@@ -178,9 +178,6 @@
         <h4 id="4-指针与一维数组"><a href="#4-指针与一维数组" class="headerlink" title="4.指针与一维数组"></a>4.指针与一维数组</h4><p>我们知道一个数组的元素在内存中是连续存放的，<strong>数组第一个元素的地址称为数组的首地址。</strong><em>在C语言中，数组名就是该数组的首地址。</em></p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a[<span class="number">4869</span>],*p;</span><br></pre></td></tr></table></figure>
 <p>以上面的为例，语句“ <strong>p=a;</strong> ”和语句“ <strong>p=&amp;a[0];</strong> ”是等价的，都表示指针变量p指向数组a的首地址。数组首地址的值在C语言中是一个地址常量，无法改变。因此，语句“ a=p; ”或者语句“ a++; ”都是非法的。<br>如果数组的首地址是a，且指针变量p指向该数组的首地址，即“ p=a; ”，则C语言中还规定数组的第i个元素a[i]的地址是<strong>a+i，其等价于p+i。</strong>如：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a[<span class="number">5</span>]=&#123;<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>&#125;,*p=a;    <span class="comment">//p指向整型数组a的首地址。</span></span><br><span class="line"><span class="keyword">double</span> b[<span class="number">5</span>]=&#123;<span class="number">0.0</span>,<span class="number">0.1</span>,<span class="number">0.2</span>,<span class="number">0.3</span>,<span class="number">0.4</span>&#125;,*q=b;    <span class="comment">//q指向双精度数组b的首地址。</span></span><br></pre></td></tr></table></figure>
-<p>C语言中的下标运算符“ <strong>[]</strong> ”可以构成表达式，假设p为指针变量，i为整型表达式，则可以把p[i]看成是表达式，首先按p+i计算地址，然后存取该地址单元中的值。<br><strong>若定义了一维数组a和指针变量p，且p=a。则有等价关系：a[i]&lt;=&gt;p[i]&lt;=&gt;*(a+i)&lt;=&gt;*(p+i)。</strong><br><em>注：以上i为整型表达式。</em></p>
-<h4 id="5-指针的算数运算"><a href="#5-指针的算数运算" class="headerlink" title="5.指针的算数运算"></a>5.指针的算数运算</h4>
         
       
 
