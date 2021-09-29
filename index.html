@@ -155,6 +155,100 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Linux延迟绑定与安全防护机制" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/09/29/Linux%E5%BB%B6%E8%BF%9F%E7%BB%91%E5%AE%9A%E4%B8%8E%E5%AE%89%E5%85%A8%E9%98%B2%E6%8A%A4%E6%9C%BA%E5%88%B6/">Linux延迟绑定与安全防护机制</a>
+    </h1>
+  
+
+        
+        <a href="/2021/09/29/Linux%E5%BB%B6%E8%BF%9F%E7%BB%91%E5%AE%9A%E4%B8%8E%E5%AE%89%E5%85%A8%E9%98%B2%E6%8A%A4%E6%9C%BA%E5%88%B6/" class="archive-article-date">
+  	<time datetime="2021-09-29T13:58:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-09-29</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="0-elf文件格式"><a href="#0-elf文件格式" class="headerlink" title="0.elf文件格式"></a>0.elf文件格式</h4><h5 id="0-1-概述"><a href="#0-1-概述" class="headerlink" title="0-1.概述"></a>0-1.概述</h5><p>ELF（Executable and Linkable Format）文件是Linux环境中的一种二进制可执行文件。<br>elf的基本信息存在于elf的头部信息中，这些信息包括指令的运行框架、程序入口等，可以通过 <strong>readelf -h &lt;elf_name&gt;</strong> 来查看头部信息。<br>elf文件中包含许多<strong>节（section）</strong>，各个节中存放不同的数据，这些节的信息存放在节头表中，可用  <strong>readelf -S &lt;file&gt;</strong> 查看，主要包括：<br><img src="/2021/09/29/Linux%E5%BB%B6%E8%BF%9F%E7%BB%91%E5%AE%9A%E4%B8%8E%E5%AE%89%E5%85%A8%E9%98%B2%E6%8A%A4%E6%9C%BA%E5%88%B6/1.png"></p>
+<h5 id="0-2-elf文件被加载到内存中的布局"><a href="#0-2-elf文件被加载到内存中的布局" class="headerlink" title="0-2.elf文件被加载到内存中的布局"></a>0-2.elf文件被加载到内存中的布局</h5>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PWN</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">栈溢出</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/学习//" class="article-tag-list-link color3">学习</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/09/29/Linux%E5%BB%B6%E8%BF%9F%E7%BB%91%E5%AE%9A%E4%B8%8E%E5%AE%89%E5%85%A8%E9%98%B2%E6%8A%A4%E6%9C%BA%E5%88%B6/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-C语言指针学习-part-2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -955,6 +1049,18 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">C/C++</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">PWN</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">栈溢出</a>
               </li>
              
               <li class="article-tag-list-item">
