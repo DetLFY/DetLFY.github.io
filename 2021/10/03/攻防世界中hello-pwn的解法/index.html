@@ -6,17 +6,30 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://example.com">
-  <title>Tag: Linux指令 | Detective_LFY&#39;s Blog</title>
+  <title>攻防世界中hello_pwn的解法 | Detective_LFY&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="一个个人博客。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Detective_LFY&#39;s Blog">
-<meta property="og:url" content="http://example.com/tags/Linux%E6%8C%87%E4%BB%A4/index.html">
+  <meta name="description" content="0.说在前面先声明一下，这题我之前是看wp解出的，但是当时不理解。现在学了一些栈溢出，再反过来看这道题时发现还是挺简单的。下面我把思路以及解法说一下。 1.解法（自己理解后写的，可能和wp有些不一样）由于我之前解过这道题，所以无法再获取在线环境。因此这里我在本地进行模拟。我创建了一个flag.txt的文件，内容是“You got the flag!”来模拟取得了flag。下面正式开始。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="攻防世界中hello_pwn的解法">
+<meta property="og:url" content="http://example.com/2021/10/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E4%B8%ADhello-pwn%E7%9A%84%E8%A7%A3%E6%B3%95/index.html">
 <meta property="og:site_name" content="Detective_LFY&#39;s Blog">
-<meta property="og:description" content="一个个人博客。">
+<meta property="og:description" content="0.说在前面先声明一下，这题我之前是看wp解出的，但是当时不理解。现在学了一些栈溢出，再反过来看这道题时发现还是挺简单的。下面我把思路以及解法说一下。 1.解法（自己理解后写的，可能和wp有些不一样）由于我之前解过这道题，所以无法再获取在线环境。因此这里我在本地进行模拟。我创建了一个flag.txt的文件，内容是“You got the flag!”来模拟取得了flag。下面正式开始。">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2021/10/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E4%B8%ADhello-pwn%E7%9A%84%E8%A7%A3%E6%B3%95/1.png">
+<meta property="og:image" content="http://example.com/2021/10/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E4%B8%ADhello-pwn%E7%9A%84%E8%A7%A3%E6%B3%95/2.png">
+<meta property="og:image" content="http://example.com/2021/10/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E4%B8%ADhello-pwn%E7%9A%84%E8%A7%A3%E6%B3%95/3.png">
+<meta property="og:image" content="http://example.com/2021/10/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E4%B8%ADhello-pwn%E7%9A%84%E8%A7%A3%E6%B3%95/4.png">
+<meta property="og:image" content="http://example.com/2021/10/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E4%B8%ADhello-pwn%E7%9A%84%E8%A7%A3%E6%B3%95/5.png">
+<meta property="og:image" content="http://example.com/2021/10/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E4%B8%ADhello-pwn%E7%9A%84%E8%A7%A3%E6%B3%95/6.png">
+<meta property="og:image" content="http://example.com/2021/10/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E4%B8%ADhello-pwn%E7%9A%84%E8%A7%A3%E6%B3%95/7.png">
+<meta property="article:published_time" content="2021-10-03T15:15:44.000Z">
+<meta property="article:modified_time" content="2021-10-03T16:08:30.332Z">
 <meta property="article:author" content="LianFeiyang">
+<meta property="article:tag" content="PWN">
+<meta property="article:tag" content="栈溢出">
+<meta property="article:tag" content="题目">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/10/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E4%B8%ADhello-pwn%E7%9A%84%E8%A7%A3%E6%B3%95/1.png">
   
     <link rel="alternative" href="/atom.xml" title="Detective_LFY&#39;s Blog" type="application/atom+xml">
   
@@ -153,64 +166,80 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-攻防世界中hello-pwn的解法" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2021" class="archive-year">2021</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/09/22/Linux%E7%8E%AF%E5%A2%83%E4%B8%8B%E4%BB%A3%E7%A0%81%E7%9A%84%E4%B9%A6%E5%86%99%E5%8F%8A%E8%BF%90%E8%A1%8C/" class="archive-article-date">
-  	<time datetime="2021-09-22T07:51:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-09-22</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/09/22/Linux%E7%8E%AF%E5%A2%83%E4%B8%8B%E4%BB%A3%E7%A0%81%E7%9A%84%E4%B9%A6%E5%86%99%E5%8F%8A%E8%BF%90%E8%A1%8C/">Linux环境下代码的书写及运行</a>
+    <h1 class="article-title" itemprop="name">
+      攻防世界中hello_pwn的解法
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2021/10/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E4%B8%ADhello-pwn%E7%9A%84%E8%A7%A3%E6%B3%95/" class="archive-article-date">
+  	<time datetime="2021-10-03T15:15:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-10-03</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="0-说在前面"><a href="#0-说在前面" class="headerlink" title="0.说在前面"></a>0.说在前面</h4><p>先声明一下，这题我之前是看wp解出的，但是当时不理解。现在学了一些栈溢出，再反过来看这道题时发现还是挺简单的。下面我把思路以及解法说一下。</p>
+<h4 id="1-解法（自己理解后写的，可能和wp有些不一样）"><a href="#1-解法（自己理解后写的，可能和wp有些不一样）" class="headerlink" title="1.解法（自己理解后写的，可能和wp有些不一样）"></a>1.解法（自己理解后写的，可能和wp有些不一样）</h4><p><em>由于我之前解过这道题，所以无法再获取在线环境。因此这里我在本地进行模拟。我创建了一个flag.txt的文件，内容是“You got the flag!”来模拟取得了flag。</em><br>下面正式开始。</p>
+<span id="more"></span>
+<p>首先我们先检查一下附件的安全防护，用命令“ <strong>checksec &lt;filename&gt;</strong> ”即可。如下图：<br><img src="/2021/10/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E4%B8%ADhello-pwn%E7%9A%84%E8%A7%A3%E6%B3%95/1.png"><br>可以发现这是一个<strong>64位</strong>的ELF，<strong>并且没有开启canary和PIE保护，</strong>这意味着这题大概率是个栈溢出的题目。<br>然后试着运行一下程序，与之交互，发现什么也没返回……如下图：<br><img src="/2021/10/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E4%B8%ADhello-pwn%E7%9A%84%E8%A7%A3%E6%B3%95/2.png"><br>没关系，没返回才是正常的。<em>（不然解什么题？当它是get_shell啊？）</em><br>把它拖入64位的IDA里看看。查看伪C代码，找到主函数，如下：<br><img src="/2021/10/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E4%B8%ADhello-pwn%E7%9A%84%E8%A7%A3%E6%B3%95/3.png"><br>可以发现有一个条件语句。只要达成条件，就会执行函数sub_400686();点击查看该函数，如下图：<br><img src="/2021/10/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E4%B8%ADhello-pwn%E7%9A%84%E8%A7%A3%E6%B3%95/4.png"><br><strong>发现该函数的功能就是获取flag。</strong>那这就是我们的目标了。<br>回到主函数，发现在条件语句前有一个 <strong>read()</strong> 函数。并且它读入了<strong>16字节</strong>。<br>再查看一下unk_601068的分布，如下图：<br><img src="/2021/10/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E4%B8%ADhello-pwn%E7%9A%84%E8%A7%A3%E6%B3%95/5.png"><br>发现它是一个为被初始化且可修改的数据（.bss），<strong>只有4个字节。</strong>并且它的<strong>高地址下一个数据就是刚才条件语句中的变量。</strong><em>（妥妥的栈溢出了。）</em><br>由此很容易得出偏移量为<strong>4</strong>。那么可以构造的一种载荷就是“ <strong>b’A’*4+p64(1853186401)</strong> ”。<em>（注意，这里不一定要字母A，只要能占4字节就行。）</em><strong>由此可以将dword_60106C 的值改写为1853186401。</strong><br>思路有了，脚本就好写了。这里给出一种脚本的写法，如下图：<br><img src="/2021/10/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E4%B8%ADhello-pwn%E7%9A%84%E8%A7%A3%E6%B3%95/6.png"><br><em>（注意：由于我是在本地模拟的，所以用的是process，如果是远程则用remote。并且recvuntil中的参数只要是输入前的最后几个字符就行了，比如说还可以用”bof”, <strong>但是注意一定不能是随意的字符或字符串，因为我试过……</strong> ）</em><br>之后运行脚本，如下图：<br><img src="/2021/10/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E4%B8%ADhello-pwn%E7%9A%84%E8%A7%A3%E6%B3%95/7.png"><br>可以发现<strong>返回了“ You got the flag! ”，</strong>说明成功了，我们获取了flag。这道题也就解完了。</p>
+<h4 id="2-总结"><a href="#2-总结" class="headerlink" title="2.总结"></a>2.总结</h4><p>栈溢出类的题核心方法就是通过栈溢出改写数据<strong>劫持控制流</strong>，把程序的运行引导到我们想要的方向。</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">博客</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PWN</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">C/C++</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">栈溢出</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Linux指令</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">vim</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Python</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">题目</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
@@ -223,17 +252,104 @@
 	</div>
 
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/2021/10/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E4%B8%ADhello-pwn%E7%9A%84%E8%A7%A3%E6%B3%95/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/2021/09/29/Linux%E5%BB%B6%E8%BF%9F%E7%BB%91%E5%AE%9A%E4%B8%8E%E5%AE%89%E5%85%A8%E9%98%B2%E6%8A%A4%E6%9C%BA%E5%88%B6/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Linux延迟绑定与安全防护机制</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -256,9 +372,9 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,
