@@ -23,7 +23,7 @@
 <meta property="og:image" content="http://example.com/2021/10/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E4%B8%ADhello-pwn%E7%9A%84%E8%A7%A3%E6%B3%95/6.png">
 <meta property="og:image" content="http://example.com/2021/10/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E4%B8%ADhello-pwn%E7%9A%84%E8%A7%A3%E6%B3%95/7.png">
 <meta property="article:published_time" content="2021-10-03T15:15:44.000Z">
-<meta property="article:modified_time" content="2021-10-03T16:08:30.332Z">
+<meta property="article:modified_time" content="2021-10-03T16:16:50.509Z">
 <meta property="article:author" content="LianFeiyang">
 <meta property="article:tag" content="PWN">
 <meta property="article:tag" content="栈溢出">
@@ -189,7 +189,7 @@
         <h4 id="0-说在前面"><a href="#0-说在前面" class="headerlink" title="0.说在前面"></a>0.说在前面</h4><p>先声明一下，这题我之前是看wp解出的，但是当时不理解。现在学了一些栈溢出，再反过来看这道题时发现还是挺简单的。下面我把思路以及解法说一下。</p>
 <h4 id="1-解法（自己理解后写的，可能和wp有些不一样）"><a href="#1-解法（自己理解后写的，可能和wp有些不一样）" class="headerlink" title="1.解法（自己理解后写的，可能和wp有些不一样）"></a>1.解法（自己理解后写的，可能和wp有些不一样）</h4><p><em>由于我之前解过这道题，所以无法再获取在线环境。因此这里我在本地进行模拟。我创建了一个flag.txt的文件，内容是“You got the flag!”来模拟取得了flag。</em><br>下面正式开始。</p>
 <span id="more"></span>
-<p>首先我们先检查一下附件的安全防护，用命令“ <strong>checksec &lt;filename&gt;</strong> ”即可。如下图：<br><img src="/2021/10/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E4%B8%ADhello-pwn%E7%9A%84%E8%A7%A3%E6%B3%95/1.png"><br>可以发现这是一个<strong>64位</strong>的ELF，<strong>并且没有开启canary和PIE保护，</strong>这意味着这题大概率是个栈溢出的题目。<br>然后试着运行一下程序，与之交互，发现什么也没返回……如下图：<br><img src="/2021/10/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E4%B8%ADhello-pwn%E7%9A%84%E8%A7%A3%E6%B3%95/2.png"><br>没关系，没返回才是正常的。<em>（不然解什么题？当它是get_shell啊？）</em><br>把它拖入64位的IDA里看看。查看伪C代码，找到主函数，如下：<br><img src="/2021/10/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E4%B8%ADhello-pwn%E7%9A%84%E8%A7%A3%E6%B3%95/3.png"><br>可以发现有一个条件语句。只要达成条件，就会执行函数sub_400686();点击查看该函数，如下图：<br><img src="/2021/10/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E4%B8%ADhello-pwn%E7%9A%84%E8%A7%A3%E6%B3%95/4.png"><br><strong>发现该函数的功能就是获取flag。</strong>那这就是我们的目标了。<br>回到主函数，发现在条件语句前有一个 <strong>read()</strong> 函数。并且它读入了<strong>16字节</strong>。<br>再查看一下unk_601068的分布，如下图：<br><img src="/2021/10/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E4%B8%ADhello-pwn%E7%9A%84%E8%A7%A3%E6%B3%95/5.png"><br>发现它是一个为被初始化且可修改的数据（.bss），<strong>只有4个字节。</strong>并且它的<strong>高地址下一个数据就是刚才条件语句中的变量。</strong><em>（妥妥的栈溢出了。）</em><br>由此很容易得出偏移量为<strong>4</strong>。那么可以构造的一种载荷就是“ <strong>b’A’*4+p64(1853186401)</strong> ”。<em>（注意，这里不一定要字母A，只要能占4字节就行。）</em><strong>由此可以将dword_60106C 的值改写为1853186401。</strong><br>思路有了，脚本就好写了。这里给出一种脚本的写法，如下图：<br><img src="/2021/10/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E4%B8%ADhello-pwn%E7%9A%84%E8%A7%A3%E6%B3%95/6.png"><br><em>（注意：由于我是在本地模拟的，所以用的是process，如果是远程则用remote。并且recvuntil中的参数只要是输入前的最后几个字符就行了，比如说还可以用”bof”, <strong>但是注意一定不能是随意的字符或字符串，因为我试过……</strong> ）</em><br>之后运行脚本，如下图：<br><img src="/2021/10/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E4%B8%ADhello-pwn%E7%9A%84%E8%A7%A3%E6%B3%95/7.png"><br>可以发现<strong>返回了“ You got the flag! ”，</strong>说明成功了，我们获取了flag。这道题也就解完了。</p>
+<p>首先我们先检查一下附件的安全防护，用命令“ <strong>checksec &lt;filename&gt;</strong> ”即可。如下图：<br><img src="/2021/10/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E4%B8%ADhello-pwn%E7%9A%84%E8%A7%A3%E6%B3%95/1.png"><br>可以发现这是一个<strong>64位</strong>的ELF，<strong>并且没有开启canary和PIE保护，</strong>这意味着这题大概率是个栈溢出的题目。<br>然后试着运行一下程序，与之交互，发现什么也没返回……如下图：<br><img src="/2021/10/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E4%B8%ADhello-pwn%E7%9A%84%E8%A7%A3%E6%B3%95/2.png"><br>没关系，没返回才是正常的。<em>（不然解什么题？当它是get_shell啊？）</em><br>把它拖入64位的IDA里看看。查看伪C代码，找到主函数，如下：<br><img src="/2021/10/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E4%B8%ADhello-pwn%E7%9A%84%E8%A7%A3%E6%B3%95/3.png"><br>可以发现有一个条件语句。只要达成条件，就会执行函数sub_400686();点击查看该函数，如下图：<br><img src="/2021/10/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E4%B8%ADhello-pwn%E7%9A%84%E8%A7%A3%E6%B3%95/4.png"><br><strong>发现该函数的功能就是获取flag。</strong>那这就是我们的目标了。<br>回到主函数，发现在条件语句前有一个 <strong>read()</strong> 函数。并且它读入了<strong>16字节</strong>。<br>再查看一下unk_601068的分布，如下图：<br><img src="/2021/10/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E4%B8%ADhello-pwn%E7%9A%84%E8%A7%A3%E6%B3%95/5.png"><br>发现它是一个未被初始化且可修改的数据（.bss），<strong>只有4个字节。</strong>并且它的<strong>高地址下一个数据就是刚才条件语句中的变量。</strong><em>（妥妥的栈溢出了。）</em><br>由此很容易得出偏移量为<strong>4</strong>。那么可以构造的一种载荷就是“ <strong>b’A’*4+p64(1853186401)</strong> ”。<em>（注意，这里不一定要字母A，只要能占4字节就行。）</em><strong>由此可以将dword_60106C 的值改写为1853186401。</strong><br>思路有了，脚本就好写了。这里给出一种脚本的写法，如下图：<br><img src="/2021/10/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E4%B8%ADhello-pwn%E7%9A%84%E8%A7%A3%E6%B3%95/6.png"><br><em>（注意：由于我是在本地模拟的，所以用的是process，如果是远程则用remote。并且recvuntil中的参数只要是输入前的最后几个字符就行了，比如说还可以用”bof”, <strong>但是注意一定不能是随意的字符或字符串，因为我试过……</strong> ）</em><br>之后运行脚本，如下图：<br><img src="/2021/10/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E4%B8%ADhello-pwn%E7%9A%84%E8%A7%A3%E6%B3%95/7.png"><br>可以发现<strong>返回了“ You got the flag! ”，</strong>说明成功了，我们获取了flag。这道题也就解完了。</p>
 <h4 id="2-总结"><a href="#2-总结" class="headerlink" title="2.总结"></a>2.总结</h4><p>栈溢出类的题核心方法就是通过栈溢出改写数据<strong>劫持控制流</strong>，把程序的运行引导到我们想要的方向。</p>
 
       
@@ -503,15 +503,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">题目</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">二进制</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">溢出</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">题目</a>
               </li>
              
               <li class="article-tag-list-item">
