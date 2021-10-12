@@ -175,7 +175,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h4 id="0-前言-amp-回顾"><a href="#0-前言-amp-回顾" class="headerlink" title="0.前言&amp;回顾"></a>0.前言&amp;回顾</h4><p>简单的栈转移，但是我不清楚为什么给的system我用不了……（可能只是因为我菜），所以我用的还是execv。此题和之前ret2csu的有些类似，只是需要进行栈转移。</p>
+        <h4 id="0-前言-amp-回顾"><a href="#0-前言-amp-回顾" class="headerlink" title="0.前言&amp;回顾"></a>0.前言&amp;回顾</h4><p>简单的栈转移，但是我不清楚为什么给的system我用不了……<del>（可能只是因为我菜）</del><em>（据学长说是因为system函数执行时有栈方面的对齐要求，我简单了解了一下似乎是有某字节倍数的要求才能正常调用，具体的我目前也不是很了解，以后补充。）</em>，所以我用的还是execv。此题和之前ret2csu的有些类似，只是需要进行栈转移。</p>
 <p>我们知道，leave的实质是<strong>mov rsp,rbp;pop rbp</strong>。而ret的实质是<strong>pop rip</strong>。</p>
 <h4 id="1-栈转移的原因及方法"><a href="#1-栈转移的原因及方法" class="headerlink" title="1.栈转移的原因及方法"></a>1.栈转移的原因及方法</h4>
         
@@ -203,11 +203,11 @@
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">栈转移</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">ROP</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">ROP</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">栈转移</a>
         		</li>
       		
 		</ul>
@@ -1305,31 +1305,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">题目</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Assembly</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">溢出</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">解题思路</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">栈转移</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">ROP</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">测试</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1345,7 +1325,27 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">题目</a>
+                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">溢出</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">解题思路</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">ROP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">栈转移</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">测试</a>
               </li>
             
             <div class="clearfix"></div>
