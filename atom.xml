@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-10-12T16:44:12.152Z</updated>
+  <updated>2021-10-20T15:40:02.895Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>关于“鲲鹏杯”CTF中pwn_1一些问题的探讨</title>
+    <link href="http://example.com/2021/10/20/%E5%85%B3%E4%BA%8E%E2%80%9C%E9%B2%B2%E9%B9%8F%E6%9D%AF%E2%80%9DCTF%E4%B8%ADpwn-1%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98%E7%9A%84%E6%8E%A2%E8%AE%A8/"/>
+    <id>http://example.com/2021/10/20/%E5%85%B3%E4%BA%8E%E2%80%9C%E9%B2%B2%E9%B9%8F%E6%9D%AF%E2%80%9DCTF%E4%B8%ADpwn-1%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98%E7%9A%84%E6%8E%A2%E8%AE%A8/</id>
+    <published>2021-10-20T09:11:08.000Z</published>
+    <updated>2021-10-20T15:40:02.895Z</updated>
+    
+    
+    <summary type="html">&lt;h4 id=&quot;0-前言&quot;&gt;&lt;a href=&quot;#0-前言&quot; class=&quot;headerlink&quot; title=&quot;0.前言&quot;&gt;&lt;/a&gt;0.前言&lt;/h4&gt;&lt;p&gt;&lt;em&gt;题目：&lt;a href=&quot;pwn_1&quot;&gt;点击下载ELF文件&lt;/a&gt;&lt;/em&gt;&lt;br&gt;&lt;em&gt;保护：未开任何保护&lt;/em&gt;&lt;br&gt;&lt;em&gt;其他：32位ELF，编译环境是Uubuntu14&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;说实话，这道题对pwn新人不算特别友好，主要难点有两个：一是由于汇编码中调用了call eax导致无法直接查看其伪C代码（这个在当时比赛中确实难住了我，因为以我现在的水平直接审计汇编代码属实头疼，但赛后我找到了解决的方法——很简单，因为错误指发生在call eax，那么把这行代码&lt;strong&gt;去掉或者替换&lt;/strong&gt;就行了），解决后查看伪C代码逻辑就简单了；二是这一题虽然是栈的题目，但不涉及溢出，但只要看懂了伪C代码不难想到使用shellcode，但是根据题目我们最多只能输入&lt;strong&gt;19字节&lt;/strong&gt;，而pwntools自带的shellcode远超这个字节数。所以需要准备小于19字节的shellcode。（&lt;strong&gt;因此我认为新人包括我在内要去积累一些较短的shellcode以备不时之需。&lt;/strong&gt;）&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="学习" scheme="http://example.com/categories/%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+    <category term="题目" scheme="http://example.com/tags/%E9%A2%98%E7%9B%AE/"/>
+    
+    <category term="栈" scheme="http://example.com/tags/%E6%A0%88/"/>
+    
+    <category term="shellcode" scheme="http://example.com/tags/shellcode/"/>
+    
+    <category term="问题探讨" scheme="http://example.com/tags/%E9%97%AE%E9%A2%98%E6%8E%A2%E8%AE%A8/"/>
+    
+    <category term="Ubuntu" scheme="http://example.com/tags/Ubuntu/"/>
+    
+    <category term="Kali" scheme="http://example.com/tags/Kali/"/>
+    
+  </entry>
   
   <entry>
     <title>浅谈简单的栈转移</title>
@@ -164,9 +194,9 @@
     
     <category term="C/C++" scheme="http://example.com/tags/C-C/"/>
     
-    <category term="Assembly" scheme="http://example.com/tags/Assembly/"/>
-    
     <category term="栈" scheme="http://example.com/tags/%E6%A0%88/"/>
+    
+    <category term="Assembly" scheme="http://example.com/tags/Assembly/"/>
     
     <category term="数据存储" scheme="http://example.com/tags/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/"/>
     
