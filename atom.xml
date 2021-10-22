@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-10-20T15:40:02.895Z</updated>
+  <updated>2021-10-22T16:38:37.685Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,38 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>浅谈libc地址泄露</title>
+    <link href="http://example.com/2021/10/22/%E6%B5%85%E8%B0%88libc%E5%9C%B0%E5%9D%80%E6%B3%84%E9%9C%B2/"/>
+    <id>http://example.com/2021/10/22/%E6%B5%85%E8%B0%88libc%E5%9C%B0%E5%9D%80%E6%B3%84%E9%9C%B2/</id>
+    <published>2021-10-22T14:37:41.000Z</published>
+    <updated>2021-10-22T16:38:37.685Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h4 id=&quot;0-前言&quot;&gt;&lt;a href=&quot;#0-前言&quot; class=&quot;headerlink&quot; title=&quot;0.前言&quot;&gt;&lt;/a&gt;0.前言&lt;/h4&gt;&lt;p&gt;这个例题似乎是没法完成最终的getshell的，因为缓冲区离got表太近了，会出问题。&lt;/p&gt;
+&lt;h4</summary>
+        
+      
+    
+    
+    
+    <category term="学习" scheme="http://example.com/categories/%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+    <category term="PWN" scheme="http://example.com/tags/PWN/"/>
+    
+    <category term="栈溢出" scheme="http://example.com/tags/%E6%A0%88%E6%BA%A2%E5%87%BA/"/>
+    
+    <category term="基地址泄露" scheme="http://example.com/tags/%E5%9F%BA%E5%9C%B0%E5%9D%80%E6%B3%84%E9%9C%B2/"/>
+    
+    <category term="ROP" scheme="http://example.com/tags/ROP/"/>
+    
+  </entry>
   
   <entry>
     <title>关于“鲲鹏杯”CTF中pwn_1一些问题的探讨</title>
@@ -32,9 +64,9 @@
     <category term="学习" scheme="http://example.com/categories/%E5%AD%A6%E4%B9%A0/"/>
     
     
-    <category term="题目" scheme="http://example.com/tags/%E9%A2%98%E7%9B%AE/"/>
-    
     <category term="栈" scheme="http://example.com/tags/%E6%A0%88/"/>
+    
+    <category term="题目" scheme="http://example.com/tags/%E9%A2%98%E7%9B%AE/"/>
     
     <category term="shellcode" scheme="http://example.com/tags/shellcode/"/>
     
@@ -67,9 +99,9 @@
     
     <category term="栈溢出" scheme="http://example.com/tags/%E6%A0%88%E6%BA%A2%E5%87%BA/"/>
     
-    <category term="解题思路" scheme="http://example.com/tags/%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF/"/>
-    
     <category term="ROP" scheme="http://example.com/tags/ROP/"/>
+    
+    <category term="解题思路" scheme="http://example.com/tags/%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF/"/>
     
     <category term="栈转移" scheme="http://example.com/tags/%E6%A0%88%E8%BD%AC%E7%A7%BB/"/>
     
@@ -96,9 +128,9 @@
     
     <category term="栈溢出" scheme="http://example.com/tags/%E6%A0%88%E6%BA%A2%E5%87%BA/"/>
     
-    <category term="解题思路" scheme="http://example.com/tags/%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF/"/>
-    
     <category term="ROP" scheme="http://example.com/tags/ROP/"/>
+    
+    <category term="解题思路" scheme="http://example.com/tags/%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF/"/>
     
   </entry>
   
@@ -194,9 +226,9 @@
     
     <category term="C/C++" scheme="http://example.com/tags/C-C/"/>
     
-    <category term="栈" scheme="http://example.com/tags/%E6%A0%88/"/>
-    
     <category term="Assembly" scheme="http://example.com/tags/Assembly/"/>
+    
+    <category term="栈" scheme="http://example.com/tags/%E6%A0%88/"/>
     
     <category term="数据存储" scheme="http://example.com/tags/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/"/>
     
