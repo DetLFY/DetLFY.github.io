@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-10-26T17:06:25.937Z</updated>
+  <updated>2021-10-26T17:07:53.178Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -21,16 +21,11 @@
     <link href="http://example.com/2021/10/26/%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B1%BB%E9%A2%98%E7%9A%84%E4%B8%80%E8%88%AC%E6%96%B9%E6%B3%95/"/>
     <id>http://example.com/2021/10/26/%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B1%BB%E9%A2%98%E7%9A%84%E4%B8%80%E8%88%AC%E6%96%B9%E6%B3%95/</id>
     <published>2021-10-26T15:38:38.000Z</published>
-    <updated>2021-10-26T17:06:25.937Z</updated>
+    <updated>2021-10-26T17:07:53.178Z</updated>
     
     
-      
-      
-        
-        
-    <summary type="html">&lt;h4 id=&quot;0-前言&quot;&gt;&lt;a href=&quot;#0-前言&quot; class=&quot;headerlink&quot;</summary>
-        
-      
+    <summary type="html">&lt;h4 id=&quot;0-前言&quot;&gt;&lt;a href=&quot;#0-前言&quot; class=&quot;headerlink&quot; title=&quot;0.前言&quot;&gt;&lt;/a&gt;0.前言&lt;/h4&gt;&lt;p&gt;本文讨论的是栈溢出类题目的思路及一般解法，不包含完整解题过程与高级ROP等。&lt;br&gt;这也算是这一个月来学习的一个总结与复习。&lt;br&gt;栈类题目的思想在我看来其实归根到底就是&lt;strong&gt;劫持控制流&lt;/strong&gt;。只要能把控制流劫持到我们想要的地方，目的便达成了。&lt;/p&gt;
+&lt;h4 id=&quot;1-栈溢出的原理&quot;&gt;&lt;a href=&quot;#1-栈溢出的原理&quot; class=&quot;headerlink&quot; title=&quot;1.栈溢出的原理&quot;&gt;&lt;/a&gt;1.栈溢出的原理&lt;/h4&gt;</summary>
     
     
     
@@ -87,9 +82,9 @@
     <category term="学习" scheme="http://example.com/categories/%E5%AD%A6%E4%B9%A0/"/>
     
     
-    <category term="题目" scheme="http://example.com/tags/%E9%A2%98%E7%9B%AE/"/>
-    
     <category term="栈" scheme="http://example.com/tags/%E6%A0%88/"/>
+    
+    <category term="题目" scheme="http://example.com/tags/%E9%A2%98%E7%9B%AE/"/>
     
     <category term="shellcode" scheme="http://example.com/tags/shellcode/"/>
     
@@ -249,9 +244,9 @@
     
     <category term="C/C++" scheme="http://example.com/tags/C-C/"/>
     
-    <category term="栈" scheme="http://example.com/tags/%E6%A0%88/"/>
-    
     <category term="Assembly" scheme="http://example.com/tags/Assembly/"/>
+    
+    <category term="栈" scheme="http://example.com/tags/%E6%A0%88/"/>
     
     <category term="数据存储" scheme="http://example.com/tags/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/"/>
     

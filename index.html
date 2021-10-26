@@ -176,29 +176,8 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h4 id="0-前言"><a href="#0-前言" class="headerlink" title="0.前言"></a>0.前言</h4><p>本文讨论的是栈溢出类题目的思路及一般解法，不包含完整解题过程与高级ROP等。<br>这也算是这一个月来学习的一个总结与复习。<br>栈类题目的思想在我看来其实归根到底就是<strong>劫持控制流</strong>。只要能把控制流劫持到我们想要的地方，目的便达成了。</p>
-<h4 id="1-栈溢出的原理"><a href="#1-栈溢出的原理" class="headerlink" title="1.栈溢出的原理"></a>1.栈溢出的原理</h4><p>我们知道，栈是一种由<strong>高地址向低地址</strong>增长的数据结构，而数据的写入是由<strong>低地址向高地址</strong>的。<br>倘若向栈中的某个变量写入的字节数超出了这个变量本身的大小，此时若不能很好地控制它，则会发生<strong>越界写入</strong>。导致的后果是栈中其他数据的改写。<br>而我们又知道，栈在函数调用的过程中会将rip压栈，此时若能溢出到此处，则可以改写rip的值，使之指向我们想要程序返回的地址，从而<strong>控制了执行流</strong>。</p>
-<p>由此可见，栈溢出漏洞的利用实现要满足两个条件：<br><strong>1. 程序运行的过程中允许向栈内写入数据。</strong><del>（没法写入怎么溢出？）</del><br><strong>2. 写入的数据大小能够发生越界写入。</strong></p>
-<p><em>（其实栈类题也有可能不要溢出就可以达到getshell的目的，例子就是之前“鲲鹏杯”的pwn_1。这题比较特殊。）</em></p>
-<h4 id="2-栈溢出的基本方法"><a href="#2-栈溢出的基本方法" class="headerlink" title="2.栈溢出的基本方法"></a>2.栈溢出的基本方法</h4><h5 id="2-0-利用思路"><a href="#2-0-利用思路" class="headerlink" title="2-0.利用思路"></a>2-0.利用思路</h5><p>从大体上可以分为两类：</p>
-<ol>
-<li>直接控制执行流。（shellcode&amp;&amp;rop）</li>
-<li>间接控制执行流。（改写函数指针，如got表）<h5 id="2-1-ret2text"><a href="#2-1-ret2text" class="headerlink" title="2-1.ret2text"></a>2-1.ret2text</h5>这类题算是pwn的hello_world。若程序中本身存在后门函数，直接覆盖返回地址到后门函数的地址即可。<br>rop的构建一般为：<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">payload=<span class="string">b&#x27;A&#x27;</span>*N+p64(<span class="number">0</span>)+p64(backdoor_addr)</span><br></pre></td></tr></table></figure>
-<h5 id="2-2-ret2shellcode"><a href="#2-2-ret2shellcode" class="headerlink" title="2-2.ret2shellcode"></a>2-2.ret2shellcode</h5>这类题唯一的难点应该是shellcode的构建，如果缓冲区长度允许，直接用pwntools自带的shellcode即可。如果缓冲区长度受限，则需要自己（上网积累）较短的通用shellcode。</li>
-</ol>
-<p><strong>能用shellcode的条件是程序有RWX的段，如果开了NX保护则不考虑这种方法。</strong><br>rop的构建与上一个类似：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">shellcode=<span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">汇编码区</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line">payload=<span class="string">b&#x27;A&#x27;</span>*N+p64(<span class="number">0</span>)+p64(shellcode_addr)</span><br></pre></td></tr></table></figure>
-<h5 id="2-3-ret2libc"><a href="#2-3-ret2libc" class="headerlink" title="2-3.ret2libc"></a>2-3.ret2libc</h5><p>控制执行流返回到libc中的函数，如system()、execv()。<br>提供一种rop的构建：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">payload=<span class="string">b&#x27;A&#x27;</span>*N+p64(<span class="number">0</span>)+p64(pop_rdi_ret)</span><br><span class="line">payload+=p64(bin_sh)</span><br><span class="line">payload+=p64(pop_rsi_r15_ret)</span><br><span class="line">payload+=p64(<span class="number">0</span>)*<span class="number">2</span></span><br><span class="line">payload+=p64(execv_addr)</span><br></pre></td></tr></table></figure>
-<h5 id="2-4-ret2csu"><a href="#2-4-ret2csu" class="headerlink" title="2-4.ret2csu"></a>2-4.ret2csu</h5><p>程序中存在__libc_csu_init() ，可考虑构建通用gadget。<br>提供一种rop的构建：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">payload=<span class="string">b&#x27;A&#x27;</span>*N+p64(<span class="number">0</span>)+p64(gadget1_addr)</span><br><span class="line">payload+=p64(<span class="number">0</span>)</span><br><span class="line">payload+=p64(<span class="number">1</span>)</span><br><span class="line">payload+=p64(bin_sh)</span><br><span class="line">payload+=p64(<span class="number">0</span>)</span><br><span class="line">payload+=p64(<span class="number">0</span>)</span><br><span class="line">payload+=p64(execv_addr)</span><br><span class="line">payload+=p64(gadget2_addr)</span><br></pre></td></tr></table></figure>
-<p>参考：<a target="_blank" rel="noopener" href="https://detlfy.github.io/2021/10/09/%E6%B5%85%E8%B0%88ret2csu/">浅谈ret2csu</a></p>
-<h5 id="2-5-栈转移"><a href="#2-5-栈转移" class="headerlink" title="2-5.栈转移"></a>2-5.栈转移</h5><p>大多数情况下栈溢出的长度不足以完成rop，甚至只够覆盖到返回地址。此时考虑栈转移（栈迁移）。<br>提供一种rop的构建：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">payload1=<span class="string">b&#x27;A&#x27;</span>*N+p64(buf_addr)+p64(leave_ret)</span><br><span class="line">payload2=p64(gadget1_addr)</span><br><span class="line">payload2+=p64(<span class="number">0</span>)+p64(<span class="number">1</span>)+p64(bin_sh)+p64(<span class="number">0</span>)+p64(<span class="number">0</span>)+p64(execv_addr)</span><br><span class="line">payload2+=p64(gadget2_addr)</span><br></pre></td></tr></table></figure>
-<p>参考：<a target="_blank" rel="noopener" href="https://detlfy.github.io/2021/10/11/%E6%B5%85%E8%B0%88%E7%AE%80%E5%8D%95%E7%9A%84%E6%A0%88%E8%BD%AC%E7%A7%BB/">浅谈简单的栈转移</a></p>
-<h5 id="2-6-libc地址泄露"><a href="#2-6-libc地址泄露" class="headerlink" title="2-6.libc地址泄露"></a>2-6.libc地址泄露</h5><p>当开启了ASLR保护时需要先用已知系统函数地址通过偏移计算泄露libc基地址再通过偏移计算我们需要的系统函数的地址。<br>参考：<a target="_blank" rel="noopener" href="https://detlfy.github.io/2021/10/22/%E6%B5%85%E8%B0%88libc%E5%9C%B0%E5%9D%80%E6%B3%84%E9%9C%B2/">浅谈libc地址泄露</a></p>
-<h5 id="2-7-劫持got表"><a href="#2-7-劫持got表" class="headerlink" title="2-7.劫持got表"></a>2-7.劫持got表</h5><p>（待补充……）</p>
-<h4 id="3-总结"><a href="#3-总结" class="headerlink" title="3.总结"></a>3.总结</h4><p>发现漏洞，想办法利用漏洞，具体情况具体分析。<br>栈类的题不是一成不变的，要<strong>多积累，多理解</strong>。</p>
-
+<h4 id="1-栈溢出的原理"><a href="#1-栈溢出的原理" class="headerlink" title="1.栈溢出的原理"></a>1.栈溢出的原理</h4>
+        
       
 
       
@@ -403,11 +382,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">题目</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">栈</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">栈</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">题目</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -1001,11 +980,11 @@
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">栈</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Assembly</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Assembly</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">栈</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -1339,11 +1318,23 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">题目</a>
+                <a href="javascript:void(0)" class="js-tag color4">Assembly</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">栈</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据存储</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">调用约定</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">题目</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1360,18 +1351,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Kali</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Assembly</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据存储</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">调用约定</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1399,11 +1378,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">栈转移</a>
+                <a href="javascript:void(0)" class="js-tag color3">测试</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">测试</a>
+                <a href="javascript:void(0)" class="js-tag color4">栈转移</a>
               </li>
             
             <div class="clearfix"></div>

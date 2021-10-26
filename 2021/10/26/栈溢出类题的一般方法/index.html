@@ -8,15 +8,15 @@
   <link rel="dns-prefetch" href="http://example.com">
   <title>栈溢出类题的一般方法 | Detective_LFY&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="0.前言本文讨论的是栈溢出类题目的思路及一般解法，不包含完整解题过程与高级ROP等。这也算是这一个月来学习的一个总结与复习。栈类题目的思想在我看来其实归根到底就是劫持控制流。只要能把控制流劫持到我们想要的地方，目的便达成了。 1.栈溢出的原理我们知道，栈是一种由高地址向低地址增长的数据结构，而数据的写入是由低地址向高地址的。倘若向栈中的某个变量写入的字节数超出了这个变量本身的大小，此时若不能很好地">
+  <meta name="description" content="0.前言本文讨论的是栈溢出类题目的思路及一般解法，不包含完整解题过程与高级ROP等。这也算是这一个月来学习的一个总结与复习。栈类题目的思想在我看来其实归根到底就是劫持控制流。只要能把控制流劫持到我们想要的地方，目的便达成了。 1.栈溢出的原理">
 <meta property="og:type" content="article">
 <meta property="og:title" content="栈溢出类题的一般方法">
 <meta property="og:url" content="http://example.com/2021/10/26/%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B1%BB%E9%A2%98%E7%9A%84%E4%B8%80%E8%88%AC%E6%96%B9%E6%B3%95/index.html">
 <meta property="og:site_name" content="Detective_LFY&#39;s Blog">
-<meta property="og:description" content="0.前言本文讨论的是栈溢出类题目的思路及一般解法，不包含完整解题过程与高级ROP等。这也算是这一个月来学习的一个总结与复习。栈类题目的思想在我看来其实归根到底就是劫持控制流。只要能把控制流劫持到我们想要的地方，目的便达成了。 1.栈溢出的原理我们知道，栈是一种由高地址向低地址增长的数据结构，而数据的写入是由低地址向高地址的。倘若向栈中的某个变量写入的字节数超出了这个变量本身的大小，此时若不能很好地">
+<meta property="og:description" content="0.前言本文讨论的是栈溢出类题目的思路及一般解法，不包含完整解题过程与高级ROP等。这也算是这一个月来学习的一个总结与复习。栈类题目的思想在我看来其实归根到底就是劫持控制流。只要能把控制流劫持到我们想要的地方，目的便达成了。 1.栈溢出的原理">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-10-26T15:38:38.000Z">
-<meta property="article:modified_time" content="2021-10-26T17:06:25.937Z">
+<meta property="article:modified_time" content="2021-10-26T17:07:53.178Z">
 <meta property="article:author" content="LianFeiyang">
 <meta property="article:tag" content="PWN">
 <meta property="article:tag" content="栈溢出">
@@ -179,7 +179,8 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h4 id="0-前言"><a href="#0-前言" class="headerlink" title="0.前言"></a>0.前言</h4><p>本文讨论的是栈溢出类题目的思路及一般解法，不包含完整解题过程与高级ROP等。<br>这也算是这一个月来学习的一个总结与复习。<br>栈类题目的思想在我看来其实归根到底就是<strong>劫持控制流</strong>。只要能把控制流劫持到我们想要的地方，目的便达成了。</p>
-<h4 id="1-栈溢出的原理"><a href="#1-栈溢出的原理" class="headerlink" title="1.栈溢出的原理"></a>1.栈溢出的原理</h4><p>我们知道，栈是一种由<strong>高地址向低地址</strong>增长的数据结构，而数据的写入是由<strong>低地址向高地址</strong>的。<br>倘若向栈中的某个变量写入的字节数超出了这个变量本身的大小，此时若不能很好地控制它，则会发生<strong>越界写入</strong>。导致的后果是栈中其他数据的改写。<br>而我们又知道，栈在函数调用的过程中会将rip压栈，此时若能溢出到此处，则可以改写rip的值，使之指向我们想要程序返回的地址，从而<strong>控制了执行流</strong>。</p>
+<h4 id="1-栈溢出的原理"><a href="#1-栈溢出的原理" class="headerlink" title="1.栈溢出的原理"></a>1.栈溢出的原理</h4><span id="more"></span>
+<p>我们知道，栈是一种由<strong>高地址向低地址</strong>增长的数据结构，而数据的写入是由<strong>低地址向高地址</strong>的。<br>倘若向栈中的某个变量写入的字节数超出了这个变量本身的大小，此时若不能很好地控制它，则会发生<strong>越界写入</strong>。导致的后果是栈中其他数据的改写。<br>而我们又知道，栈在函数调用的过程中会将rip压栈，此时若能溢出到此处，则可以改写rip的值，使之指向我们想要程序返回的地址，从而<strong>控制了执行流</strong>。</p>
 <p>由此可见，栈溢出漏洞的利用实现要满足两个条件：<br><strong>1. 程序运行的过程中允许向栈内写入数据。</strong><del>（没法写入怎么溢出？）</del><br><strong>2. 写入的数据大小能够发生越界写入。</strong></p>
 <p><em>（其实栈类题也有可能不要溢出就可以达到getshell的目的，例子就是之前“鲲鹏杯”的pwn_1。这题比较特殊。）</em></p>
 <h4 id="2-栈溢出的基本方法"><a href="#2-栈溢出的基本方法" class="headerlink" title="2.栈溢出的基本方法"></a>2.栈溢出的基本方法</h4><h5 id="2-0-利用思路"><a href="#2-0-利用思路" class="headerlink" title="2-0.利用思路"></a>2-0.利用思路</h5><p>从大体上可以分为两类：</p>
@@ -497,11 +498,23 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">题目</a>
+                <a href="javascript:void(0)" class="js-tag color4">Assembly</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">栈</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据存储</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">调用约定</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">题目</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -518,18 +531,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Kali</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Assembly</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据存储</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">调用约定</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -557,11 +558,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">栈转移</a>
+                <a href="javascript:void(0)" class="js-tag color3">测试</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">测试</a>
+                <a href="javascript:void(0)" class="js-tag color4">栈转移</a>
               </li>
             
             <div class="clearfix"></div>
