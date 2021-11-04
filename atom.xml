@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-11-04T14:29:38.934Z</updated>
+  <updated>2021-11-04T14:30:44.462Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -21,16 +21,11 @@
     <link href="http://example.com/2021/11/04/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8CPWN%E6%96%B0%E6%89%8B%E5%8C%BAstring/"/>
     <id>http://example.com/2021/11/04/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8CPWN%E6%96%B0%E6%89%8B%E5%8C%BAstring/</id>
     <published>2021-11-04T12:02:30.000Z</published>
-    <updated>2021-11-04T14:29:38.934Z</updated>
+    <updated>2021-11-04T14:30:44.462Z</updated>
     
     
-      
-      
-        
-        
-    <summary type="html">&lt;h4 id=&quot;0-前言&quot;&gt;&lt;a href=&quot;#0-前言&quot; class=&quot;headerlink&quot;</summary>
-        
-      
+    <summary type="html">&lt;h4 id=&quot;0-前言&quot;&gt;&lt;a href=&quot;#0-前言&quot; class=&quot;headerlink&quot; title=&quot;0.前言&quot;&gt;&lt;/a&gt;0.前言&lt;/h4&gt;&lt;p&gt;这题挺复杂的，为了设个题特地做了个有趣（？）的文字冒险游戏。&lt;br&gt;而且文字量挺大的。说实话我也是看了其他人的wp才做出来的，而且据说是pwn新手区难度很大的一题。主要是观察比较困难，而且程序代码整体阅读有一定的难度。但是它解题的逻辑倒挺简单的：就是通过格式化字符串漏洞修改变量的值使条件满足，向一段内存中写入shellcode并用函数指针强制转换类型使之可执行。&lt;/p&gt;
+&lt;h4 id=&quot;1-思路&quot;&gt;&lt;a href=&quot;#1-思路&quot; class=&quot;headerlink&quot; title=&quot;1.思路&quot;&gt;&lt;/a&gt;1.思路&lt;/h4&gt;</summary>
     
     
     
@@ -89,9 +84,9 @@
     
     <category term="PWN" scheme="http://example.com/tags/PWN/"/>
     
-    <category term="栈溢出" scheme="http://example.com/tags/%E6%A0%88%E6%BA%A2%E5%87%BA/"/>
-    
     <category term="真题" scheme="http://example.com/tags/%E7%9C%9F%E9%A2%98/"/>
+    
+    <category term="栈溢出" scheme="http://example.com/tags/%E6%A0%88%E6%BA%A2%E5%87%BA/"/>
     
     <category term="libc" scheme="http://example.com/tags/libc/"/>
     
@@ -163,9 +158,9 @@
     <category term="学习" scheme="http://example.com/categories/%E5%AD%A6%E4%B9%A0/"/>
     
     
-    <category term="题目" scheme="http://example.com/tags/%E9%A2%98%E7%9B%AE/"/>
-    
     <category term="栈" scheme="http://example.com/tags/%E6%A0%88/"/>
+    
+    <category term="题目" scheme="http://example.com/tags/%E9%A2%98%E7%9B%AE/"/>
     
     <category term="shellcode" scheme="http://example.com/tags/shellcode/"/>
     
@@ -275,11 +270,11 @@
     
     <category term="博客" scheme="http://example.com/tags/%E5%8D%9A%E5%AE%A2/"/>
     
-    <category term="Linux" scheme="http://example.com/tags/Linux/"/>
-    
     <category term="PWN" scheme="http://example.com/tags/PWN/"/>
     
     <category term="栈溢出" scheme="http://example.com/tags/%E6%A0%88%E6%BA%A2%E5%87%BA/"/>
+    
+    <category term="Linux" scheme="http://example.com/tags/Linux/"/>
     
   </entry>
   
@@ -325,9 +320,9 @@
     
     <category term="C/C++" scheme="http://example.com/tags/C-C/"/>
     
-    <category term="栈" scheme="http://example.com/tags/%E6%A0%88/"/>
-    
     <category term="Assembly" scheme="http://example.com/tags/Assembly/"/>
+    
+    <category term="栈" scheme="http://example.com/tags/%E6%A0%88/"/>
     
     <category term="数据存储" scheme="http://example.com/tags/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/"/>
     
