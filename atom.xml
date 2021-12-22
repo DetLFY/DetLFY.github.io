@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-12-22T09:26:05.548Z</updated>
+  <updated>2021-12-22T09:57:17.462Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="http://example.com/2021/12/22/%E4%BE%8B%E6%9E%90%E5%9F%BA%E4%BA%8EUAF%E7%9A%84fastbin-attack%E5%8F%8Arealloc%E8%B0%83%E6%95%B4%E6%A0%88/"/>
     <id>http://example.com/2021/12/22/%E4%BE%8B%E6%9E%90%E5%9F%BA%E4%BA%8EUAF%E7%9A%84fastbin-attack%E5%8F%8Arealloc%E8%B0%83%E6%95%B4%E6%A0%88/</id>
     <published>2021-12-22T03:27:44.000Z</published>
-    <updated>2021-12-22T09:26:05.548Z</updated>
+    <updated>2021-12-22T09:57:17.462Z</updated>
     
     
     <summary type="html">&lt;h4 id=&quot;0-前导知识&quot;&gt;&lt;a href=&quot;#0-前导知识&quot; class=&quot;headerlink&quot; title=&quot;0.前导知识&quot;&gt;&lt;/a&gt;0.前导知识&lt;/h4&gt;&lt;h5 id=&quot;0-1-unsortedbin泄露libc地址&quot;&gt;&lt;a href=&quot;#0-1-unsortedbin泄露libc地址&quot; class=&quot;headerlink&quot; title=&quot;0-1.unsortedbin泄露libc地址&quot;&gt;&lt;/a&gt;0-1.unsortedbin泄露libc地址&lt;/h5&gt;&lt;p&gt;通过查阅相关资料可以知道，对于libc-2.23.so而言，当unsortedbin中只有一个freed chunk时，这个freed chunk的fd和bk指针都指向libc中的一个地址（一般是&amp;lt;main_arena+88&amp;gt;），这个偏移也可以算出是0x3c4b78。&lt;/p&gt;</summary>
@@ -150,11 +150,11 @@
     <category term="学习" scheme="http://example.com/categories/%E5%AD%A6%E4%B9%A0/"/>
     
     
+    <category term="Linux" scheme="http://example.com/tags/Linux/"/>
+    
     <category term="堆内存" scheme="http://example.com/tags/%E5%A0%86%E5%86%85%E5%AD%98/"/>
     
     <category term="内存管理" scheme="http://example.com/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/"/>
-    
-    <category term="Linux" scheme="http://example.com/tags/Linux/"/>
     
     <category term="链表" scheme="http://example.com/tags/%E9%93%BE%E8%A1%A8/"/>
     
@@ -302,11 +302,11 @@
     <category term="学习" scheme="http://example.com/categories/%E5%AD%A6%E4%B9%A0/"/>
     
     
-    <category term="栈" scheme="http://example.com/tags/%E6%A0%88/"/>
-    
     <category term="shellcode" scheme="http://example.com/tags/shellcode/"/>
     
     <category term="题目" scheme="http://example.com/tags/%E9%A2%98%E7%9B%AE/"/>
+    
+    <category term="栈" scheme="http://example.com/tags/%E6%A0%88/"/>
     
     <category term="问题探讨" scheme="http://example.com/tags/%E9%97%AE%E9%A2%98%E6%8E%A2%E8%AE%A8/"/>
     
@@ -464,9 +464,9 @@
     
     <category term="C/C++" scheme="http://example.com/tags/C-C/"/>
     
-    <category term="Assembly" scheme="http://example.com/tags/Assembly/"/>
-    
     <category term="栈" scheme="http://example.com/tags/%E6%A0%88/"/>
+    
+    <category term="Assembly" scheme="http://example.com/tags/Assembly/"/>
     
     <category term="数据存储" scheme="http://example.com/tags/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/"/>
     
