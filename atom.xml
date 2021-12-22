@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-12-07T14:52:09.248Z</updated>
+  <updated>2021-12-22T09:15:47.287Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>例析基于UAF的fastbin attack及realloc调整栈</title>
+    <link href="http://example.com/2021/12/22/%E4%BE%8B%E6%9E%90%E5%9F%BA%E4%BA%8EUAF%E7%9A%84fastbin-attack%E5%8F%8Arealloc%E8%B0%83%E6%95%B4%E6%A0%88/"/>
+    <id>http://example.com/2021/12/22/%E4%BE%8B%E6%9E%90%E5%9F%BA%E4%BA%8EUAF%E7%9A%84fastbin-attack%E5%8F%8Arealloc%E8%B0%83%E6%95%B4%E6%A0%88/</id>
+    <published>2021-12-22T03:27:44.000Z</published>
+    <updated>2021-12-22T09:15:47.287Z</updated>
+    
+    
+    <summary type="html">&lt;h4 id=&quot;0-前导知识&quot;&gt;&lt;a href=&quot;#0-前导知识&quot; class=&quot;headerlink&quot; title=&quot;0.前导知识&quot;&gt;&lt;/a&gt;0.前导知识&lt;/h4&gt;&lt;h5 id=&quot;0-1-unsortedbin泄露libc地址&quot;&gt;&lt;a href=&quot;#0-1-unsortedbin泄露libc地址&quot; class=&quot;headerlink&quot; title=&quot;0-1.unsortedbin泄露libc地址&quot;&gt;&lt;/a&gt;0-1.unsortedbin泄露libc地址&lt;/h5&gt;&lt;p&gt;通过查阅相关资料可以知道，对于libc-2.23.so而言，当unsortedbin中只有一个freed chunk时，这个freed chunk的fd和bk指针都指向libc中的一个地址（一般是&amp;lt;main_arena+88&amp;gt;），这个偏移也可以算出是0x3c4b78。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="学习" scheme="http://example.com/categories/%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+    <category term="PWN" scheme="http://example.com/tags/PWN/"/>
+    
+    <category term="UAF" scheme="http://example.com/tags/UAF/"/>
+    
+    <category term="fastbin attack" scheme="http://example.com/tags/fastbin-attack/"/>
+    
+    <category term="malloc" scheme="http://example.com/tags/malloc/"/>
+    
+    <category term="realloc" scheme="http://example.com/tags/realloc/"/>
+    
+    <category term="one_gatget" scheme="http://example.com/tags/one-gatget/"/>
+    
+  </entry>
   
   <entry>
     <title>UNCTF2021 PWN 部分WP</title>
@@ -65,11 +94,11 @@
     
     <category term="UAF" scheme="http://example.com/tags/UAF/"/>
     
+    <category term="fastbin attack" scheme="http://example.com/tags/fastbin-attack/"/>
+    
     <category term="double free" scheme="http://example.com/tags/double-free/"/>
     
     <category term="堆溢出" scheme="http://example.com/tags/%E5%A0%86%E6%BA%A2%E5%87%BA/"/>
-    
-    <category term="fastbin attack" scheme="http://example.com/tags/fastbin-attack/"/>
     
   </entry>
   
@@ -121,11 +150,11 @@
     <category term="学习" scheme="http://example.com/categories/%E5%AD%A6%E4%B9%A0/"/>
     
     
-    <category term="Linux" scheme="http://example.com/tags/Linux/"/>
-    
     <category term="堆内存" scheme="http://example.com/tags/%E5%A0%86%E5%86%85%E5%AD%98/"/>
     
     <category term="内存管理" scheme="http://example.com/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/"/>
+    
+    <category term="Linux" scheme="http://example.com/tags/Linux/"/>
     
     <category term="链表" scheme="http://example.com/tags/%E9%93%BE%E8%A1%A8/"/>
     
@@ -251,9 +280,9 @@
     
     <category term="栈溢出" scheme="http://example.com/tags/%E6%A0%88%E6%BA%A2%E5%87%BA/"/>
     
-    <category term="基地址泄露" scheme="http://example.com/tags/%E5%9F%BA%E5%9C%B0%E5%9D%80%E6%B3%84%E9%9C%B2/"/>
-    
     <category term="ROP" scheme="http://example.com/tags/ROP/"/>
+    
+    <category term="基地址泄露" scheme="http://example.com/tags/%E5%9F%BA%E5%9C%B0%E5%9D%80%E6%B3%84%E9%9C%B2/"/>
     
   </entry>
   
@@ -275,9 +304,9 @@
     
     <category term="shellcode" scheme="http://example.com/tags/shellcode/"/>
     
-    <category term="题目" scheme="http://example.com/tags/%E9%A2%98%E7%9B%AE/"/>
-    
     <category term="栈" scheme="http://example.com/tags/%E6%A0%88/"/>
+    
+    <category term="题目" scheme="http://example.com/tags/%E9%A2%98%E7%9B%AE/"/>
     
     <category term="问题探讨" scheme="http://example.com/tags/%E9%97%AE%E9%A2%98%E6%8E%A2%E8%AE%A8/"/>
     
@@ -308,9 +337,9 @@
     
     <category term="栈溢出" scheme="http://example.com/tags/%E6%A0%88%E6%BA%A2%E5%87%BA/"/>
     
-    <category term="ROP" scheme="http://example.com/tags/ROP/"/>
-    
     <category term="解题思路" scheme="http://example.com/tags/%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF/"/>
+    
+    <category term="ROP" scheme="http://example.com/tags/ROP/"/>
     
     <category term="栈转移" scheme="http://example.com/tags/%E6%A0%88%E8%BD%AC%E7%A7%BB/"/>
     
@@ -337,9 +366,9 @@
     
     <category term="栈溢出" scheme="http://example.com/tags/%E6%A0%88%E6%BA%A2%E5%87%BA/"/>
     
-    <category term="ROP" scheme="http://example.com/tags/ROP/"/>
-    
     <category term="解题思路" scheme="http://example.com/tags/%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF/"/>
+    
+    <category term="ROP" scheme="http://example.com/tags/ROP/"/>
     
   </entry>
   
@@ -435,9 +464,9 @@
     
     <category term="C/C++" scheme="http://example.com/tags/C-C/"/>
     
-    <category term="栈" scheme="http://example.com/tags/%E6%A0%88/"/>
-    
     <category term="Assembly" scheme="http://example.com/tags/Assembly/"/>
+    
+    <category term="栈" scheme="http://example.com/tags/%E6%A0%88/"/>
     
     <category term="数据存储" scheme="http://example.com/tags/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/"/>
     
@@ -555,29 +584,6 @@
     <category term="博客" scheme="http://example.com/tags/%E5%8D%9A%E5%AE%A2/"/>
     
     <category term="C/C++" scheme="http://example.com/tags/C-C/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>测试文章</title>
-    <link href="http://example.com/2021/09/20/%E6%B5%8B%E8%AF%95%E6%96%87%E7%AB%A0/"/>
-    <id>http://example.com/2021/09/20/%E6%B5%8B%E8%AF%95%E6%96%87%E7%AB%A0/</id>
-    <published>2021-09-20T07:35:26.000Z</published>
-    <updated>2021-09-22T01:47:53.088Z</updated>
-    
-    
-    <summary type="html">&lt;p&gt;&lt;img src=&quot;/2021/09/20/%E6%B5%8B%E8%AF%95%E6%96%87%E7%AB%A0/test.jpg&quot; alt=&quot;test&quot;&gt;&lt;/p&gt;
-&lt;h4 id=&quot;1-这只是个测试文章&quot;&gt;&lt;a href=&quot;#1-这只是个测试文章&quot; class=&quot;headerlink&quot; title=&quot;1.这只是个测试文章&quot;&gt;&lt;/a&gt;1.这只是个测试文章&lt;/h4&gt;&lt;p&gt;它没有任何意义……&lt;/p&gt;
-&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;就像这段文字一样。&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
-    
-    
-    
-    <category term="杂项" scheme="http://example.com/categories/%E6%9D%82%E9%A1%B9/"/>
-    
-    
-    <category term="博客" scheme="http://example.com/tags/%E5%8D%9A%E5%AE%A2/"/>
-    
-    <category term="测试" scheme="http://example.com/tags/%E6%B5%8B%E8%AF%95/"/>
     
   </entry>
   
