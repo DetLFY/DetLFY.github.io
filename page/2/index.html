@@ -155,6 +155,488 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-攻防世界PWN新手区string" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/11/04/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8CPWN%E6%96%B0%E6%89%8B%E5%8C%BAstring/">攻防世界PWN新手区string</a>
+    </h1>
+  
+
+        
+        <a href="/2021/11/04/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8CPWN%E6%96%B0%E6%89%8B%E5%8C%BAstring/" class="archive-article-date">
+  	<time datetime="2021-11-04T12:02:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-11-04</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="0-前言"><a href="#0-前言" class="headerlink" title="0.前言"></a>0.前言</h4><p>这题挺复杂的，为了设个题特地做了个有趣（？）的文字冒险游戏。<br>而且文字量挺大的。说实话我也是看了其他人的wp才做出来的，而且据说是pwn新手区难度很大的一题。主要是观察比较困难，而且程序代码整体阅读有一定的难度。但是它解题的逻辑倒挺简单的：就是通过格式化字符串漏洞修改变量的值使条件满足，向一段内存中写入shellcode并用函数指针强制转换类型使之可执行。</p>
+<h4 id="1-思路"><a href="#1-思路" class="headerlink" title="1.思路"></a>1.思路</h4>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PWN</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">shellcode</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">格式化字符串漏洞</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">函数指针</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/学习//" class="article-tag-list-link color3">学习</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/11/04/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8CPWN%E6%96%B0%E6%89%8B%E5%8C%BAstring/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-浅谈利用格式化字符串漏洞泄露canary" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/10/31/%E6%B5%85%E8%B0%88%E5%88%A9%E7%94%A8%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E6%B3%84%E9%9C%B2canary/">浅谈利用格式化字符串漏洞泄露canary</a>
+    </h1>
+  
+
+        
+        <a href="/2021/10/31/%E6%B5%85%E8%B0%88%E5%88%A9%E7%94%A8%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E6%B3%84%E9%9C%B2canary/" class="archive-article-date">
+  	<time datetime="2021-10-31T15:26:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-10-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="0-格式化字符串漏洞"><a href="#0-格式化字符串漏洞" class="headerlink" title="0.格式化字符串漏洞"></a>0.格式化字符串漏洞</h4><h5 id="0-1-起因"><a href="#0-1-起因" class="headerlink" title="0-1.起因"></a>0-1.起因</h5><p>我们知道，一般情况下，在C语言中格式化输出函数printf()的用法如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,a);</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d%f&quot;</span>,a,b);</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d%f%c&quot;</span>,a,b,c);</span><br></pre></td></tr></table></figure>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PWN</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">格式化字符串漏洞</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">canary</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/学习//" class="article-tag-list-link color3">学习</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/10/31/%E6%B5%85%E8%B0%88%E5%88%A9%E7%94%A8%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E6%B3%84%E9%9C%B2canary/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-NSSCTF中收录的【2021-鹤城杯】babyof题解" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/10/28/NSSCTF%E4%B8%AD%E6%94%B6%E5%BD%95%E7%9A%84%E3%80%902021-%E9%B9%A4%E5%9F%8E%E6%9D%AF%E3%80%91babyof%E9%A2%98%E8%A7%A3/">NSSCTF中收录的【2021 鹤城杯】babyof题解</a>
+    </h1>
+  
+
+        
+        <a href="/2021/10/28/NSSCTF%E4%B8%AD%E6%94%B6%E5%BD%95%E7%9A%84%E3%80%902021-%E9%B9%A4%E5%9F%8E%E6%9D%AF%E3%80%91babyof%E9%A2%98%E8%A7%A3/" class="archive-article-date">
+  	<time datetime="2021-10-28T08:21:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-10-28</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="0-前言"><a href="#0-前言" class="headerlink" title="0.前言"></a>0.前言</h4><p>这题是一个比较典型的栈溢出类题，整体思路不难，我查了一下好像是当时比赛的第二题。<br>这题在NSSCTF上做的时候有一个点比较坑（后面讲），我不清楚是当时比赛环境就是这样还是收入时环境没有完全一致。不过还是解决了就是。<br>写这题的wp的原因有几个：<br><em>一是我认为这题解法比较经典，能起到一个复习的作用；</em><br><em>二是这题会涉及一些我之前博客中忘了写的东西，相当于做一个补充；</em><br><em>三是解决那个小问题时用到了LibcSearcher，我个人觉得这是个不错且简单好用的Python库，一并说了。</em><br>这道题的exp优化参考了一些wp，但主体逻辑还是我自己写的。</p>
+<h4 id="1-题解过程"><a href="#1-题解过程" class="headerlink" title="1.题解过程"></a>1.题解过程</h4>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PWN</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">栈溢出</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">真题</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">libc</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/学习//" class="article-tag-list-link color3">学习</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/10/28/NSSCTF%E4%B8%AD%E6%94%B6%E5%BD%95%E7%9A%84%E3%80%902021-%E9%B9%A4%E5%9F%8E%E6%9D%AF%E3%80%91babyof%E9%A2%98%E8%A7%A3/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-栈溢出类题的一般方法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/10/26/%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B1%BB%E9%A2%98%E7%9A%84%E4%B8%80%E8%88%AC%E6%96%B9%E6%B3%95/">栈溢出类题的一般方法</a>
+    </h1>
+  
+
+        
+        <a href="/2021/10/26/%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B1%BB%E9%A2%98%E7%9A%84%E4%B8%80%E8%88%AC%E6%96%B9%E6%B3%95/" class="archive-article-date">
+  	<time datetime="2021-10-26T15:38:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-10-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="0-前言"><a href="#0-前言" class="headerlink" title="0.前言"></a>0.前言</h4><p>本文讨论的是栈溢出类题目的思路及一般解法，不包含完整解题过程与高级ROP等。<br>这也算是这一个月来学习的一个总结与复习。<br>栈类题目的思想在我看来其实归根到底就是<strong>劫持控制流</strong>。只要能把控制流劫持到我们想要的地方，目的便达成了。</p>
+<h4 id="1-栈溢出的原理"><a href="#1-栈溢出的原理" class="headerlink" title="1.栈溢出的原理"></a>1.栈溢出的原理</h4>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PWN</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">栈溢出</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">总结</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/学习//" class="article-tag-list-link color3">学习</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/10/26/%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B1%BB%E9%A2%98%E7%9A%84%E4%B8%80%E8%88%AC%E6%96%B9%E6%B3%95/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-浅谈libc地址泄露" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/10/22/%E6%B5%85%E8%B0%88libc%E5%9C%B0%E5%9D%80%E6%B3%84%E9%9C%B2/">浅谈libc地址泄露</a>
+    </h1>
+  
+
+        
+        <a href="/2021/10/22/%E6%B5%85%E8%B0%88libc%E5%9C%B0%E5%9D%80%E6%B3%84%E9%9C%B2/" class="archive-article-date">
+  	<time datetime="2021-10-22T14:37:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-10-22</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="0-前言"><a href="#0-前言" class="headerlink" title="0.前言"></a>0.前言</h4><p>这个例题似乎是没法完成最终的getshell的，因为缓冲区离got表太近了，会出问题。</p>
+<h4 id="1-思路"><a href="#1-思路" class="headerlink" title="1.思路"></a>1.思路</h4><p>当程序开了PIE或者ASLR保护后，函数的地址会被<strong>随机化</strong>，这时如果要返回到某个函数的话就需要泄露地址。<br>以开了ASLR的为例，此时系统函数的地址是随机的，但是函数在同一libc中的<strong>偏移量是确定的</strong>。而我们知道，一个系统函数，如puts函数，在程序中被调用过后，其地址就会存在got表中，此时可以通过泄露其地址，再通过偏移即可泄露libc的基地址。此时如果要调用system或execv函数，则再用libc基地址加上对应的偏移即可。</p>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PWN</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">栈溢出</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">基地址泄露</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">ROP</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/学习//" class="article-tag-list-link color3">学习</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/10/22/%E6%B5%85%E8%B0%88libc%E5%9C%B0%E5%9D%80%E6%B3%84%E9%9C%B2/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-关于“鲲鹏杯”CTF中pwn-1一些问题的探讨" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -305,11 +787,11 @@
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">解题思路</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">ROP</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">ROP</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">解题思路</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -408,11 +890,11 @@
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">解题思路</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">ROP</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">ROP</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">解题思路</a>
         		</li>
       		
 		</ul>
@@ -655,529 +1137,6 @@
 
 
   
-    <article id="post-C语言指针学习-part-2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/09/27/C%E8%AF%AD%E8%A8%80%E6%8C%87%E9%92%88%E5%AD%A6%E4%B9%A0-part-2/">C语言指针学习 part.2</a>
-    </h1>
-  
-
-        
-        <a href="/2021/09/27/C%E8%AF%AD%E8%A8%80%E6%8C%87%E9%92%88%E5%AD%A6%E4%B9%A0-part-2/" class="archive-article-date">
-  	<time datetime="2021-09-27T11:23:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-09-27</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="4-指针与一维数组"><a href="#4-指针与一维数组" class="headerlink" title="4.指针与一维数组"></a>4.指针与一维数组</h4><p>我们知道一个数组的元素在内存中是连续存放的，<strong>数组第一个元素的地址称为数组的首地址。</strong><em>在C语言中，数组名就是该数组的首地址。</em></p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a[<span class="number">4869</span>],*p;</span><br></pre></td></tr></table></figure>
-<p>以上面的为例，语句“ <strong>p=a;</strong> ”和语句“ <strong>p=&amp;a[0];</strong> ”是等价的，都表示指针变量p指向数组a的首地址。数组首地址的值在C语言中是一个地址常量，无法改变。因此，语句“ a=p; ”或者语句“ a++; ”都是非法的。<br>如果数组的首地址是a，且指针变量p指向该数组的首地址，即“ p=a; ”，则C语言中还规定数组的第i个元素a[i]的地址是<strong>a+i，其等价于p+i。</strong>如：</p>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">博客</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">C/C++</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/学习//" class="article-tag-list-link color3">学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/09/27/C%E8%AF%AD%E8%A8%80%E6%8C%87%E9%92%88%E5%AD%A6%E4%B9%A0-part-2/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-函数的调用与约定" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/09/25/%E5%87%BD%E6%95%B0%E7%9A%84%E8%B0%83%E7%94%A8%E4%B8%8E%E7%BA%A6%E5%AE%9A/">函数的调用与约定</a>
-    </h1>
-  
-
-        
-        <a href="/2021/09/25/%E5%87%BD%E6%95%B0%E7%9A%84%E8%B0%83%E7%94%A8%E4%B8%8E%E7%BA%A6%E5%AE%9A/" class="archive-article-date">
-  	<time datetime="2021-09-25T03:42:08.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-09-25</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="0-计算机内部的数据存储形式"><a href="#0-计算机内部的数据存储形式" class="headerlink" title="0.计算机内部的数据存储形式"></a>0.计算机内部的数据存储形式</h4><p>计算机内部有两种数据存储形式：<strong>大端序</strong>、<strong>小端序</strong>。对于大端序而言，数据高位存储在计算机地址的低位，数据低位存储在地址的高位。而小端序正好相反，即数据高位存储在计算机地址的高位，数据低位存储在地址的低位。<br>可以简记成<strong>大端序高低低高，小端序高高低低。</strong></p>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">博客</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">C/C++</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">栈</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Assembly</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">数据存储</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">调用约定</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/学习//" class="article-tag-list-link color3">学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/09/25/%E5%87%BD%E6%95%B0%E7%9A%84%E8%B0%83%E7%94%A8%E4%B8%8E%E7%BA%A6%E5%AE%9A/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-汇编语言学习" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/09/24/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0/">汇编语言学习</a>
-    </h1>
-  
-
-        
-        <a href="/2021/09/24/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0/" class="archive-article-date">
-  	<time datetime="2021-09-23T16:30:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-09-24</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="0-引入知识"><a href="#0-引入知识" class="headerlink" title="0.引入知识"></a>0.引入知识</h4><p>一些量词如下：</p>
-<table>
-<thead>
-<tr>
-<th>名称</th>
-<th>中文名</th>
-<th>大小</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>bit</td>
-<td>比特</td>
-<td>1位（1b）</td>
-</tr>
-<tr>
-<td>byte</td>
-<td>字节</td>
-<td>8位（1B）</td>
-</tr>
-<tr>
-<td>word</td>
-<td>字</td>
-<td>16位</td>
-</tr>
-<tr>
-<td>dword</td>
-<td>双字</td>
-<td>32位</td>
-</tr>
-<tr>
-<td>qword</td>
-<td>四字</td>
-<td>64位</td>
-</tr>
-</tbody></table>
-<p>当前主流计算机的最小寻址单位是<strong>B（字节）</strong>而非b（比特）。</p>
-<h4 id="1-汇编语言的诞生"><a href="#1-汇编语言的诞生" class="headerlink" title="1.汇编语言的诞生"></a>1.汇编语言的诞生</h4>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">博客</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Assembly</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">二进制</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">溢出</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/学习//" class="article-tag-list-link color3">学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/09/24/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Linux环境下代码的书写及运行" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/09/22/Linux%E7%8E%AF%E5%A2%83%E4%B8%8B%E4%BB%A3%E7%A0%81%E7%9A%84%E4%B9%A6%E5%86%99%E5%8F%8A%E8%BF%90%E8%A1%8C/">Linux环境下代码的书写及运行</a>
-    </h1>
-  
-
-        
-        <a href="/2021/09/22/Linux%E7%8E%AF%E5%A2%83%E4%B8%8B%E4%BB%A3%E7%A0%81%E7%9A%84%E4%B9%A6%E5%86%99%E5%8F%8A%E8%BF%90%E8%A1%8C/" class="archive-article-date">
-  	<time datetime="2021-09-22T07:51:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-09-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="1-测试环境"><a href="#1-测试环境" class="headerlink" title="1.测试环境"></a>1.测试环境</h4><p>声明：本次测试都是在我的笔记本（IdeaPad 15sITL 2021）上进行的，不同的设备结果可能会有所差距。<del>一般不会。</del></p>
-<ul>
-<li><strong>VMware 16 Pro</strong><em>（如果Win10的电脑启动虚拟机会强制重启建议升级为最新版）</em></li>
-<li><strong>Ubuntu 16.04</strong><em>（用的是学长给的已经搭好的虚拟机，自己装20.04时不知道为什么总说我硬件有问题……）</em><h4 id="2-关于C-C-的"><a href="#2-关于C-C-的" class="headerlink" title="2.关于C/C++的"></a>2.关于C/C++的</h4></li></ul>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">博客</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">C/C++</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Linux指令</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">vim</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Python</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/学习//" class="article-tag-list-link color3">学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/09/22/Linux%E7%8E%AF%E5%A2%83%E4%B8%8B%E4%BB%A3%E7%A0%81%E7%9A%84%E4%B9%A6%E5%86%99%E5%8F%8A%E8%BF%90%E8%A1%8C/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-C语言指针学习" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/09/21/C%E8%AF%AD%E8%A8%80%E6%8C%87%E9%92%88%E5%AD%A6%E4%B9%A0/">C语言指针学习</a>
-    </h1>
-  
-
-        
-        <a href="/2021/09/21/C%E8%AF%AD%E8%A8%80%E6%8C%87%E9%92%88%E5%AD%A6%E4%B9%A0/" class="archive-article-date">
-  	<time datetime="2021-09-21T14:37:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-09-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="1-何为指针"><a href="#1-何为指针" class="headerlink" title="1.何为指针"></a>1.何为指针</h4><p>指针是一类特殊的变量，用以寄存其他变量的地址。<br>我们知道，假若定义一个变量，则这个变量会被随机分配到内存中的几个连续存储单元。每一个存储单元都有一个地址。正因为这些存储单元是一定的，且每种类型的变量长度是固定的，所以只要知道了这些连续存储单元中的第一个的地址，即知道了这个变量在内存中的位置。因此，这几个连续存储单元的首地址就作为这个变量的地址。例如：定义变量“float f;”，假如它被分配到地址为1000、1001、1002、1003的四个连续存储单元，则地址1000就是变量f的地址。而这个地址也成为变量f的指针。<br>因此，<strong>变量的地址就是变量的指针。</strong></p>
-<h4 id="2-指针变量的定义与赋值"><a href="#2-指针变量的定义与赋值" class="headerlink" title="2.指针变量的定义与赋值"></a>2.指针变量的定义与赋值</h4>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">博客</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">C/C++</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/学习//" class="article-tag-list-link color3">学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/09/21/C%E8%AF%AD%E8%A8%80%E6%8C%87%E9%92%88%E5%AD%A6%E4%B9%A0/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next &amp;raquo;</a>
@@ -1288,6 +1247,18 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">overlap</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">堆溢出</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">fastbin attack</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">博客</a>
               </li>
              
@@ -1296,15 +1267,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Linux指令</a>
+                <a href="javascript:void(0)" class="js-tag color1">HGAME</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">vim</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Python</a>
+                <a href="javascript:void(0)" class="js-tag color4">CTF</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1332,11 +1299,19 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">真题</a>
+                <a href="javascript:void(0)" class="js-tag color3">Linux指令</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">libc</a>
+                <a href="javascript:void(0)" class="js-tag color4">vim</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">真题</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1365,10 +1340,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">UAF</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">fastbin attack</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1404,6 +1375,10 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">函数指针</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Assembly</a>
               </li>
              
@@ -1413,10 +1388,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">调用约定</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">函数指针</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1432,15 +1403,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">double free</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">堆溢出</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">解题思路</a>
+                <a href="javascript:void(0)" class="js-tag color1">基地址泄露</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1448,7 +1411,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">基地址泄露</a>
+                <a href="javascript:void(0)" class="js-tag color5">解题思路</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">double free</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1457,6 +1424,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">测试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">libc</a>
               </li>
             
             <div class="clearfix"></div>
