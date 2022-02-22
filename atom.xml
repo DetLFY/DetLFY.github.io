@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-02-21T15:27:26.618Z</updated>
+  <updated>2022-02-22T08:29:37.663Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>例析传统的offbyone</title>
+    <link href="http://example.com/2022/02/22/%E4%BE%8B%E6%9E%90%E4%BC%A0%E7%BB%9F%E7%9A%84offbyone/"/>
+    <id>http://example.com/2022/02/22/%E4%BE%8B%E6%9E%90%E4%BC%A0%E7%BB%9F%E7%9A%84offbyone/</id>
+    <published>2022-02-22T06:53:06.000Z</published>
+    <updated>2022-02-22T08:29:37.663Z</updated>
+    
+    
+    <summary type="html">&lt;h4 id=&quot;0-防止我忘记&quot;&gt;&lt;a href=&quot;#0-防止我忘记&quot; class=&quot;headerlink&quot; title=&quot;0.防止我忘记&quot;&gt;&lt;/a&gt;0.防止我忘记&lt;/h4&gt;&lt;p&gt;&lt;strong&gt;malloc不会自动初始化内存，calloc才会自动初始化。malloc初始化需要配合memset或者构造函数。&lt;/strong&gt;&lt;br&gt;&lt;strong&gt;因此如果malloc时没有初始化内存，则可能会泄露脏数据。&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;1-libc2-23下的offbyone&quot;&gt;&lt;a href=&quot;#1-libc2-23下的offbyone&quot; class=&quot;headerlink&quot; title=&quot;1.libc2.23下的offbyone&quot;&gt;&lt;/a&gt;1.libc2.23下的offbyone&lt;/h4&gt;</summary>
+    
+    
+    
+    <category term="学习" scheme="http://example.com/categories/%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+    <category term="overlap" scheme="http://example.com/tags/overlap/"/>
+    
+    <category term="堆溢出" scheme="http://example.com/tags/%E5%A0%86%E6%BA%A2%E5%87%BA/"/>
+    
+    <category term="PWN" scheme="http://example.com/tags/PWN/"/>
+    
+    <category term="offbyone" scheme="http://example.com/tags/offbyone/"/>
+    
+  </entry>
   
   <entry>
     <title>unsortedbin attack</title>
@@ -284,11 +310,11 @@
     <category term="学习" scheme="http://example.com/categories/%E5%AD%A6%E4%B9%A0/"/>
     
     
+    <category term="Linux" scheme="http://example.com/tags/Linux/"/>
+    
     <category term="堆内存" scheme="http://example.com/tags/%E5%A0%86%E5%86%85%E5%AD%98/"/>
     
     <category term="内存管理" scheme="http://example.com/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/"/>
-    
-    <category term="Linux" scheme="http://example.com/tags/Linux/"/>
     
     <category term="链表" scheme="http://example.com/tags/%E9%93%BE%E8%A1%A8/"/>
     
@@ -503,30 +529,6 @@
     <category term="ROP" scheme="http://example.com/tags/ROP/"/>
     
     <category term="解题思路" scheme="http://example.com/tags/%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>攻防世界中hello_pwn的解法</title>
-    <link href="http://example.com/2021/10/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E4%B8%ADhello-pwn%E7%9A%84%E8%A7%A3%E6%B3%95/"/>
-    <id>http://example.com/2021/10/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E4%B8%ADhello-pwn%E7%9A%84%E8%A7%A3%E6%B3%95/</id>
-    <published>2021-10-03T15:15:44.000Z</published>
-    <updated>2021-10-03T16:16:50.509Z</updated>
-    
-    
-    <summary type="html">&lt;h4 id=&quot;0-说在前面&quot;&gt;&lt;a href=&quot;#0-说在前面&quot; class=&quot;headerlink&quot; title=&quot;0.说在前面&quot;&gt;&lt;/a&gt;0.说在前面&lt;/h4&gt;&lt;p&gt;先声明一下，这题我之前是看wp解出的，但是当时不理解。现在学了一些栈溢出，再反过来看这道题时发现还是挺简单的。下面我把思路以及解法说一下。&lt;/p&gt;
-&lt;h4 id=&quot;1-解法（自己理解后写的，可能和wp有些不一样）&quot;&gt;&lt;a href=&quot;#1-解法（自己理解后写的，可能和wp有些不一样）&quot; class=&quot;headerlink&quot; title=&quot;1.解法（自己理解后写的，可能和wp有些不一样）&quot;&gt;&lt;/a&gt;1.解法（自己理解后写的，可能和wp有些不一样）&lt;/h4&gt;&lt;p&gt;&lt;em&gt;由于我之前解过这道题，所以无法再获取在线环境。因此这里我在本地进行模拟。我创建了一个flag.txt的文件，内容是“You got the flag!”来模拟取得了flag。&lt;/em&gt;&lt;br&gt;下面正式开始。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="学习" scheme="http://example.com/categories/%E5%AD%A6%E4%B9%A0/"/>
-    
-    
-    <category term="PWN" scheme="http://example.com/tags/PWN/"/>
-    
-    <category term="栈溢出" scheme="http://example.com/tags/%E6%A0%88%E6%BA%A2%E5%87%BA/"/>
-    
-    <category term="题目" scheme="http://example.com/tags/%E9%A2%98%E7%9B%AE/"/>
     
   </entry>
   
