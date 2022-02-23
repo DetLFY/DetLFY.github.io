@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-02-22T08:29:37.663Z</updated>
+  <updated>2022-02-23T11:55:17.658Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>例析offbynull</title>
+    <link href="http://example.com/2022/02/23/%E4%BE%8B%E6%9E%90offbynull/"/>
+    <id>http://example.com/2022/02/23/%E4%BE%8B%E6%9E%90offbynull/</id>
+    <published>2022-02-23T09:57:22.000Z</published>
+    <updated>2022-02-23T11:55:17.658Z</updated>
+    
+    
+    <summary type="html">&lt;h4 id=&quot;0-特殊的offbyone&quot;&gt;&lt;a href=&quot;#0-特殊的offbyone&quot; class=&quot;headerlink&quot; title=&quot;0.特殊的offbyone&quot;&gt;&lt;/a&gt;0.特殊的offbyone&lt;/h4&gt;&lt;p&gt;offbynull是offbyone的一种特殊情况。它的特点是&lt;strong&gt;溢出的一字节为NULL字节。&lt;/strong&gt;&lt;br&gt;与传统的offbyone思路相似，我们也是要通过这溢出的NULL字节来实现chunk overlap，从而实现内存泄漏或是修改堆指针。&lt;/p&gt;
+&lt;h4 id=&quot;1-利用思路&quot;&gt;&lt;a href=&quot;#1-利用思路&quot; class=&quot;headerlink&quot; title=&quot;1.利用思路&quot;&gt;&lt;/a&gt;1.利用思路&lt;/h4&gt;</summary>
+    
+    
+    
+    <category term="学习" scheme="http://example.com/categories/%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+    <category term="overlap" scheme="http://example.com/tags/overlap/"/>
+    
+    <category term="堆溢出" scheme="http://example.com/tags/%E5%A0%86%E6%BA%A2%E5%87%BA/"/>
+    
+    <category term="PWN" scheme="http://example.com/tags/PWN/"/>
+    
+    <category term="offbynull" scheme="http://example.com/tags/offbynull/"/>
+    
+    <category term="offbyone" scheme="http://example.com/tags/offbyone/"/>
+    
+  </entry>
   
   <entry>
     <title>例析传统的offbyone</title>
@@ -310,11 +338,11 @@
     <category term="学习" scheme="http://example.com/categories/%E5%AD%A6%E4%B9%A0/"/>
     
     
-    <category term="Linux" scheme="http://example.com/tags/Linux/"/>
-    
     <category term="堆内存" scheme="http://example.com/tags/%E5%A0%86%E5%86%85%E5%AD%98/"/>
     
     <category term="内存管理" scheme="http://example.com/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/"/>
+    
+    <category term="Linux" scheme="http://example.com/tags/Linux/"/>
     
     <category term="链表" scheme="http://example.com/tags/%E9%93%BE%E8%A1%A8/"/>
     
@@ -502,33 +530,6 @@
     <category term="解题思路" scheme="http://example.com/tags/%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF/"/>
     
     <category term="栈转移" scheme="http://example.com/tags/%E6%A0%88%E8%BD%AC%E7%A7%BB/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>浅谈ret2csu</title>
-    <link href="http://example.com/2021/10/09/%E6%B5%85%E8%B0%88ret2csu/"/>
-    <id>http://example.com/2021/10/09/%E6%B5%85%E8%B0%88ret2csu/</id>
-    <published>2021-10-09T06:09:54.000Z</published>
-    <updated>2021-10-09T07:18:26.252Z</updated>
-    
-    
-    <summary type="html">&lt;h4 id=&quot;0-前言&quot;&gt;&lt;a href=&quot;#0-前言&quot; class=&quot;headerlink&quot; title=&quot;0.前言&quot;&gt;&lt;/a&gt;0.前言&lt;/h4&gt;&lt;p&gt;有一说一，这个rop有一些点困扰了我很久，下面予以说明。&lt;/p&gt;
-&lt;h4 id=&quot;1-总体思路&quot;&gt;&lt;a href=&quot;#1-总体思路&quot; class=&quot;headerlink&quot; title=&quot;1.总体思路&quot;&gt;&lt;/a&gt;1.总体思路&lt;/h4&gt;&lt;p&gt;ret2csu一般是应对程序中存在明显的&lt;strong&gt;栈溢出漏洞&lt;/strong&gt;，但在程序中找不到system()函数，但可看到其存在read()、write()、和 &lt;strong&gt;__libc_csu_init()&lt;/strong&gt; 函数的情况。&lt;br&gt;利用程序中的一些gadget来实现获取shell。&lt;br&gt;rop链的构造一般为：&lt;strong&gt;pop n ret+n个寄存器的值+mov call&lt;/strong&gt;。&lt;em&gt;（这边的call要注意，待会讲）&lt;/em&gt;&lt;/p&gt;
-&lt;h4 id=&quot;2-例子&quot;&gt;&lt;a href=&quot;#2-例子&quot; class=&quot;headerlink&quot; title=&quot;2.例子&quot;&gt;&lt;/a&gt;2.例子&lt;/h4&gt;</summary>
-    
-    
-    
-    <category term="学习" scheme="http://example.com/categories/%E5%AD%A6%E4%B9%A0/"/>
-    
-    
-    <category term="PWN" scheme="http://example.com/tags/PWN/"/>
-    
-    <category term="栈溢出" scheme="http://example.com/tags/%E6%A0%88%E6%BA%A2%E5%87%BA/"/>
-    
-    <category term="ROP" scheme="http://example.com/tags/ROP/"/>
-    
-    <category term="解题思路" scheme="http://example.com/tags/%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF/"/>
     
   </entry>
   

