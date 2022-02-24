@@ -155,6 +155,108 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-fastbin-unsortedbin-attack的综合利用及通过修改堆指针实现got表改写" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/02/24/fastbin-unsortedbin-attack%E7%9A%84%E7%BB%BC%E5%90%88%E5%88%A9%E7%94%A8%E5%8F%8A%E9%80%9A%E8%BF%87%E4%BF%AE%E6%94%B9%E5%A0%86%E6%8C%87%E9%92%88%E5%AE%9E%E7%8E%B0got%E8%A1%A8%E6%94%B9%E5%86%99/">fastbin &amp;&amp; unsortedbin attack的综合利用及通过修改堆指针实现got表改写</a>
+    </h1>
+  
+
+        
+        <a href="/2022/02/24/fastbin-unsortedbin-attack%E7%9A%84%E7%BB%BC%E5%90%88%E5%88%A9%E7%94%A8%E5%8F%8A%E9%80%9A%E8%BF%87%E4%BF%AE%E6%94%B9%E5%A0%86%E6%8C%87%E9%92%88%E5%AE%9E%E7%8E%B0got%E8%A1%A8%E6%94%B9%E5%86%99/" class="archive-article-date">
+  	<time datetime="2022-02-24T06:24:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-02-24</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="0-题目来源"><a href="#0-题目来源" class="headerlink" title="0.题目来源"></a>0.题目来源</h4><p>写这篇博客的原因是因为BUU上的一道题，这题由于是从正式比赛中复现的，因此靶机的环境有些问题（flag的位置不一样）。<br>按照预期解，这题应该只是单纯普通简单的unsortedbin attack实现任意内存写改写大数，从而绕到后门函数。但是这题由于给的后门函数是执行 cat /home/pwn/flag 指令的，但是可以证实靶机的flag是位于根目录的，因此后门函数便无效了。</p>
+<h4 id="1-情景分析"><a href="#1-情景分析" class="headerlink" title="1.情景分析"></a>1.情景分析</h4>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">堆溢出</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">fastbin attack</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">unsortedbin attack</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">堆指针</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">got表</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/学习//" class="article-tag-list-link color3">学习</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2022/02/24/fastbin-unsortedbin-attack%E7%9A%84%E7%BB%BC%E5%90%88%E5%88%A9%E7%94%A8%E5%8F%8A%E9%80%9A%E8%BF%87%E4%BF%AE%E6%94%B9%E5%A0%86%E6%8C%87%E9%92%88%E5%AE%9E%E7%8E%B0got%E8%A1%A8%E6%94%B9%E5%86%99/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-例析offbynull" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1008,115 +1110,9 @@
 
 
   
-    <article id="post-UNCTF2021-PWN-部分WP" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/12/07/UNCTF2021-PWN-%E9%83%A8%E5%88%86WP/">UNCTF2021 PWN 部分WP</a>
-    </h1>
-  
-
-        
-        <a href="/2021/12/07/UNCTF2021-PWN-%E9%83%A8%E5%88%86WP/" class="archive-article-date">
-  	<time datetime="2021-12-07T14:08:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-07</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="0-前言"><a href="#0-前言" class="headerlink" title="0.前言"></a>0.前言</h4><p>UNCTF2021年个人赛的PWN题部分WP。</p>
-<h4 id="1-fo"><a href="#1-fo" class="headerlink" title="1.fo"></a>1.fo</h4>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PWN</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">栈溢出</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">真题</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">整数溢出</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">mprotect</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">shellcode</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/学习//" class="article-tag-list-link color3">学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/12/07/UNCTF2021-PWN-%E9%83%A8%E5%88%86WP/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
     </nav>
   
 
@@ -1292,6 +1288,10 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">libc</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">整数溢出</a>
               </li>
              
@@ -1304,10 +1304,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">libc</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">unsortedbin attack</a>
               </li>
              
@@ -1317,6 +1313,14 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">堆漏洞</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">堆指针</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">got表</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1408,11 +1412,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">double free</a>
+                <a href="javascript:void(0)" class="js-tag color5">解题思路</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">解题思路</a>
+                <a href="javascript:void(0)" class="js-tag color2">double free</a>
               </li>
              
               <li class="article-tag-list-item">

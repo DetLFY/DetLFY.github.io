@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-02-23T11:55:17.658Z</updated>
+  <updated>2022-02-24T07:44:43.231Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>fastbin &amp;&amp; unsortedbin attack的综合利用及通过修改堆指针实现got表改写</title>
+    <link href="http://example.com/2022/02/24/fastbin-unsortedbin-attack%E7%9A%84%E7%BB%BC%E5%90%88%E5%88%A9%E7%94%A8%E5%8F%8A%E9%80%9A%E8%BF%87%E4%BF%AE%E6%94%B9%E5%A0%86%E6%8C%87%E9%92%88%E5%AE%9E%E7%8E%B0got%E8%A1%A8%E6%94%B9%E5%86%99/"/>
+    <id>http://example.com/2022/02/24/fastbin-unsortedbin-attack%E7%9A%84%E7%BB%BC%E5%90%88%E5%88%A9%E7%94%A8%E5%8F%8A%E9%80%9A%E8%BF%87%E4%BF%AE%E6%94%B9%E5%A0%86%E6%8C%87%E9%92%88%E5%AE%9E%E7%8E%B0got%E8%A1%A8%E6%94%B9%E5%86%99/</id>
+    <published>2022-02-24T06:24:16.000Z</published>
+    <updated>2022-02-24T07:44:43.231Z</updated>
+    
+    
+    <summary type="html">&lt;h4 id=&quot;0-题目来源&quot;&gt;&lt;a href=&quot;#0-题目来源&quot; class=&quot;headerlink&quot; title=&quot;0.题目来源&quot;&gt;&lt;/a&gt;0.题目来源&lt;/h4&gt;&lt;p&gt;写这篇博客的原因是因为BUU上的一道题，这题由于是从正式比赛中复现的，因此靶机的环境有些问题（flag的位置不一样）。&lt;br&gt;按照预期解，这题应该只是单纯普通简单的unsortedbin attack实现任意内存写改写大数，从而绕到后门函数。但是这题由于给的后门函数是执行 cat /home/pwn/flag 指令的，但是可以证实靶机的flag是位于根目录的，因此后门函数便无效了。&lt;/p&gt;
+&lt;h4 id=&quot;1-情景分析&quot;&gt;&lt;a href=&quot;#1-情景分析&quot; class=&quot;headerlink&quot; title=&quot;1.情景分析&quot;&gt;&lt;/a&gt;1.情景分析&lt;/h4&gt;</summary>
+    
+    
+    
+    <category term="学习" scheme="http://example.com/categories/%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+    <category term="堆溢出" scheme="http://example.com/tags/%E5%A0%86%E6%BA%A2%E5%87%BA/"/>
+    
+    <category term="fastbin attack" scheme="http://example.com/tags/fastbin-attack/"/>
+    
+    <category term="unsortedbin attack" scheme="http://example.com/tags/unsortedbin-attack/"/>
+    
+    <category term="堆指针" scheme="http://example.com/tags/%E5%A0%86%E6%8C%87%E9%92%88/"/>
+    
+    <category term="got表" scheme="http://example.com/tags/got%E8%A1%A8/"/>
+    
+  </entry>
   
   <entry>
     <title>例析offbynull</title>
@@ -501,35 +529,6 @@
     <category term="Ubuntu" scheme="http://example.com/tags/Ubuntu/"/>
     
     <category term="Kali" scheme="http://example.com/tags/Kali/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>浅谈简单的栈转移</title>
-    <link href="http://example.com/2021/10/11/%E6%B5%85%E8%B0%88%E7%AE%80%E5%8D%95%E7%9A%84%E6%A0%88%E8%BD%AC%E7%A7%BB/"/>
-    <id>http://example.com/2021/10/11/%E6%B5%85%E8%B0%88%E7%AE%80%E5%8D%95%E7%9A%84%E6%A0%88%E8%BD%AC%E7%A7%BB/</id>
-    <published>2021-10-10T16:18:38.000Z</published>
-    <updated>2021-10-12T16:44:12.152Z</updated>
-    
-    
-    <summary type="html">&lt;h4 id=&quot;0-前言-amp-回顾&quot;&gt;&lt;a href=&quot;#0-前言-amp-回顾&quot; class=&quot;headerlink&quot; title=&quot;0.前言&amp;amp;回顾&quot;&gt;&lt;/a&gt;0.前言&amp;amp;回顾&lt;/h4&gt;&lt;p&gt;简单的栈转移，但是我不清楚为什么给的system我用不了……&lt;del&gt;（可能只是因为我菜）&lt;/del&gt;&lt;em&gt;（据学长说是因为system函数执行时有栈方面的对齐要求，我简单了解了一下似乎是有某字节倍数的要求才能正常调用，具体的我目前也不是很了解，以后补充。）&lt;/em&gt;，所以我用的还是execv。此题和之前ret2csu的有些类似，只是需要进行栈转移。&lt;/p&gt;
-&lt;p&gt;我们知道，leave的实质是&lt;strong&gt;mov rsp,rbp;pop rbp&lt;/strong&gt;。而ret的实质是&lt;strong&gt;pop rip&lt;/strong&gt;。&lt;/p&gt;
-&lt;h4 id=&quot;1-栈转移的原因及方法&quot;&gt;&lt;a href=&quot;#1-栈转移的原因及方法&quot; class=&quot;headerlink&quot; title=&quot;1.栈转移的原因及方法&quot;&gt;&lt;/a&gt;1.栈转移的原因及方法&lt;/h4&gt;</summary>
-    
-    
-    
-    <category term="学习" scheme="http://example.com/categories/%E5%AD%A6%E4%B9%A0/"/>
-    
-    
-    <category term="PWN" scheme="http://example.com/tags/PWN/"/>
-    
-    <category term="栈溢出" scheme="http://example.com/tags/%E6%A0%88%E6%BA%A2%E5%87%BA/"/>
-    
-    <category term="ROP" scheme="http://example.com/tags/ROP/"/>
-    
-    <category term="解题思路" scheme="http://example.com/tags/%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF/"/>
-    
-    <category term="栈转移" scheme="http://example.com/tags/%E6%A0%88%E8%BD%AC%E7%A7%BB/"/>
     
   </entry>
   
