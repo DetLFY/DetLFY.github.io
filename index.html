@@ -155,6 +155,103 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-初探libc2-27下的tcache-attack" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/02/24/%E5%88%9D%E6%8E%A2libc2-27%E4%B8%8B%E7%9A%84tcache-attack/">初探libc2.27下的tcache attack</a>
+    </h1>
+  
+
+        
+        <a href="/2022/02/24/%E5%88%9D%E6%8E%A2libc2-27%E4%B8%8B%E7%9A%84tcache-attack/" class="archive-article-date">
+  	<time datetime="2022-02-24T09:13:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-02-24</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="0-libc2-27版本下的tcache机制"><a href="#0-libc2-27版本下的tcache机制" class="headerlink" title="0.libc2.27版本下的tcache机制"></a>0.libc2.27版本下的tcache机制</h4><p>tcache是libc2.26版本后引入的新机制，其广泛应用于Ubuntu18.04及以后的系统。tcache的管理机制类似于fastbin，每个bins上最多可以有7个chunk。每个bins都是单链表，与fastbin同为LIFO。tcache的优先级大于fastbin。只有当tcache满了后 <em>（这里的满指的是对应的bins上已有7个chunk，无法再放入后续chunk）</em>，chunk才会被放回其他链表，而在申请操作时，tcache也会被首先分配。</p>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">tcache</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">tcache attack</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">double free</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">堆进阶</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/学习//" class="article-tag-list-link color3">学习</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2022/02/24/%E5%88%9D%E6%8E%A2libc2-27%E4%B8%8B%E7%9A%84tcache-attack/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-fastbin-unsortedbin-attack的综合利用及通过修改堆指针实现got表改写" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1005,111 +1102,6 @@
 
 
   
-    <article id="post-例析基于UAF的fastbin-attack及realloc调整栈" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/12/22/%E4%BE%8B%E6%9E%90%E5%9F%BA%E4%BA%8EUAF%E7%9A%84fastbin-attack%E5%8F%8Arealloc%E8%B0%83%E6%95%B4%E6%A0%88/">例析基于UAF的fastbin attack及realloc调整栈</a>
-    </h1>
-  
-
-        
-        <a href="/2021/12/22/%E4%BE%8B%E6%9E%90%E5%9F%BA%E4%BA%8EUAF%E7%9A%84fastbin-attack%E5%8F%8Arealloc%E8%B0%83%E6%95%B4%E6%A0%88/" class="archive-article-date">
-  	<time datetime="2021-12-22T03:27:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="0-前导知识"><a href="#0-前导知识" class="headerlink" title="0.前导知识"></a>0.前导知识</h4><h5 id="0-1-unsortedbin泄露libc地址"><a href="#0-1-unsortedbin泄露libc地址" class="headerlink" title="0-1.unsortedbin泄露libc地址"></a>0-1.unsortedbin泄露libc地址</h5><p>通过查阅相关资料可以知道，对于libc-2.23.so而言，当unsortedbin中只有一个freed chunk时，这个freed chunk的fd和bk指针都指向libc中的一个地址（一般是&lt;main_arena+88&gt;），这个偏移也可以算出是0x3c4b78。</p>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">fastbin attack</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PWN</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">UAF</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">malloc</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">realloc</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">one_gatget</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/学习//" class="article-tag-list-link color3">学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/12/22/%E4%BE%8B%E6%9E%90%E5%9F%BA%E4%BA%8EUAF%E7%9A%84fastbin-attack%E5%8F%8Arealloc%E8%B0%83%E6%95%B4%E6%A0%88/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
@@ -1308,19 +1300,19 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">UAF</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">堆漏洞</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">堆指针</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">got表</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">UAF</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">堆漏洞</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1388,6 +1380,22 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">tcache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">tcache attack</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">double free</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">堆进阶</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">函数指针</a>
               </li>
              
@@ -1413,10 +1421,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">解题思路</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">double free</a>
               </li>
              
               <li class="article-tag-list-item">
