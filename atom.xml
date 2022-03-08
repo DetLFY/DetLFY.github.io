@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-02-24T11:45:11.028Z</updated>
+  <updated>2022-03-08T09:56:43.850Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>从heapcreator谈chunk extend以及另一种泄露libc的思路</title>
+    <link href="http://example.com/2022/03/07/%E4%BB%8Eheapcreator%E8%B0%88chunk-extend%E4%BB%A5%E5%8F%8A%E5%8F%A6%E4%B8%80%E7%A7%8D%E6%B3%84%E9%9C%B2libc%E7%9A%84%E6%80%9D%E8%B7%AF/"/>
+    <id>http://example.com/2022/03/07/%E4%BB%8Eheapcreator%E8%B0%88chunk-extend%E4%BB%A5%E5%8F%8A%E5%8F%A6%E4%B8%80%E7%A7%8D%E6%B3%84%E9%9C%B2libc%E7%9A%84%E6%80%9D%E8%B7%AF/</id>
+    <published>2022-03-07T09:40:15.000Z</published>
+    <updated>2022-03-08T09:56:43.850Z</updated>
+    
+    
+    <summary type="html">&lt;h4 id=&quot;0-chunk-extend&quot;&gt;&lt;a href=&quot;#0-chunk-extend&quot; class=&quot;headerlink&quot; title=&quot;0.chunk extend&quot;&gt;&lt;/a&gt;0.chunk extend&lt;/h4&gt;&lt;p&gt;chunk extend（堆拓展），这种方法其实之前有讲过，就是通过修改chunk size使原有的堆块长度扩展，从而覆盖其后的堆块，造成overlap，以达到leak或者attack的目的。&lt;br&gt;这种利用手法常见于有堆溢出漏洞尤其是offbyone的题。&lt;/p&gt;
+&lt;h4 id=&quot;1-heapcreator&quot;&gt;&lt;a href=&quot;#1-heapcreator&quot; class=&quot;headerlink&quot; title=&quot;1.heapcreator&quot;&gt;&lt;/a&gt;1.heapcreator&lt;/h4&gt;</summary>
+    
+    
+    
+    <category term="学习" scheme="http://example.com/categories/%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+    <category term="overlap" scheme="http://example.com/tags/overlap/"/>
+    
+    <category term="PWN" scheme="http://example.com/tags/PWN/"/>
+    
+    <category term="堆指针" scheme="http://example.com/tags/%E5%A0%86%E6%8C%87%E9%92%88/"/>
+    
+    <category term="chunk extend" scheme="http://example.com/tags/chunk-extend/"/>
+    
+    <category term="offbyone" scheme="http://example.com/tags/offbyone/"/>
+    
+  </entry>
   
   <entry>
     <title>初探libc2.27下的tcache attack</title>
@@ -91,9 +119,9 @@
     
     <category term="PWN" scheme="http://example.com/tags/PWN/"/>
     
-    <category term="offbynull" scheme="http://example.com/tags/offbynull/"/>
-    
     <category term="offbyone" scheme="http://example.com/tags/offbyone/"/>
+    
+    <category term="offbynull" scheme="http://example.com/tags/offbynull/"/>
     
   </entry>
   
@@ -498,32 +526,6 @@
     <category term="栈溢出" scheme="http://example.com/tags/%E6%A0%88%E6%BA%A2%E5%87%BA/"/>
     
     <category term="总结" scheme="http://example.com/tags/%E6%80%BB%E7%BB%93/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>浅谈libc地址泄露</title>
-    <link href="http://example.com/2021/10/22/%E6%B5%85%E8%B0%88libc%E5%9C%B0%E5%9D%80%E6%B3%84%E9%9C%B2/"/>
-    <id>http://example.com/2021/10/22/%E6%B5%85%E8%B0%88libc%E5%9C%B0%E5%9D%80%E6%B3%84%E9%9C%B2/</id>
-    <published>2021-10-22T14:37:41.000Z</published>
-    <updated>2021-10-22T16:40:04.271Z</updated>
-    
-    
-    <summary type="html">&lt;h4 id=&quot;0-前言&quot;&gt;&lt;a href=&quot;#0-前言&quot; class=&quot;headerlink&quot; title=&quot;0.前言&quot;&gt;&lt;/a&gt;0.前言&lt;/h4&gt;&lt;p&gt;这个例题似乎是没法完成最终的getshell的，因为缓冲区离got表太近了，会出问题。&lt;/p&gt;
-&lt;h4 id=&quot;1-思路&quot;&gt;&lt;a href=&quot;#1-思路&quot; class=&quot;headerlink&quot; title=&quot;1.思路&quot;&gt;&lt;/a&gt;1.思路&lt;/h4&gt;&lt;p&gt;当程序开了PIE或者ASLR保护后，函数的地址会被&lt;strong&gt;随机化&lt;/strong&gt;，这时如果要返回到某个函数的话就需要泄露地址。&lt;br&gt;以开了ASLR的为例，此时系统函数的地址是随机的，但是函数在同一libc中的&lt;strong&gt;偏移量是确定的&lt;/strong&gt;。而我们知道，一个系统函数，如puts函数，在程序中被调用过后，其地址就会存在got表中，此时可以通过泄露其地址，再通过偏移即可泄露libc的基地址。此时如果要调用system或execv函数，则再用libc基地址加上对应的偏移即可。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="学习" scheme="http://example.com/categories/%E5%AD%A6%E4%B9%A0/"/>
-    
-    
-    <category term="PWN" scheme="http://example.com/tags/PWN/"/>
-    
-    <category term="栈溢出" scheme="http://example.com/tags/%E6%A0%88%E6%BA%A2%E5%87%BA/"/>
-    
-    <category term="基地址泄露" scheme="http://example.com/tags/%E5%9F%BA%E5%9C%B0%E5%9D%80%E6%B3%84%E9%9C%B2/"/>
-    
-    <category term="ROP" scheme="http://example.com/tags/ROP/"/>
     
   </entry>
   

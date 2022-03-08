@@ -155,6 +155,108 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-从heapcreator谈chunk-extend以及另一种泄露libc的思路" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/03/07/%E4%BB%8Eheapcreator%E8%B0%88chunk-extend%E4%BB%A5%E5%8F%8A%E5%8F%A6%E4%B8%80%E7%A7%8D%E6%B3%84%E9%9C%B2libc%E7%9A%84%E6%80%9D%E8%B7%AF/">从heapcreator谈chunk extend以及另一种泄露libc的思路</a>
+    </h1>
+  
+
+        
+        <a href="/2022/03/07/%E4%BB%8Eheapcreator%E8%B0%88chunk-extend%E4%BB%A5%E5%8F%8A%E5%8F%A6%E4%B8%80%E7%A7%8D%E6%B3%84%E9%9C%B2libc%E7%9A%84%E6%80%9D%E8%B7%AF/" class="archive-article-date">
+  	<time datetime="2022-03-07T09:40:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-03-07</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="0-chunk-extend"><a href="#0-chunk-extend" class="headerlink" title="0.chunk extend"></a>0.chunk extend</h4><p>chunk extend（堆拓展），这种方法其实之前有讲过，就是通过修改chunk size使原有的堆块长度扩展，从而覆盖其后的堆块，造成overlap，以达到leak或者attack的目的。<br>这种利用手法常见于有堆溢出漏洞尤其是offbyone的题。</p>
+<h4 id="1-heapcreator"><a href="#1-heapcreator" class="headerlink" title="1.heapcreator"></a>1.heapcreator</h4>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">overlap</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PWN</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">堆指针</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">chunk extend</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">offbyone</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/学习//" class="article-tag-list-link color3">学习</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2022/03/07/%E4%BB%8Eheapcreator%E8%B0%88chunk-extend%E4%BB%A5%E5%8F%8A%E5%8F%A6%E4%B8%80%E7%A7%8D%E6%B3%84%E9%9C%B2libc%E7%9A%84%E6%80%9D%E8%B7%AF/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-初探libc2-27下的tcache-attack" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -401,11 +503,11 @@
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">offbynull</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">offbyone</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">offbyone</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">offbynull</a>
         		</li>
       		
 		</ul>
@@ -1008,100 +1110,6 @@
 
 
   
-    <article id="post-BUUCTF-babyheap-0ctf-2017" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2022/01/18/BUUCTF-babyheap-0ctf-2017/">BUUCTF babyheap_0ctf_2017</a>
-    </h1>
-  
-
-        
-        <a href="/2022/01/18/BUUCTF-babyheap-0ctf-2017/" class="archive-article-date">
-  	<time datetime="2022-01-18T06:18:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-01-18</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="0-说明"><a href="#0-说明" class="headerlink" title="0.说明"></a>0.说明</h4><p>作为学习的堆题，内容涉及堆溢出漏洞、堆块重叠，fastbin attack等。<br>libc版本是2.23。</p>
-<h4 id="1-题解"><a href="#1-题解" class="headerlink" title="1.题解"></a>1.题解</h4>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">overlap</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">堆溢出</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">fastbin attack</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/学习//" class="article-tag-list-link color3">学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2022/01/18/BUUCTF-babyheap-0ctf-2017/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
@@ -1280,6 +1288,10 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">libc</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">整数溢出</a>
               </li>
              
@@ -1289,10 +1301,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">shellcode</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">libc</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1328,11 +1336,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">offbynull</a>
+                <a href="javascript:void(0)" class="js-tag color3">chunk extend</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">offbyone</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">offbynull</a>
               </li>
              
               <li class="article-tag-list-item">
