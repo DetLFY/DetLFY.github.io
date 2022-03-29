@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-03-13T08:38:45.115Z</updated>
+  <updated>2022-03-29T15:26:32.392Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>NISACTF2022</title>
+    <link href="http://example.com/2022/03/29/NISACTF2022/"/>
+    <id>http://example.com/2022/03/29/NISACTF2022/</id>
+    <published>2022-03-29T13:48:01.000Z</published>
+    <updated>2022-03-29T15:26:32.392Z</updated>
+    
+    
+    <summary type="html">&lt;h4 id=&quot;0-前言&quot;&gt;&lt;a href=&quot;#0-前言&quot; class=&quot;headerlink&quot; title=&quot;0.前言&quot;&gt;&lt;/a&gt;0.前言&lt;/h4&gt;&lt;p&gt;福师大那边举办的比赛，PWN的难度不大，很适合我这种小朋友玩，AK PWN自然不在话下。&lt;/p&gt;
+&lt;h4 id=&quot;1-PWN&quot;&gt;&lt;a href=&quot;#1-PWN&quot; class=&quot;headerlink&quot; title=&quot;1.PWN&quot;&gt;&lt;/a&gt;1.PWN&lt;/h4&gt;</summary>
+    
+    
+    
+    <category term="学习" scheme="http://example.com/categories/%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+    <category term="PWN" scheme="http://example.com/tags/PWN/"/>
+    
+    <category term="NISACTF" scheme="http://example.com/tags/NISACTF/"/>
+    
+    <category term="RE" scheme="http://example.com/tags/RE/"/>
+    
+  </entry>
   
   <entry>
     <title>从axb_2019_heap谈unlink与offbyone的结合利用</title>
@@ -444,11 +468,11 @@
     <category term="学习" scheme="http://example.com/categories/%E5%AD%A6%E4%B9%A0/"/>
     
     
-    <category term="Linux" scheme="http://example.com/tags/Linux/"/>
-    
     <category term="堆内存" scheme="http://example.com/tags/%E5%A0%86%E5%86%85%E5%AD%98/"/>
     
     <category term="内存管理" scheme="http://example.com/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/"/>
+    
+    <category term="Linux" scheme="http://example.com/tags/Linux/"/>
     
     <category term="链表" scheme="http://example.com/tags/%E9%93%BE%E8%A1%A8/"/>
     
@@ -501,32 +525,6 @@
     <category term="格式化字符串漏洞" scheme="http://example.com/tags/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E/"/>
     
     <category term="canary" scheme="http://example.com/tags/canary/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>NSSCTF中收录的【2021 鹤城杯】babyof题解</title>
-    <link href="http://example.com/2021/10/28/NSSCTF%E4%B8%AD%E6%94%B6%E5%BD%95%E7%9A%84%E3%80%902021-%E9%B9%A4%E5%9F%8E%E6%9D%AF%E3%80%91babyof%E9%A2%98%E8%A7%A3/"/>
-    <id>http://example.com/2021/10/28/NSSCTF%E4%B8%AD%E6%94%B6%E5%BD%95%E7%9A%84%E3%80%902021-%E9%B9%A4%E5%9F%8E%E6%9D%AF%E3%80%91babyof%E9%A2%98%E8%A7%A3/</id>
-    <published>2021-10-28T08:21:38.000Z</published>
-    <updated>2021-10-28T09:32:05.242Z</updated>
-    
-    
-    <summary type="html">&lt;h4 id=&quot;0-前言&quot;&gt;&lt;a href=&quot;#0-前言&quot; class=&quot;headerlink&quot; title=&quot;0.前言&quot;&gt;&lt;/a&gt;0.前言&lt;/h4&gt;&lt;p&gt;这题是一个比较典型的栈溢出类题，整体思路不难，我查了一下好像是当时比赛的第二题。&lt;br&gt;这题在NSSCTF上做的时候有一个点比较坑（后面讲），我不清楚是当时比赛环境就是这样还是收入时环境没有完全一致。不过还是解决了就是。&lt;br&gt;写这题的wp的原因有几个：&lt;br&gt;&lt;em&gt;一是我认为这题解法比较经典，能起到一个复习的作用；&lt;/em&gt;&lt;br&gt;&lt;em&gt;二是这题会涉及一些我之前博客中忘了写的东西，相当于做一个补充；&lt;/em&gt;&lt;br&gt;&lt;em&gt;三是解决那个小问题时用到了LibcSearcher，我个人觉得这是个不错且简单好用的Python库，一并说了。&lt;/em&gt;&lt;br&gt;这道题的exp优化参考了一些wp，但主体逻辑还是我自己写的。&lt;/p&gt;
-&lt;h4 id=&quot;1-题解过程&quot;&gt;&lt;a href=&quot;#1-题解过程&quot; class=&quot;headerlink&quot; title=&quot;1.题解过程&quot;&gt;&lt;/a&gt;1.题解过程&lt;/h4&gt;</summary>
-    
-    
-    
-    <category term="学习" scheme="http://example.com/categories/%E5%AD%A6%E4%B9%A0/"/>
-    
-    
-    <category term="PWN" scheme="http://example.com/tags/PWN/"/>
-    
-    <category term="栈溢出" scheme="http://example.com/tags/%E6%A0%88%E6%BA%A2%E5%87%BA/"/>
-    
-    <category term="真题" scheme="http://example.com/tags/%E7%9C%9F%E9%A2%98/"/>
-    
-    <category term="libc" scheme="http://example.com/tags/libc/"/>
     
   </entry>
   
