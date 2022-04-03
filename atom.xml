@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-03-29T15:49:16.415Z</updated>
+  <updated>2022-04-03T14:43:48.209Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>详谈HFCTF2022 babygame</title>
+    <link href="http://example.com/2022/03/31/%E8%AF%A6%E8%B0%88HFCTF2022-babygame/"/>
+    <id>http://example.com/2022/03/31/%E8%AF%A6%E8%B0%88HFCTF2022-babygame/</id>
+    <published>2022-03-31T09:58:07.000Z</published>
+    <updated>2022-04-03T14:43:48.209Z</updated>
+    
+    
+    <summary type="html">&lt;h4 id=&quot;0-浅谈一下这次的虎符杯&quot;&gt;&lt;a href=&quot;#0-浅谈一下这次的虎符杯&quot; class=&quot;headerlink&quot; title=&quot;0.浅谈一下这次的虎符杯&quot;&gt;&lt;/a&gt;0.浅谈一下这次的虎符杯&lt;/h4&gt;&lt;p&gt;虎符结束了这么久就才开始写这篇博客实在有些抱歉，这题babygame说实话难度确实不大，而且我当时也绕过了伪随机数来到有格式化字符串漏洞的那个函数了。但是由于我对hijack retaddr这个方法的了解不足，导致最终没有打通，实在是可惜。在赛后看了很多大佬的wp也一直卡在这个点，这也反映出了我这块的薄弱之处。但经过了资料查阅、动态调试等一系列繁琐的过程后，我也算是吃透了这一题，故这篇博客我想详细谈一谈这题的解法。&lt;/p&gt;
+&lt;h4 id=&quot;1-再谈格式化字符串漏洞利用中的内存任意写&quot;&gt;&lt;a href=&quot;#1-再谈格式化字符串漏洞利用中的内存任意写&quot; class=&quot;headerlink&quot; title=&quot;1.再谈格式化字符串漏洞利用中的内存任意写&quot;&gt;&lt;/a&gt;1.再谈格式化字符串漏洞利用中的内存任意写&lt;/h4&gt;</summary>
+    
+    
+    
+    <category term="学习" scheme="http://example.com/categories/%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+    <category term="PWN" scheme="http://example.com/tags/PWN/"/>
+    
+    <category term="栈溢出" scheme="http://example.com/tags/%E6%A0%88%E6%BA%A2%E5%87%BA/"/>
+    
+    <category term="格式化字符串漏洞" scheme="http://example.com/tags/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E/"/>
+    
+    <category term="hijack retaddr" scheme="http://example.com/tags/hijack-retaddr/"/>
+    
+    <category term="伪随机数" scheme="http://example.com/tags/%E4%BC%AA%E9%9A%8F%E6%9C%BA%E6%95%B0/"/>
+    
+    <category term="HFCTF" scheme="http://example.com/tags/HFCTF/"/>
+    
+  </entry>
   
   <entry>
     <title>NISACTF2022</title>
@@ -501,30 +531,6 @@
     <category term="格式化字符串漏洞" scheme="http://example.com/tags/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E/"/>
     
     <category term="函数指针" scheme="http://example.com/tags/%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>浅谈利用格式化字符串漏洞泄露canary</title>
-    <link href="http://example.com/2021/10/31/%E6%B5%85%E8%B0%88%E5%88%A9%E7%94%A8%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E6%B3%84%E9%9C%B2canary/"/>
-    <id>http://example.com/2021/10/31/%E6%B5%85%E8%B0%88%E5%88%A9%E7%94%A8%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E6%B3%84%E9%9C%B2canary/</id>
-    <published>2021-10-31T15:26:30.000Z</published>
-    <updated>2021-11-01T12:30:02.817Z</updated>
-    
-    
-    <summary type="html">&lt;h4 id=&quot;0-格式化字符串漏洞&quot;&gt;&lt;a href=&quot;#0-格式化字符串漏洞&quot; class=&quot;headerlink&quot; title=&quot;0.格式化字符串漏洞&quot;&gt;&lt;/a&gt;0.格式化字符串漏洞&lt;/h4&gt;&lt;h5 id=&quot;0-1-起因&quot;&gt;&lt;a href=&quot;#0-1-起因&quot; class=&quot;headerlink&quot; title=&quot;0-1.起因&quot;&gt;&lt;/a&gt;0-1.起因&lt;/h5&gt;&lt;p&gt;我们知道，一般情况下，在C语言中格式化输出函数printf()的用法如下：&lt;/p&gt;
-&lt;figure class=&quot;highlight c&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;built_in&quot;&gt;printf&lt;/span&gt;(&lt;span class=&quot;string&quot;&gt;&amp;quot;%d&amp;quot;&lt;/span&gt;,a);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;built_in&quot;&gt;printf&lt;/span&gt;(&lt;span class=&quot;string&quot;&gt;&amp;quot;%d%f&amp;quot;&lt;/span&gt;,a,b);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;built_in&quot;&gt;printf&lt;/span&gt;(&lt;span class=&quot;string&quot;&gt;&amp;quot;%d%f%c&amp;quot;&lt;/span&gt;,a,b,c);&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
-    
-    
-    
-    <category term="学习" scheme="http://example.com/categories/%E5%AD%A6%E4%B9%A0/"/>
-    
-    
-    <category term="PWN" scheme="http://example.com/tags/PWN/"/>
-    
-    <category term="格式化字符串漏洞" scheme="http://example.com/tags/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E/"/>
-    
-    <category term="canary" scheme="http://example.com/tags/canary/"/>
     
   </entry>
   
