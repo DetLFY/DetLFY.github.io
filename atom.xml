@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-04-03T14:59:51.868Z</updated>
+  <updated>2022-04-03T15:08:48.661Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="http://example.com/2022/03/31/%E8%AF%A6%E8%B0%88HFCTF2022-babygame/"/>
     <id>http://example.com/2022/03/31/%E8%AF%A6%E8%B0%88HFCTF2022-babygame/</id>
     <published>2022-03-31T09:58:07.000Z</published>
-    <updated>2022-04-03T14:59:51.868Z</updated>
+    <updated>2022-04-03T15:08:48.661Z</updated>
     
     
     <summary type="html">&lt;h4 id=&quot;0-浅谈一下这次的虎符杯&quot;&gt;&lt;a href=&quot;#0-浅谈一下这次的虎符杯&quot; class=&quot;headerlink&quot; title=&quot;0.浅谈一下这次的虎符杯&quot;&gt;&lt;/a&gt;0.浅谈一下这次的虎符杯&lt;/h4&gt;&lt;p&gt;虎符结束了这么久就才开始写这篇博客实在有些抱歉，这题babygame说实话难度确实不大，而且我当时也绕过了伪随机数来到有格式化字符串漏洞的那个函数了。但是由于我对hijack retaddr这个方法的了解不足，导致最终没有打通，实在是可惜。在赛后看了很多大佬的wp也一直卡在这个点，这也反映出了我这块的薄弱之处。但经过了资料查阅、动态调试等一系列繁琐的过程后，我也算是吃透了这一题，故这篇博客我想详细谈一谈这题的解法。&lt;/p&gt;
