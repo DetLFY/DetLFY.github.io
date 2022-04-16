@@ -155,6 +155,97 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-C语言指针学习-part-2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/09/27/C%E8%AF%AD%E8%A8%80%E6%8C%87%E9%92%88%E5%AD%A6%E4%B9%A0-part-2/">C语言指针学习 part.2</a>
+    </h1>
+  
+
+        
+        <a href="/2021/09/27/C%E8%AF%AD%E8%A8%80%E6%8C%87%E9%92%88%E5%AD%A6%E4%B9%A0-part-2/" class="archive-article-date">
+  	<time datetime="2021-09-27T11:23:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-09-27</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="4-指针与一维数组"><a href="#4-指针与一维数组" class="headerlink" title="4.指针与一维数组"></a>4.指针与一维数组</h4><p>我们知道一个数组的元素在内存中是连续存放的，<strong>数组第一个元素的地址称为数组的首地址。</strong><em>在C语言中，数组名就是该数组的首地址。</em></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a[<span class="number">4869</span>],*p;</span><br></pre></td></tr></table></figure>
+<p>以上面的为例，语句“ <strong>p=a;</strong> ”和语句“ <strong>p=&amp;a[0];</strong> ”是等价的，都表示指针变量p指向数组a的首地址。数组首地址的值在C语言中是一个地址常量，无法改变。因此，语句“ a=p; ”或者语句“ a++; ”都是非法的。<br>如果数组的首地址是a，且指针变量p指向该数组的首地址，即“ p=a; ”，则C语言中还规定数组的第i个元素a[i]的地址是<strong>a+i，其等价于p+i。</strong>如：</p>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">博客</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">C/C++</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/学习//" class="article-tag-list-link color3">学习</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/09/27/C%E8%AF%AD%E8%A8%80%E6%8C%87%E9%92%88%E5%AD%A6%E4%B9%A0-part-2/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-函数的调用与约定" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -891,6 +982,26 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">_IO_FILE</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">offbyone</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">堆漏洞</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">PWN</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">partial write</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">堆内存</a>
               </li>
              
@@ -904,10 +1015,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">链表</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">PWN</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -971,10 +1078,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">堆漏洞</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">格式化字符串漏洞</a>
               </li>
              
@@ -991,15 +1094,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">offbyone</a>
+                <a href="javascript:void(0)" class="js-tag color5">offbynull</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">chunk extend</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">offbynull</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1067,15 +1166,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">总结</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">二进制</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">溢出</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">总结</a>
               </li>
              
               <li class="article-tag-list-item">
