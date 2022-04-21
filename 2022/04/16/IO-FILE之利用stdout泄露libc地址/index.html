@@ -25,7 +25,7 @@
 <meta property="og:image" content="http://example.com/2022/04/16/IO-FILE%E4%B9%8B%E5%88%A9%E7%94%A8stdout%E6%B3%84%E9%9C%B2libc%E5%9C%B0%E5%9D%80/8.png">
 <meta property="og:image" content="http://example.com/2022/04/16/IO-FILE%E4%B9%8B%E5%88%A9%E7%94%A8stdout%E6%B3%84%E9%9C%B2libc%E5%9C%B0%E5%9D%80/9.png">
 <meta property="article:published_time" content="2022-04-16T05:51:16.000Z">
-<meta property="article:modified_time" content="2022-04-16T12:24:03.234Z">
+<meta property="article:modified_time" content="2022-04-21T13:37:48.143Z">
 <meta property="article:author" content="LianFeiyang">
 <meta property="article:tag" content="_IO_FILE">
 <meta property="article:tag" content="offbyone">
@@ -198,8 +198,8 @@
 <p>我们可以在 libc.so 中找到 stdin\stdout\stderr 等符号，这些符号是指向 FILE 结构的指针，真正结构的符号是:</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">_IO_2_1_stderr_</span><br><span class="line">_IO_2_1_stdout_</span><br><span class="line">_IO_2_1_stdin_</span><br></pre></td></tr></table></figure>
 <p><em>（注：以上摘自ctf-wiki。）</em></p>
-<h4 id="1-利用stdout泄露libc地址"><a href="#1-利用stdout泄露libc地址" class="headerlink" title="1.利用stdout泄露libc地址"></a>1.利用stdout泄露libc地址</h4><p>这种泄露方法取代了原本的house of roman，只需要爆破16位（半个字节，house of roman需要爆破4096位）。<br>这种泄露方法通常用在没有show这类函数的堆题上，通过这种方法可以将libc上的地址泄露出来。<br>主要思路是修改stdout的flags位为<strong>0xfbad1800</strong>，并将_IO_write_base的地址改小（通常是<strong>局部覆写最后一字节为\x00</strong>）。这样在程序再次调用puts这类函数的时候，就会输出_IO_2_1_stderr_某偏移处附近的一些libc地址。<br>为什么要修改flags为0xfbad1800而不是其他别的什么值呢？<br>来看一段源码：<br><img src="/2022/04/16/IO-FILE%E4%B9%8B%E5%88%A9%E7%94%A8stdout%E6%B3%84%E9%9C%B2libc%E5%9C%B0%E5%9D%80/1.png"><br>puts函数再源码中是由_IO_puts实现的，而它内部会调用_IO_sputn，并会执行_IO_new_file_xsputs，最终会执行_IO_overflow。可以看到_IO_do_write是最后调用的函数，而_IO_write_base是我们要修改的目标。<br>因此我们需要满足一系列的条件使得它进入我们期望的地方。<br><img src="/2022/04/16/IO-FILE%E4%B9%8B%E5%88%A9%E7%94%A8stdout%E6%B3%84%E9%9C%B2libc%E5%9C%B0%E5%9D%80/2.png"></p>
-<p>而要想要修改这个这些，我们最期望的就是能直接访问这些内容进行修改，或者在它们附近伪造一个堆块来进行改写。<br>那么，以后者为例，在不知道地址的情况下我们怎么才能够改写这些地方呢？<br>我们知道，当程序里只有一个usortedbin的时候，其fd和bk均指向main_arena+88（以libc2.23为例），巧合的是，这个地址和我们要改写内容的地址仅有后两个字节不同，我们可以让这个地址传入fastbin的fd，再通过局部覆写低两个字节来使得目标地址进入我们的fake chunk。而我们又知道ALSR的随机化程度不高，仅对大于0x1000的部分进行随机化，这也就意味着后一个半字节是不变的，那么我们要获取的实际地址仅有半个字节未知，因此需要爆破这16位。</p>
+<h4 id="1-利用stdout泄露libc地址"><a href="#1-利用stdout泄露libc地址" class="headerlink" title="1.利用stdout泄露libc地址"></a>1.利用stdout泄露libc地址</h4><p>这种泄露方法取代了原本的house of roman，只需要爆破4位（半个字节，house of roman需要爆破4096位）。<br>这种泄露方法通常用在没有show这类函数的堆题上，通过这种方法可以将libc上的地址泄露出来。<br>主要思路是修改stdout的flags位为<strong>0xfbad1800</strong>，并将_IO_write_base的地址改小（通常是<strong>局部覆写最后一字节为\x00</strong>）。这样在程序再次调用puts这类函数的时候，就会输出_IO_2_1_stderr_某偏移处附近的一些libc地址。<br>为什么要修改flags为0xfbad1800而不是其他别的什么值呢？<br>来看一段源码：<br><img src="/2022/04/16/IO-FILE%E4%B9%8B%E5%88%A9%E7%94%A8stdout%E6%B3%84%E9%9C%B2libc%E5%9C%B0%E5%9D%80/1.png"><br>puts函数再源码中是由_IO_puts实现的，而它内部会调用_IO_sputn，并会执行_IO_new_file_xsputs，最终会执行_IO_overflow。可以看到_IO_do_write是最后调用的函数，而_IO_write_base是我们要修改的目标。<br>因此我们需要满足一系列的条件使得它进入我们期望的地方。<br><img src="/2022/04/16/IO-FILE%E4%B9%8B%E5%88%A9%E7%94%A8stdout%E6%B3%84%E9%9C%B2libc%E5%9C%B0%E5%9D%80/2.png"></p>
+<p>而要想要修改这个这些，我们最期望的就是能直接访问这些内容进行修改，或者在它们附近伪造一个堆块来进行改写。<br>那么，以后者为例，在不知道地址的情况下我们怎么才能够改写这些地方呢？<br>我们知道，当程序里只有一个usortedbin的时候，其fd和bk均指向main_arena+88（以libc2.23为例），巧合的是，这个地址和我们要改写内容的地址仅有后两个字节不同，我们可以让这个地址传入fastbin的fd，再通过局部覆写低两个字节来使得目标地址进入我们的fake chunk。而我们又知道ALSR的随机化程度不高，仅对大于0x1000的部分进行随机化，这也就意味着后一个半字节是不变的，那么我们要获取的实际地址仅有半个字节未知，因此需要爆破这4位。</p>
 <h4 id="2-实例探究与offbyone结合的利用"><a href="#2-实例探究与offbyone结合的利用" class="headerlink" title="2.实例探究与offbyone结合的利用"></a>2.实例探究与offbyone结合的利用</h4><ul>
 <li>附件：<a href="noleak">noleak</a></li>
 <li>环境：Ubuntu16.04 libc2.23<br>这题是之前的offbyone的改题，保护和漏洞点一样，只是没有show功能的函数。<br>因此，这题的思路是先利用offbyone漏洞将fake chunk写入fastbin链，修改stdout的flags和_IO_write_base最后一个字节来泄露libc的地址，再次通过offbyone来攻击__malloc_hook以getshell。<br>因为后半的利用前面讲过了，这里重点来讲一下如何泄露。<br>我们用pwndbg进行动态调试，获取stdout中存放的地址：<br><img src="/2022/04/16/IO-FILE%E4%B9%8B%E5%88%A9%E7%94%A8stdout%E6%B3%84%E9%9C%B2libc%E5%9C%B0%E5%9D%80/3.png"><br>查看这个地址附近的内存：<br><img src="/2022/04/16/IO-FILE%E4%B9%8B%E5%88%A9%E7%94%A8stdout%E6%B3%84%E9%9C%B2libc%E5%9C%B0%E5%9D%80/4.png"><br>可以发现就是我们要修改的结构体。<br>我们再用find_fake_fast指令在其附近找一个能充当fake chunk的内存区域：<br><img src="/2022/04/16/IO-FILE%E4%B9%8B%E5%88%A9%E7%94%A8stdout%E6%B3%84%E9%9C%B2libc%E5%9C%B0%E5%9D%80/5.png"><br>能找到一以25dd结尾的fake chunk头，我们的目标就是修改main_arena+88处的地址后两个字节为25dd（5dd是固定的，2是要爆破的数字）。<br>我们最开始的堆布局如下：<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">add(<span class="number">0</span>,<span class="number">0x68</span>,<span class="string">&#x27;A&#x27;</span>*<span class="number">0x68</span>) <span class="comment">#利用offbyone改写1的size</span></span><br><span class="line">add(<span class="number">1</span>,<span class="number">0x108</span>,<span class="string">&#x27;AAAA&#x27;</span>) <span class="comment">#1必须是unsortdbin大小的堆块</span></span><br><span class="line">add(<span class="number">2</span>,<span class="number">0x68</span>,<span class="string">&#x27;BBBB&#x27;</span>) <span class="comment">#2,3是等大的fastbin chunk</span></span><br><span class="line">add(<span class="number">3</span>,<span class="number">0x68</span>,<span class="string">&#x27;CCCC&#x27;</span>) <span class="comment">#1,2,3是用来合并的</span></span><br><span class="line">add(<span class="number">4</span>,<span class="number">0x68</span>,<span class="string">&#x27;DDDD&#x27;</span>) <span class="comment">#防止被topchunk合并</span></span><br></pre></td></tr></table></figure>
@@ -508,6 +508,22 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">堆内存</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">内存管理</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">链表</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">_IO_FILE</a>
               </li>
              
@@ -525,22 +541,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">partial write</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">堆内存</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">内存管理</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">链表</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -620,11 +620,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">offbynull</a>
+                <a href="javascript:void(0)" class="js-tag color3">chunk extend</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">chunk extend</a>
+                <a href="javascript:void(0)" class="js-tag color5">offbynull</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -692,15 +692,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">总结</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">二进制</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">溢出</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">总结</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -716,11 +716,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">测试</a>
+                <a href="javascript:void(0)" class="js-tag color4">栈转移</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">栈转移</a>
+                <a href="javascript:void(0)" class="js-tag color3">测试</a>
               </li>
              
               <li class="article-tag-list-item">
