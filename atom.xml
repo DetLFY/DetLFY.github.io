@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-11-05T14:15:32.998Z</updated>
+  <updated>2022-11-24T11:32:15.703Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Geek Challenge 2022</title>
+    <link href="http://example.com/2022/11/22/Geek-Challenge-2022/"/>
+    <id>http://example.com/2022/11/22/Geek-Challenge-2022/</id>
+    <published>2022-11-22T10:06:05.000Z</published>
+    <updated>2022-11-24T11:32:15.703Z</updated>
+    
+    
+    <summary type="html">&lt;h4 id=&quot;0-前言&quot;&gt;&lt;a href=&quot;#0-前言&quot; class=&quot;headerlink&quot; title=&quot;0. 前言&quot;&gt;&lt;/a&gt;0. 前言&lt;/h4&gt;&lt;p&gt;成信大举办的一年一度的极客大挑战。去年没打，今年参加有幸获得校外赛道第一。&lt;br&gt;&lt;img src=&quot;/2022/11/22/Geek-Challenge-2022/0-1.png&quot; alt=&quot;0-1&quot;&gt;&lt;img src=&quot;/2022/11/22/Geek-Challenge-2022/0-2.png&quot; alt=&quot;0-2&quot;&gt;&lt;/p&gt;
+&lt;p&gt;先说结论，难度上感觉pwn水的一批（要我出题难度绝对比这高）,同类型水题多，一个ret2libc连考三题（虽然有一题写的是ret2csu，但因为还是有调用过打印函数，所以还是ret2libc）。虽然如此，但pwn水也是相对而言的，平心而论，pwn这个难度拿来考新生我认为是合格的。其它方向有些题出的多少有些放飞自我了。像是RE的自定义字节码，还有Android逆向第二题。以及misc的取证题。这些题出的多少是有些放飞自我。&lt;br&gt;吐槽了这么多，说说这个比赛好的地方。一是比赛赛题覆盖面广&lt;del&gt;（除了pwn）&lt;/del&gt;，可以让新生了解各方向不同的题型，体验不同的感觉。二是比赛时间安排合理。和ISCC一样采用月赛周上题制，难度循序渐进（maybe）。&lt;/p&gt;
+&lt;p&gt;总的来说打的还是很开心的，也希望极客大挑战能办的更好。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="学习" scheme="http://example.com/categories/%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+    <category term="Geek Challenge" scheme="http://example.com/tags/Geek-Challenge/"/>
+    
+    <category term="RE" scheme="http://example.com/tags/RE/"/>
+    
+    <category term="PWN" scheme="http://example.com/tags/PWN/"/>
+    
+    <category term="Crypto" scheme="http://example.com/tags/Crypto/"/>
+    
+    <category term="Misc" scheme="http://example.com/tags/Misc/"/>
+    
+  </entry>
   
   <entry>
     <title>NewStarCTF Cod3</title>
@@ -173,13 +202,13 @@
     <category term="学习" scheme="http://example.com/categories/%E5%AD%A6%E4%B9%A0/"/>
     
     
+    <category term="PWN" scheme="http://example.com/tags/PWN/"/>
+    
     <category term="_IO_FILE" scheme="http://example.com/tags/IO-FILE/"/>
     
     <category term="offbyone" scheme="http://example.com/tags/offbyone/"/>
     
     <category term="堆漏洞" scheme="http://example.com/tags/%E5%A0%86%E6%BC%8F%E6%B4%9E/"/>
-    
-    <category term="PWN" scheme="http://example.com/tags/PWN/"/>
     
     <category term="partial write" scheme="http://example.com/tags/partial-write/"/>
     
@@ -231,11 +260,11 @@
     <category term="学习" scheme="http://example.com/categories/%E5%AD%A6%E4%B9%A0/"/>
     
     
+    <category term="RE" scheme="http://example.com/tags/RE/"/>
+    
     <category term="PWN" scheme="http://example.com/tags/PWN/"/>
     
     <category term="NISACTF" scheme="http://example.com/tags/NISACTF/"/>
-    
-    <category term="RE" scheme="http://example.com/tags/RE/"/>
     
   </entry>
   
@@ -254,9 +283,9 @@
     <category term="学习" scheme="http://example.com/categories/%E5%AD%A6%E4%B9%A0/"/>
     
     
-    <category term="offbyone" scheme="http://example.com/tags/offbyone/"/>
-    
     <category term="PWN" scheme="http://example.com/tags/PWN/"/>
+    
+    <category term="offbyone" scheme="http://example.com/tags/offbyone/"/>
     
     <category term="堆指针" scheme="http://example.com/tags/%E5%A0%86%E6%8C%87%E9%92%88/"/>
     
@@ -282,9 +311,9 @@
     
     <category term="overlap" scheme="http://example.com/tags/overlap/"/>
     
-    <category term="offbyone" scheme="http://example.com/tags/offbyone/"/>
-    
     <category term="PWN" scheme="http://example.com/tags/PWN/"/>
+    
+    <category term="offbyone" scheme="http://example.com/tags/offbyone/"/>
     
     <category term="堆指针" scheme="http://example.com/tags/%E5%A0%86%E6%8C%87%E9%92%88/"/>
     
@@ -365,9 +394,9 @@
     
     <category term="堆溢出" scheme="http://example.com/tags/%E5%A0%86%E6%BA%A2%E5%87%BA/"/>
     
-    <category term="offbyone" scheme="http://example.com/tags/offbyone/"/>
-    
     <category term="PWN" scheme="http://example.com/tags/PWN/"/>
+    
+    <category term="offbyone" scheme="http://example.com/tags/offbyone/"/>
     
     <category term="offbynull" scheme="http://example.com/tags/offbynull/"/>
     
@@ -393,9 +422,9 @@
     
     <category term="堆溢出" scheme="http://example.com/tags/%E5%A0%86%E6%BA%A2%E5%87%BA/"/>
     
-    <category term="offbyone" scheme="http://example.com/tags/offbyone/"/>
-    
     <category term="PWN" scheme="http://example.com/tags/PWN/"/>
+    
+    <category term="offbyone" scheme="http://example.com/tags/offbyone/"/>
     
   </entry>
   
@@ -415,9 +444,9 @@
     <category term="学习" scheme="http://example.com/categories/%E5%AD%A6%E4%B9%A0/"/>
     
     
-    <category term="堆漏洞" scheme="http://example.com/tags/%E5%A0%86%E6%BC%8F%E6%B4%9E/"/>
-    
     <category term="PWN" scheme="http://example.com/tags/PWN/"/>
+    
+    <category term="堆漏洞" scheme="http://example.com/tags/%E5%A0%86%E6%BC%8F%E6%B4%9E/"/>
     
     <category term="unsortedbin attack" scheme="http://example.com/tags/unsortedbin-attack/"/>
     
@@ -506,30 +535,6 @@
     <category term="HGAME" scheme="http://example.com/tags/HGAME/"/>
     
     <category term="CTF" scheme="http://example.com/tags/CTF/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>BUUCTF babyheap_0ctf_2017</title>
-    <link href="http://example.com/2022/01/18/BUUCTF-babyheap-0ctf-2017/"/>
-    <id>http://example.com/2022/01/18/BUUCTF-babyheap-0ctf-2017/</id>
-    <published>2022-01-18T06:18:03.000Z</published>
-    <updated>2022-01-26T13:28:41.215Z</updated>
-    
-    
-    <summary type="html">&lt;h4 id=&quot;0-说明&quot;&gt;&lt;a href=&quot;#0-说明&quot; class=&quot;headerlink&quot; title=&quot;0.说明&quot;&gt;&lt;/a&gt;0.说明&lt;/h4&gt;&lt;p&gt;作为学习的堆题，内容涉及堆溢出漏洞、堆块重叠，fastbin attack等。&lt;br&gt;libc版本是2.23。&lt;/p&gt;
-&lt;h4 id=&quot;1-题解&quot;&gt;&lt;a href=&quot;#1-题解&quot; class=&quot;headerlink&quot; title=&quot;1.题解&quot;&gt;&lt;/a&gt;1.题解&lt;/h4&gt;</summary>
-    
-    
-    
-    <category term="学习" scheme="http://example.com/categories/%E5%AD%A6%E4%B9%A0/"/>
-    
-    
-    <category term="overlap" scheme="http://example.com/tags/overlap/"/>
-    
-    <category term="堆溢出" scheme="http://example.com/tags/%E5%A0%86%E6%BA%A2%E5%87%BA/"/>
-    
-    <category term="fastbin attack" scheme="http://example.com/tags/fastbin-attack/"/>
     
   </entry>
   
